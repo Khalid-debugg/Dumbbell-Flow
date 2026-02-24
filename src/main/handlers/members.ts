@@ -38,7 +38,9 @@ export function registerMemberHandlers() {
     // Build status filter condition for SQL
     if (filters.status !== 'all') {
       if (filters.status === 'active') {
-        whereConditions.push("ms.end_date >= date('now')")
+        whereConditions.push("ms.end_date >= date('now') AND (ms.is_paused IS NULL OR ms.is_paused = 0)")
+      } else if (filters.status === 'paused') {
+        whereConditions.push("ms.end_date >= date('now') AND ms.is_paused = 1")
       } else if (filters.status === 'inactive') {
         whereConditions.push(
           `ms.id IS NULL AND (SELECT COUNT(*) FROM memberships WHERE member_id = m.id) = 0`

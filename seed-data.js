@@ -14,6 +14,13 @@ const formatDate = (date) => {
   return date.toISOString().split('T')[0]
 }
 
+// Helper to generate UUID-like ID
+const generateId = (prefix = '') => {
+  const timestamp = Date.now().toString(36)
+  const random = Math.random().toString(36).substring(2, 15)
+  return prefix ? `${prefix}_${timestamp}${random}` : `${timestamp}${random}`
+}
+
 // Sample data pools
 const firstNames = {
   male: [
@@ -118,16 +125,17 @@ const notes = [
 
 // Plan templates
 const planTemplates = [
-  { name: 'Monthly Basic', duration: 30, price: 50 },
-  { name: 'Monthly Premium', duration: 30, price: 80 },
-  { name: 'Quarterly Basic', duration: 90, price: 135 },
-  { name: 'Quarterly Premium', duration: 90, price: 216 },
-  { name: 'Semi-Annual', duration: 180, price: 240 },
-  { name: 'Annual Basic', duration: 365, price: 480 },
-  { name: 'Annual Premium', duration: 365, price: 768 },
-  { name: 'Student Monthly', duration: 30, price: 35 },
-  { name: 'Weekend Only', duration: 30, price: 40 },
-  { name: 'Day Pass', duration: 1, price: 15 }
+  { name: 'Monthly Basic', duration: 30, price: 50, planType: 'duration', isOffer: 0 },
+  { name: 'Monthly Premium', duration: 30, price: 80, planType: 'duration', isOffer: 0 },
+  { name: 'Quarterly Basic', duration: 90, price: 135, planType: 'duration', isOffer: 0 },
+  { name: 'Quarterly Premium', duration: 90, price: 216, planType: 'duration', isOffer: 0 },
+  { name: 'Semi-Annual', duration: 180, price: 240, planType: 'duration', isOffer: 0 },
+  { name: 'Annual Basic', duration: 365, price: 480, planType: 'duration', isOffer: 0 },
+  { name: 'Annual Premium', duration: 365, price: 768, planType: 'duration', isOffer: 0 },
+  { name: 'Student Monthly', duration: 30, price: 35, planType: 'duration', isOffer: 1 },
+  { name: 'Weekend Only', duration: 30, price: 40, planType: 'duration', isOffer: 0 },
+  { name: '10 Check-in Pass', checkInLimit: 10, price: 100, planType: 'checkin', isOffer: 0 },
+  { name: '20 Check-in Pass', checkInLimit: 20, price: 180, planType: 'checkin', isOffer: 0 }
 ]
 
 const paymentMethods = ['cash', 'card', 'transfer', 'e-wallet']
@@ -135,7 +143,7 @@ const paymentMethods = ['cash', 'card', 'transfer', 'e-wallet']
 function seedDatabase(dbPath, options = {}) {
   const {
     numMembers = 100,
-    numPlans = 10,
+    numPlans = 11, // Include all plan templates (9 duration + 2 check-in)
     checkInRate = 0.7, // 70% chance of check-ins
     clearExisting = true
   } = options
@@ -149,40 +157,45 @@ function seedDatabase(dbPath, options = {}) {
     // Clear existing data if requested
     if (clearExisting) {
       console.log('🗑️  Clearing existing data...')
+      db.exec('DELETE FROM whatsapp_notifications')
+      db.exec('DELETE FROM membership_payments')
       db.exec('DELETE FROM check_ins')
       db.exec('DELETE FROM memberships')
       db.exec('DELETE FROM members')
-      db.exec('DELETE FROM plans')
+      db.exec('DELETE FROM membership_plans')
       console.log('✓ Existing data cleared')
     }
 
-    // Insert plans
-    console.log('📋 Creating plans...')
+    // Insert membership plans
+    console.log('📋 Creating membership plans...')
     const insertPlan = db.prepare(`
-      INSERT INTO plans (name, duration_days, price, features, description, is_active)
-      VALUES (?, ?, ?, ?, ?, 1)
+      INSERT INTO membership_plans (id, name, description, price, is_offer, duration_days, plan_type, check_in_limit)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     const planIds = []
     for (let i = 0; i < Math.min(numPlans, planTemplates.length); i++) {
       const plan = planTemplates[i]
-      const result = insertPlan.run(
+      const planId = generateId('plan')
+      insertPlan.run(
+        planId,
         plan.name,
-        plan.duration,
-        plan.price,
-        JSON.stringify(['Access to all equipment', 'Locker room access']),
         `${plan.name} membership plan`,
-        1
+        plan.price,
+        plan.isOffer,
+        plan.duration || null,
+        plan.planType,
+        plan.checkInLimit || null
       )
-      planIds.push(result.lastInsertRowid)
+      planIds.push({ id: planId, ...plan })
     }
-    console.log(`✓ Created ${planIds.length} plans`)
+    console.log(`✓ Created ${planIds.length} membership plans`)
 
     // Insert members
     console.log('👥 Creating members...')
     const insertMember = db.prepare(`
-      INSERT INTO members (name, phone, email, gender, address, join_date, notes, barcode)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO members (id, name, phone, email, gender, country_code, address, join_date, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     const memberIds = []
@@ -194,10 +207,13 @@ function seedDatabase(dbPath, options = {}) {
       const lastName = getRandom(lastNames)
       const name = `${firstName} ${lastName}`
 
-      // Generate unique phone
+      // Generate unique phone starting with 10, 11, 12, or 15
       let phone
       do {
-        phone = `555${String(Math.floor(Math.random() * 10000000)).padStart(7, '0')}`
+        const prefixes = ['10', '11', '12', '15']
+        const prefix = getRandom(prefixes)
+        const remaining = String(Math.floor(Math.random() * 100000000)).padStart(8, '0')
+        phone = `${prefix}${remaining}`
       } while (usedPhones.has(phone))
       usedPhones.add(phone)
 
@@ -208,18 +224,23 @@ function seedDatabase(dbPath, options = {}) {
       const address = Math.random() > 0.5 ? getRandom(addresses) : null
       const joinDate = formatDate(getRandomDate(new Date(2023, 0, 1), new Date(2025, 0, 1)))
       const note = getRandom(notes)
-      const barcode = `GYM${String(i + 1).padStart(6, '0')}`
+      const memberId = generateId('member')
 
-      const result = insertMember.run(name, phone, email, gender, address, joinDate, note, barcode)
-      memberIds.push({ id: result.lastInsertRowid, joinDate, gender })
+      insertMember.run(memberId, name, phone, email, gender, '+20', address, joinDate, note)
+      memberIds.push({ id: memberId, joinDate, gender })
     }
     console.log(`✓ Created ${memberIds.length} members`)
 
     // Insert memberships with diverse scenarios
     console.log('💳 Creating memberships...')
     const insertMembership = db.prepare(`
-      INSERT INTO memberships (member_id, plan_id, start_date, end_date, amount_paid, payment_method, payment_date, notes)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO memberships (
+        id, member_id, plan_id, start_date, end_date,
+        total_price, amount_paid, remaining_balance, payment_status,
+        payment_method, payment_date, remaining_check_ins,
+        is_custom, is_paused, notes
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     const membershipIds = []
@@ -231,65 +252,115 @@ function seedDatabase(dbPath, options = {}) {
 
       if (scenario < 0.6) {
         // 60% - Active members with current membership
-        const planId = getRandom(planIds)
-        const plan = planTemplates[planIds.indexOf(planId)]
+        const plan = getRandom(planIds)
         const startDate = getRandomDate(
           new Date(today.getFullYear(), today.getMonth() - 2, 1),
           today
         )
         const endDate = new Date(startDate)
-        endDate.setDate(endDate.getDate() + plan.duration)
+        if (plan.planType === 'duration') {
+          endDate.setDate(endDate.getDate() + plan.duration)
+        } else {
+          endDate.setDate(endDate.getDate() + 365) // 1 year validity for check-in plans
+        }
 
-        const result = insertMembership.run(
+        // Random payment status
+        const paymentScenario = Math.random()
+        let paymentStatus, amountPaid, remainingBalance
+        if (paymentScenario < 0.7) {
+          paymentStatus = 'paid'
+          amountPaid = plan.price
+          remainingBalance = 0
+        } else if (paymentScenario < 0.85) {
+          paymentStatus = 'partial'
+          amountPaid = Math.floor(plan.price * (0.3 + Math.random() * 0.4))
+          remainingBalance = plan.price - amountPaid
+        } else {
+          paymentStatus = 'unpaid'
+          amountPaid = 0
+          remainingBalance = plan.price
+        }
+
+        const membershipId = generateId('membership')
+        insertMembership.run(
+          membershipId,
           member.id,
-          planId,
+          plan.id,
           formatDate(startDate),
           formatDate(endDate),
           plan.price,
+          amountPaid,
+          remainingBalance,
+          paymentStatus,
           getRandom(paymentMethods),
           formatDate(startDate),
+          plan.planType === 'checkin' ? plan.checkInLimit : null,
+          0, // is_custom
+          0, // is_paused
           'Active membership'
         )
-        membershipIds.push({ id: result.lastInsertRowid, memberId: member.id, endDate })
+        membershipIds.push({ id: membershipId, memberId: member.id, endDate, plan })
       } else if (scenario < 0.75) {
         // 15% - Members with expiring membership (within 7 days)
-        const planId = getRandom(planIds)
-        const plan = planTemplates[planIds.indexOf(planId)]
+        const plan = getRandom(planIds)
         const endDate = new Date(today)
         endDate.setDate(endDate.getDate() + Math.floor(Math.random() * 7) + 1)
         const startDate = new Date(endDate)
-        startDate.setDate(startDate.getDate() - plan.duration)
+        if (plan.planType === 'duration') {
+          startDate.setDate(startDate.getDate() - plan.duration)
+        } else {
+          startDate.setDate(startDate.getDate() - 180) // 6 months ago
+        }
 
-        const result = insertMembership.run(
+        const membershipId = generateId('membership')
+        insertMembership.run(
+          membershipId,
           member.id,
-          planId,
+          plan.id,
           formatDate(startDate),
           formatDate(endDate),
           plan.price,
+          plan.price,
+          0,
+          'paid',
           getRandom(paymentMethods),
           formatDate(startDate),
+          plan.planType === 'checkin' ? Math.floor(Math.random() * 3) : null, // Few check-ins left
+          0,
+          0,
           'Expiring soon'
         )
-        membershipIds.push({ id: result.lastInsertRowid, memberId: member.id, endDate })
+        membershipIds.push({ id: membershipId, memberId: member.id, endDate, plan })
       } else if (scenario < 0.85) {
         // 10% - Expired members (had membership, now expired)
-        const planId = getRandom(planIds)
-        const plan = planTemplates[planIds.indexOf(planId)]
+        const plan = getRandom(planIds)
         const endDate = getRandomDate(
           new Date(today.getFullYear(), today.getMonth() - 6, 1),
           new Date(today.getTime() - 24 * 60 * 60 * 1000)
         )
         const startDate = new Date(endDate)
-        startDate.setDate(startDate.getDate() - plan.duration)
+        if (plan.planType === 'duration') {
+          startDate.setDate(startDate.getDate() - plan.duration)
+        } else {
+          startDate.setDate(startDate.getDate() - 365)
+        }
 
+        const membershipId = generateId('membership')
         insertMembership.run(
+          membershipId,
           member.id,
-          planId,
+          plan.id,
           formatDate(startDate),
           formatDate(endDate),
           plan.price,
+          plan.price,
+          0,
+          'paid',
           getRandom(paymentMethods),
           formatDate(startDate),
+          plan.planType === 'checkin' ? 0 : null,
+          0,
+          0,
           'Expired membership'
         )
       } else if (scenario < 0.95) {
@@ -298,25 +369,36 @@ function seedDatabase(dbPath, options = {}) {
         let currentDate = new Date(member.joinDate)
 
         for (let i = 0; i < numMemberships; i++) {
-          const planId = getRandom(planIds)
-          const plan = planTemplates[planIds.indexOf(planId)]
+          const plan = getRandom(planIds)
           const startDate = new Date(currentDate)
           const endDate = new Date(startDate)
-          endDate.setDate(endDate.getDate() + plan.duration)
+          if (plan.planType === 'duration') {
+            endDate.setDate(endDate.getDate() + plan.duration)
+          } else {
+            endDate.setDate(endDate.getDate() + 365)
+          }
 
-          const result = insertMembership.run(
+          const membershipId = generateId('membership')
+          insertMembership.run(
+            membershipId,
             member.id,
-            planId,
+            plan.id,
             formatDate(startDate),
             formatDate(endDate),
             plan.price,
+            plan.price,
+            0,
+            'paid',
             getRandom(paymentMethods),
             formatDate(startDate),
+            plan.planType === 'checkin' ? plan.checkInLimit : null,
+            0,
+            0,
             `Membership #${i + 1}`
           )
 
           if (endDate > today) {
-            membershipIds.push({ id: result.lastInsertRowid, memberId: member.id, endDate })
+            membershipIds.push({ id: membershipId, memberId: member.id, endDate, plan })
           }
 
           currentDate = new Date(endDate)
@@ -331,8 +413,8 @@ function seedDatabase(dbPath, options = {}) {
     // Insert check-ins
     console.log('✅ Creating check-ins...')
     const insertCheckIn = db.prepare(`
-      INSERT INTO check_ins (member_id, check_in_time)
-      VALUES (?, ?)
+      INSERT INTO check_ins (id, member_id, check_in_time)
+      VALUES (?, ?, ?)
     `)
 
     let checkInCount = 0
@@ -342,8 +424,17 @@ function seedDatabase(dbPath, options = {}) {
 
     membershipIds.forEach((membership) => {
       const currentDate = new Date(startDate)
+      let memberCheckIns = 0
 
       while (currentDate <= today && currentDate <= membership.endDate) {
+        // For check-in based plans, limit the number of check-ins
+        if (
+          membership.plan.planType === 'checkin' &&
+          memberCheckIns >= membership.plan.checkInLimit
+        ) {
+          break
+        }
+
         // Random check-in probability
         if (Math.random() < checkInRate) {
           const checkInTime = new Date(currentDate)
@@ -354,25 +445,102 @@ function seedDatabase(dbPath, options = {}) {
             0
           )
 
-          insertCheckIn.run(membership.memberId, checkInTime.toISOString())
+          const checkInId = generateId('checkin')
+          insertCheckIn.run(checkInId, membership.memberId, checkInTime.toISOString())
           checkInCount++
+          memberCheckIns++
         }
 
         currentDate.setDate(currentDate.getDate() + 1)
+      }
+
+      // Update remaining check-ins for check-in based plans
+      if (membership.plan.planType === 'checkin') {
+        const updateMembership = db.prepare(`
+          UPDATE memberships
+          SET remaining_check_ins = ?
+          WHERE id = ?
+        `)
+        updateMembership.run(membership.plan.checkInLimit - memberCheckIns, membership.id)
       }
     })
 
     console.log(`✓ Created ${checkInCount} check-ins`)
 
+    // Insert membership payments for partial/unpaid memberships
+    console.log('💰 Creating membership payments...')
+    const insertPayment = db.prepare(`
+      INSERT INTO membership_payments (id, membership_id, amount, payment_method, payment_date, payment_status, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+
+    let paymentCount = 0
+    membershipIds.forEach((membership) => {
+      // Get the membership details to check payment status
+      const membershipDetails = db
+        .prepare('SELECT * FROM memberships WHERE id = ?')
+        .get(membership.id)
+
+      if (membershipDetails.amount_paid > 0) {
+        // Initial payment
+        const paymentId = generateId('payment')
+        insertPayment.run(
+          paymentId,
+          membership.id,
+          membershipDetails.amount_paid,
+          membershipDetails.payment_method,
+          membershipDetails.payment_date,
+          'completed',
+          'Initial payment'
+        )
+        paymentCount++
+
+        // For partial payments, add some scheduled future payments
+        if (membershipDetails.payment_status === 'partial') {
+          const remainingPayments = Math.floor(Math.random() * 2) + 1 // 1-2 scheduled payments
+          let remainingAmount = membershipDetails.remaining_balance
+
+          for (let i = 0; i < remainingPayments && remainingAmount > 0; i++) {
+            const paymentAmount =
+              i === remainingPayments - 1
+                ? remainingAmount
+                : Math.floor(remainingAmount / (remainingPayments - i))
+
+            const scheduledDate = new Date(membershipDetails.payment_date)
+            scheduledDate.setDate(scheduledDate.getDate() + (i + 1) * 30) // Monthly payments
+
+            const scheduledPaymentId = generateId('payment')
+            insertPayment.run(
+              scheduledPaymentId,
+              membership.id,
+              paymentAmount,
+              membershipDetails.payment_method,
+              formatDate(scheduledDate),
+              'scheduled',
+              `Scheduled payment ${i + 1}`
+            )
+            paymentCount++
+            remainingAmount -= paymentAmount
+          }
+        }
+      }
+    })
+
+    console.log(`✓ Created ${paymentCount} membership payments`)
+
     // Print summary
     console.log('\n📊 Seeding Summary:')
-    console.log(`  Plans: ${planIds.length}`)
+    console.log(`  Membership Plans: ${planIds.length}`)
+    console.log(`    - Duration-based: ${planIds.filter((p) => p.planType === 'duration').length}`)
+    console.log(`    - Check-in-based: ${planIds.filter((p) => p.planType === 'checkin').length}`)
     console.log(`  Members: ${memberIds.length}`)
     console.log(`    - Active: ~${Math.floor(memberIds.length * 0.6)}`)
     console.log(`    - Expiring Soon: ~${Math.floor(memberIds.length * 0.15)}`)
     console.log(`    - Expired: ~${Math.floor(memberIds.length * 0.1)}`)
     console.log(`    - Inactive: ~${Math.floor(memberIds.length * 0.05)}`)
+    console.log(`  Memberships: ${membershipIds.length}`)
     console.log(`  Check-ins: ${checkInCount}`)
+    console.log(`  Payments: ${paymentCount}`)
     console.log('\n✅ Database seeding completed successfully!')
   } catch (error) {
     console.error('❌ Error seeding database:', error)
