@@ -50,6 +50,10 @@
     "downloadError": "Error al guardar informe",
     "noPermission": "No tienes permiso para realizar esta acción"
   },
+  "planGate": {
+    "title": "Se Requiere Plan Pro",
+    "description": "Los informes y exportaciones de datos están disponibles en el plan Pro y superiores. Actualiza tu suscripción para desbloquear esta función."
+  },
   "export": {
     "title": "Exportar Datos a CSV",
     "subtitle": "Selecciona tablas para exportar en formato CSV",

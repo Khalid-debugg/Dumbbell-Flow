@@ -9,10 +9,13 @@ import { useAuth } from '@renderer/hooks/useAuth'
 import { PERMISSIONS } from '@renderer/models/account'
 import { ShieldOff } from 'lucide-react'
 import { generateReportPDF } from '@renderer/utils/reportPdfGenerator'
+import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
+import { PlanGate } from '@renderer/components/ui/PlanGate'
 
 function Reports() {
   const { t, i18n } = useTranslation('reports')
   const { hasPermission } = useAuth()
+  const planFeatures = usePlanFeatures()
   const [loading, setLoading] = useState(false)
   const [reportData, setReportData] = useState<ReportData | null>(null)
   const [currentFilters, setCurrentFilters] = useState<IReportFilters | null>(null)
@@ -20,30 +23,33 @@ function Reports() {
   // Check if user has permission to view reports
   const canView = hasPermission(PERMISSIONS.reports.view)
 
-  const handleGenerate = useCallback(async (filters: IReportFilters) => {
-    // Check permission before generating
-    if (!hasPermission(PERMISSIONS.reports.generate)) {
-      toast.error(t('messages.noPermission') || 'You do not have permission to generate reports')
-      return
-    }
+  const handleGenerate = useCallback(
+    async (filters: IReportFilters) => {
+      // Check permission before generating
+      if (!hasPermission(PERMISSIONS.reports.generate)) {
+        toast.error(t('messages.noPermission') || 'You do not have permission to generate reports')
+        return
+      }
 
-    setLoading(true)
-    try {
-      const data = await window.electron.ipcRenderer.invoke(
-        'reports:generate',
-        filters.startDate,
-        filters.endDate
-      )
-      setReportData(data)
-      setCurrentFilters(filters)
-      toast.success(t('messages.generated'))
-    } catch (error) {
-      console.error('Failed to generate report:', error)
-      toast.error(t('messages.error'))
-    } finally {
-      setLoading(false)
-    }
-  }, [hasPermission, t])
+      setLoading(true)
+      try {
+        const data = await window.electron.ipcRenderer.invoke(
+          'reports:generate',
+          filters.startDate,
+          filters.endDate
+        )
+        setReportData(data)
+        setCurrentFilters(filters)
+        toast.success(t('messages.generated'))
+      } catch (error) {
+        console.error('Failed to generate report:', error)
+        toast.error(t('messages.error'))
+      } finally {
+        setLoading(false)
+      }
+    },
+    [hasPermission, t]
+  )
 
   const handlePrint = useCallback(() => {
     // Add small delay to ensure print styles are applied
@@ -89,6 +95,48 @@ function Reports() {
       toast.error(t('messages.downloadError'))
     }
   }, [reportData, currentFilters, hasPermission, t, i18n.language])
+
+  if (!planFeatures.reports) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('title')}</h1>
+          <p className="text-gray-400">{t('subtitle')}</p>
+        </div>
+        <PlanGate requiredPlan="pro">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1 space-y-6">
+              <ReportFilters onGenerate={() => {}} loading={false} />
+              <DataExport />
+            </div>
+            <div className="lg:col-span-2">
+              <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
+                <div className="max-w-md mx-auto">
+                  <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg
+                      className="w-8 h-8 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-2">{t('empty.title')}</h3>
+                  <p className="text-gray-400">{t('empty.description')}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </PlanGate>
+      </div>
+    )
+  }
 
   // Show access denied if user doesn't have permission to view reports
   if (!canView) {

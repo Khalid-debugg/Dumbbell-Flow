@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "FitFlow",
+    "name": "DumbbellFlow",
     "tagline": "Gestión de Gimnasio"
   },
   "nav": {
@@ -53,6 +53,16 @@
       "noAdminFound": "No se encontró cuenta de administrador",
       "success": "¡Cuenta de administrador recuperada exitosamente! Ahora puedes iniciar sesión con las nuevas credenciales.",
       "failed": "La recuperación falló. Por favor, intenta de nuevo."
+    }
+  },
+  "planGate": {
+    "pro": {
+      "title": "Se Requiere Plan Pro",
+      "description": "Esta función está disponible en el plan Pro y superiores. Actualiza tu suscripción para desbloquearla."
+    },
+    "premium": {
+      "title": "Se Requiere Plan Premium",
+      "description": "Esta función está disponible en el plan Premium. Actualiza tu suscripción para desbloquearla."
     }
   },
   "dashboard": {

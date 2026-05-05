@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "FitFlow",
+    "name": "DumbbellFlow",
     "tagline": "Gestão de Academia"
   },
   "nav": {
@@ -53,6 +53,16 @@
       "noAdminFound": "Nenhuma conta de administrador encontrada",
       "success": "Conta de administrador recuperada com sucesso! Agora você pode fazer login com as novas credenciais.",
       "failed": "A recuperação falhou. Por favor, tente novamente."
+    }
+  },
+  "planGate": {
+    "pro": {
+      "title": "Plano Pro Necessário",
+      "description": "Este recurso está disponível no plano Pro e acima. Atualize sua assinatura para desbloqueá-lo."
+    },
+    "premium": {
+      "title": "Plano Premium Necessário",
+      "description": "Este recurso está disponível no plano Premium. Atualize sua assinatura para desbloqueá-lo."
     }
   },
   "dashboard": {

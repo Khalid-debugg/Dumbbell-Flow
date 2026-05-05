@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "FitFlow",
+    "name": "DumbbellFlow",
     "tagline": "Gestion de Salle de Sport"
   },
   "nav": {
@@ -53,6 +53,16 @@
       "noAdminFound": "Aucun compte administrateur trouvé",
       "success": "Compte administrateur récupéré avec succès ! Vous pouvez maintenant vous connecter avec les nouveaux identifiants.",
       "failed": "La récupération a échoué. Veuillez réessayer."
+    }
+  },
+  "planGate": {
+    "pro": {
+      "title": "Plan Pro Requis",
+      "description": "Cette fonctionnalité est disponible avec le plan Pro et supérieur. Mettez à niveau votre abonnement pour la débloquer."
+    },
+    "premium": {
+      "title": "Plan Premium Requis",
+      "description": "Cette fonctionnalité est disponible avec le plan Premium. Mettez à niveau votre abonnement pour la débloquer."
     }
   },
   "dashboard": {

@@ -50,6 +50,10 @@
     "downloadError": "Falha ao salvar relatório",
     "noPermission": "Você não tem permissão para realizar esta ação"
   },
+  "planGate": {
+    "title": "Plano Pro Necessário",
+    "description": "Relatórios e exportações de dados estão disponíveis no plano Pro e acima. Atualize sua assinatura para desbloquear este recurso."
+  },
   "export": {
     "title": "Exportar Dados para CSV",
     "subtitle": "Selecione tabelas para exportar no formato CSV",

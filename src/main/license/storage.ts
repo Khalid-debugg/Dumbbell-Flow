@@ -12,8 +12,9 @@ export interface StoredLicenseData {
   licenseKey: string
   deviceId: string
   activatedAt: string
-  trialEndsAt: string | null
+  licenseEndsAt: string // When the current license period ends (set by server on activation/renewal)
   subscriptionStatus: string
+  planTier: string
   signedLicense: string // Server-signed data for offline validation
   lastOnlineCheck: string
 }
@@ -26,7 +27,7 @@ function getLicensePath(): string {
   return path.join(userDataPath, LICENSE_FILE)
 }
 
-const ENCRYPTION_KEY = 'fitflow-encryption-key-32bytes!'
+const ENCRYPTION_KEY = 'dumbbellflow-encryption-key-32bytes!'
 const IV_LENGTH = 16
 
 /**

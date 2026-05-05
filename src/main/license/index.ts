@@ -1,12 +1,11 @@
 import { ipcMain, app } from 'electron'
 import { generateHardwareId, formatHardwareId } from './hwid'
-import { validateOfflineLicense, shouldPerformOnlineCheck } from './validator'
+import { validateOfflineLicense } from './validator'
 import {
   loadLicense,
   saveLicense,
   hasLicense,
   deleteLicense,
-  updateLastOnlineCheck,
   type StoredLicenseData
 } from './storage'
 
@@ -14,7 +13,7 @@ export * from './hwid'
 export * from './validator'
 export * from './storage'
 
-// API Base URL - should match your fitflow-landing deployment
+// API Base URL - should match your dumbbellflow-landing deployment
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000'
 
 /**
@@ -34,13 +33,14 @@ export function getLicenseKey(): string | null {
 console.log('License API configured with base URL:', API_BASE_URL)
 
 /**
- * Check if the app is currently licensed (offline check)
+ * Check if the app is currently licensed (offline check only).
+ * Returns requiresOnlineCheck when licenseEndsAt has been reached.
  */
 export function isAppLicensed(): {
   valid: boolean
   reason?: string
-  trialDaysRemaining?: number
-  requiresPayment?: boolean
+  daysRemaining?: number
+  requiresOnlineCheck?: boolean
 } {
   try {
     const hardwareId = generateHardwareId()
@@ -53,8 +53,7 @@ export function isAppLicensed(): {
       }
     }
 
-    const result = validateOfflineLicense(licenseData, hardwareId)
-    return result
+    return validateOfflineLicense(licenseData, hardwareId)
   } catch (error) {
     console.error('Error checking license:', error)
     return {
@@ -194,44 +193,40 @@ export function registerLicenseHandlers(): void {
     }
   })
 
-  // Check if already licensed (with periodic online check)
+  // Check if licensed: validate locally using licenseEndsAt, go online only when the date is reached
   ipcMain.handle('license:isLicensed', async () => {
     try {
       const offlineResult = isAppLicensed()
 
-      if (!offlineResult.valid) {
+      if (offlineResult.valid) {
+        return true
+      }
+
+      // Only go online when licenseEndsAt has been reached
+      if (!offlineResult.requiresOnlineCheck) {
         return false
       }
 
-      // Perform periodic online check if needed
       const licenseData = loadLicense()
-      if (licenseData && shouldPerformOnlineCheck(licenseData)) {
-        const hardwareId = generateHardwareId()
-        const onlineResult = await validateOnline(licenseData.licenseKey, hardwareId)
+      if (!licenseData) return false
 
-        if (onlineResult.success) {
-          updateLastOnlineCheck()
+      const hardwareId = generateHardwareId()
+      const onlineResult = await validateOnline(licenseData.licenseKey, hardwareId)
 
-          // Update stored license data if server returned new info
-          if (onlineResult.data) {
-            const updatedData: StoredLicenseData = {
-              ...licenseData,
-              trialEndsAt: onlineResult.data.trialEndsAt || licenseData.trialEndsAt,
-              subscriptionStatus:
-                onlineResult.data.subscriptionStatus || licenseData.subscriptionStatus,
-              lastOnlineCheck: new Date().toISOString()
-            }
-            saveLicense(updatedData)
-          }
-
-          return onlineResult.valid
+      if (onlineResult.success && onlineResult.valid && onlineResult.data?.subscriptionEndsAt) {
+        const updatedData: StoredLicenseData = {
+          ...licenseData,
+          licenseEndsAt: onlineResult.data.subscriptionEndsAt,
+          subscriptionStatus: onlineResult.data.subscriptionStatus || licenseData.subscriptionStatus,
+          planTier: onlineResult.data.planTier || licenseData.planTier,
+          lastOnlineCheck: new Date().toISOString()
         }
-
-        // If online check fails, continue with offline validation
-        console.log('Online check failed, using offline validation')
+        saveLicense(updatedData)
+        return true
       }
 
-      return offlineResult.valid
+      // Not renewed or server unreachable → deny access
+      return false
     } catch (error) {
       console.error('Error checking license:', error)
       return false
@@ -247,13 +242,13 @@ export function registerLicenseHandlers(): void {
       const result = await activateOnline(licenseKey, hardwareId)
 
       if (result.success && result.data) {
-        // Save license data locally
         const licenseData: StoredLicenseData = {
           licenseKey,
           deviceId: hardwareId,
           activatedAt: result.data.activatedAt,
-          trialEndsAt: result.data.trialEndsAt || null,
+          licenseEndsAt: result.data.subscriptionEndsAt,
           subscriptionStatus: result.data.subscriptionStatus,
+          planTier: result.data.planTier,
           signedLicense: result.data.signedLicense,
           lastOnlineCheck: new Date().toISOString()
         }
@@ -288,16 +283,17 @@ export function registerLicenseHandlers(): void {
       return {
         isLicensed: licenseStatus.valid,
         reason: licenseStatus.reason,
-        trialDaysRemaining: licenseStatus.trialDaysRemaining || 0,
-        requiresPayment: licenseStatus.requiresPayment || false,
+        daysRemaining: licenseStatus.daysRemaining || 0,
+        requiresOnlineCheck: licenseStatus.requiresOnlineCheck || false,
         hardwareId: hwid,
         formattedHardwareId: formatHardwareId(hwid),
         hasLicenseFile: hasLicense(),
         licenseData: licenseData
           ? {
               activatedAt: licenseData.activatedAt,
-              trialEndsAt: licenseData.trialEndsAt,
-              subscriptionStatus: licenseData.subscriptionStatus
+              licenseEndsAt: licenseData.licenseEndsAt,
+              subscriptionStatus: licenseData.subscriptionStatus,
+              planTier: licenseData.planTier
             }
           : null
       }
@@ -347,7 +343,10 @@ export function registerLicenseHandlers(): void {
           console.warn('Failed to deactivate on server: Non-JSON response')
         }
       } catch (error) {
-        console.warn('Could not reach server for deactivation, will deactivate locally only:', error)
+        console.warn(
+          'Could not reach server for deactivation, will deactivate locally only:',
+          error
+        )
       }
 
       // Delete local license file - this is critical
@@ -368,7 +367,9 @@ export function registerLicenseHandlers(): void {
         console.error('Failed to delete license file:', deleteError)
         return {
           success: false,
-          message: 'Failed to delete local license file: ' + (deleteError instanceof Error ? deleteError.message : 'Unknown error')
+          message:
+            'Failed to delete local license file: ' +
+            (deleteError instanceof Error ? deleteError.message : 'Unknown error')
         }
       }
 

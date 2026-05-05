@@ -20,6 +20,8 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@renderer/hooks/useAuth'
 import { PERMISSIONS } from '@renderer/models/account'
+import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
+import { PlanGate } from '@renderer/components/ui/PlanGate'
 
 interface RevenueData {
   dailyRevenue: { date: string; revenue: number }[]
@@ -47,6 +49,7 @@ export type ExpiringMembership = Membership & { daysRemaining: number }
 function Dashboard() {
   const { t } = useTranslation('dashboard')
   const { hasPermission } = useAuth()
+  const planFeatures = usePlanFeatures()
   const [loading, setLoading] = useState(true)
   const [revenueData, setRevenueData] = useState<RevenueData>({
     dailyRevenue: [],
@@ -224,7 +227,15 @@ function Dashboard() {
         }
       />
 
-      {hasPermission(PERMISSIONS.dashboard.view_financial) && <RevenueChart data={revenueData} />}
+      {hasPermission(PERMISSIONS.dashboard.view_financial) && (
+        planFeatures.financialDashboard ? (
+          <RevenueChart data={revenueData} />
+        ) : (
+          <PlanGate requiredPlan="pro">
+            <RevenueChart data={revenueData} />
+          </PlanGate>
+        )
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentCheckIns

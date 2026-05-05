@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "FitFlow",
+    "name": "DumbbellFlow",
     "tagline": "Fitnessstudio-Verwaltung"
   },
   "nav": {
@@ -53,6 +53,16 @@
       "noAdminFound": "Kein Administrator-Konto gefunden",
       "success": "Administrator-Konto erfolgreich wiederhergestellt! Sie können sich jetzt mit den neuen Anmeldedaten anmelden.",
       "failed": "Wiederherstellung fehlgeschlagen. Bitte versuchen Sie es erneut."
+    }
+  },
+  "planGate": {
+    "pro": {
+      "title": "Pro-Plan Erforderlich",
+      "description": "Diese Funktion ist im Pro-Plan und höher verfügbar. Aktualisieren Sie Ihr Abonnement, um sie freizuschalten."
+    },
+    "premium": {
+      "title": "Premium-Plan Erforderlich",
+      "description": "Diese Funktion ist im Premium-Plan verfügbar. Aktualisieren Sie Ihr Abonnement, um sie freizuschalten."
     }
   },
   "dashboard": {

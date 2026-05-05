@@ -4,6 +4,8 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { Settings as SettingsType } from '@renderer/models/settings'
 import { PERMISSIONS } from '@renderer/models/account'
 import { useAuth } from '@renderer/hooks/useAuth'
+import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
+import { PlanGate } from '@renderer/components/ui/PlanGate'
 import { Button } from '@renderer/components/ui/button'
 import { Save, Loader2, ShieldAlert, AlertTriangle, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
@@ -18,6 +20,7 @@ function Settings() {
   const { t } = useTranslation('settings')
   const { settings: contextSettings, updateSettings, loading: contextLoading, error, refreshSettings } = useSettings()
   const { hasPermission } = useAuth()
+  const planFeatures = usePlanFeatures()
   const [formData, setFormData] = useState<SettingsType | null>(null)
   const [saving, setSaving] = useState(false)
 
@@ -195,16 +198,27 @@ function Settings() {
           onUpdate={handleUpdate}
         />
 
-        <WhatsAppNotificationSection
-          whatsappEnabled={formData.whatsappEnabled}
-          whatsappAutoSend={formData.whatsappAutoSend}
-          whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
-          whatsappMessageTemplate={formData.whatsappMessageTemplate}
-          whatsappMessageLanguage={formData.whatsappMessageLanguage}
-          whatsappLastCheckDate={formData.whatsappLastCheckDate}
-          canManageWhatsApp={permissions.canManageWhatsApp}
-          onUpdate={handleUpdate}
-        />
+        {planFeatures.whatsapp ? (
+          <WhatsAppNotificationSection
+            whatsappEnabled={formData.whatsappEnabled}
+            whatsappAutoSend={formData.whatsappAutoSend}
+            whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
+            whatsappLastCheckDate={formData.whatsappLastCheckDate}
+            canManageWhatsApp={permissions.canManageWhatsApp}
+            onUpdate={handleUpdate}
+          />
+        ) : (
+          <PlanGate requiredPlan="premium">
+            <WhatsAppNotificationSection
+              whatsappEnabled={formData.whatsappEnabled}
+              whatsappAutoSend={formData.whatsappAutoSend}
+              whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
+              whatsappLastCheckDate={formData.whatsappLastCheckDate}
+              canManageWhatsApp={false}
+              onUpdate={() => {}}
+            />
+          </PlanGate>
+        )}
 
         {/* Developer Tools - Only visible in development mode */}
         {import.meta.env.DEV && <DeveloperTools />}

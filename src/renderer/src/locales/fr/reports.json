@@ -50,6 +50,10 @@
     "downloadError": "Échec de l'enregistrement du rapport",
     "noPermission": "Vous n'avez pas la permission d'effectuer cette action"
   },
+  "planGate": {
+    "title": "Plan Pro Requis",
+    "description": "Les rapports et les exportations de données sont disponibles avec le plan Pro et supérieur. Mettez à niveau votre abonnement pour débloquer cette fonctionnalité."
+  },
   "export": {
     "title": "Exporter les Données en CSV",
     "subtitle": "Sélectionnez les tables à exporter au format CSV",

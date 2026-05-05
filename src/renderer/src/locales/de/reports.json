@@ -50,6 +50,10 @@
     "downloadError": "Bericht konnte nicht gespeichert werden",
     "noPermission": "Sie haben keine Berechtigung, diese Aktion auszuführen"
   },
+  "planGate": {
+    "title": "Pro-Plan Erforderlich",
+    "description": "Berichte und Datenexporte sind im Pro-Plan und höher verfügbar. Aktualisieren Sie Ihr Abonnement, um diese Funktion freizuschalten."
+  },
   "export": {
     "title": "Daten in CSV exportieren",
     "subtitle": "Wählen Sie Tabellen zum Exportieren im CSV-Format aus",

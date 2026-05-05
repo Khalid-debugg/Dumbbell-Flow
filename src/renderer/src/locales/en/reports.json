@@ -50,6 +50,10 @@
     "downloadError": "Failed to save report",
     "noPermission": "You do not have permission to perform this action"
   },
+  "planGate": {
+    "title": "Pro Plan Required",
+    "description": "Reports and data exports are available on the Pro plan and above. Upgrade your subscription to unlock this feature."
+  },
   "export": {
     "title": "Export Data to CSV",
     "subtitle": "Select tables to export to CSV format",
