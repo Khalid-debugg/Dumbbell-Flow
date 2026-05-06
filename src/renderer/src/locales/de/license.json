@@ -1,9 +1,9 @@
 {
-  "title": "FitFlow aktivieren",
-  "description": "Befolgen Sie diese einfachen Schritte, um Ihre FitFlow-Anwendung zu aktivieren",
+  "title": "DumbbellFlow aktivieren",
+  "description": "Befolgen Sie diese einfachen Schritte, um Ihre DumbbellFlow-Anwendung zu aktivieren",
   "step1": {
     "title": "Aktivierungsportal besuchen",
-    "description": "Gehen Sie zum FitFlow-Aktivierungsportal, um Ihren Lizenzschlüssel zu erhalten",
+    "description": "Gehen Sie zum DumbbellFlow-Aktivierungsportal, um Ihren Lizenzschlüssel zu erhalten",
     "button": "Portal öffnen"
   },
   "step2": {
@@ -13,7 +13,7 @@
   },
   "step3": {
     "title": "App aktivieren",
-    "description": "Fügen Sie Ihren Lizenzschlüssel unten ein, um FitFlow zu aktivieren",
+    "description": "Fügen Sie Ihren Lizenzschlüssel unten ein, um DumbbellFlow zu aktivieren",
     "inputLabel": "Lizenzschlüssel",
     "inputPlaceholder": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
     "activateButton": "Jetzt aktivieren",
@@ -31,5 +31,35 @@
   },
   "navigation": {
     "back": "Zurück"
+  },
+  "airgapped": {
+    "title": "DumbbellFlow aktivieren",
+    "description": "Teilen Sie Ihre Hardware-ID mit Ihrem Händler, um einen Aktivierungscode zu erhalten",
+    "hwidLabel": "Ihre Hardware-ID",
+    "hwidDescription": "Senden Sie diese ID an Ihren Händler — er erstellt einen Aktivierungscode für Ihr Gerät",
+    "copyButton": "Kopieren",
+    "copied": "Kopiert!",
+    "codeLabel": "Aktivierungscode",
+    "codePlaceholder": "Geben Sie den erhaltenen Aktivierungscode ein",
+    "activateButton": "Aktivieren",
+    "activatingButton": "Aktivierung...",
+    "enterCode": "Bitte geben Sie einen Aktivierungscode ein",
+    "activationSuccess": "Lizenz erfolgreich aktiviert!",
+    "activationError": "Ungültiger oder abgelaufener Aktivierungscode"
+  },
+  "offlineExpiry": {
+    "message_one": "Ihre Lizenz läuft in {{count}} Tag ab. Wenden Sie sich an Ihren Händler zur Verlängerung.",
+    "message_other": "Ihre Lizenz läuft in {{count}} Tagen ab. Wenden Sie sich an Ihren Händler zur Verlängerung."
+  },
+  "trialBanner": {
+    "message_one": "Ihre kostenlose Testversion läuft in {{count}} Tag ab. Abonnieren Sie jetzt.",
+    "message_other": "Ihre kostenlose Testversion läuft in {{count}} Tagen ab. Abonnieren Sie jetzt.",
+    "subscribe": "Abonnieren"
+  },
+  "expired": {
+    "title": "Ihre kostenlose Testversion ist abgelaufen",
+    "description": "Abonnieren Sie, um Ihr Fitnessstudio weiterhin mit DumbbellFlow zu verwalten.",
+    "subscribeButton": "Jetzt abonnieren",
+    "deactivateButton": "Gerät deaktivieren"
   }
 }

@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '../ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 import { toast } from 'sonner'
 import { Check, ExternalLink, Globe, KeyRound, ChevronRight, ArrowLeft } from 'lucide-react'
 import { LanguageSelector } from './LanguageSelector'
+import { AirgappedActivation } from './AirgappedActivation'
+
+const IS_AIRGAPPED = import.meta.env.VITE_BUILD_VARIANT === 'airgapped'
 
 interface LicenseActivationProps {
   open: boolean
   onActivated: () => void
 }
 
-const ACTIVATION_PORTAL_URL = import.meta.env.VITE_ACTIVATION_PORTAL_URL || 'https://fitflow.com'
+const ACTIVATION_PORTAL_URL =
+  import.meta.env.VITE_ACTIVATION_PORTAL_URL || 'https://dumbbellflow.com'
 
 export function LicenseActivation({ open, onActivated }: LicenseActivationProps) {
+  if (IS_AIRGAPPED) return <AirgappedActivation open={open} onActivated={onActivated} />
+
   const { t } = useTranslation('license')
   const [currentStep, setCurrentStep] = useState(1)
   const [licenseKey, setLicenseKey] = useState<string>('')
@@ -36,14 +36,14 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
     }
   }, [open])
 
+  const markStepComplete = (step: number): void => {
+    setCompletedSteps((prev) => new Set(prev).add(step))
+  }
+
   const handleOpenPortal = (): void => {
     window.open(ACTIVATION_PORTAL_URL, '_blank')
     markStepComplete(1)
     setTimeout(() => setCurrentStep(2), 500)
-  }
-
-  const markStepComplete = (step: number): void => {
-    setCompletedSteps((prev) => new Set(prev).add(step))
   }
 
   const handleContinueToActivation = (): void => {
@@ -52,9 +52,7 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
   }
 
   const handleStepBack = (): void => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
-    }
+    if (currentStep > 1) setCurrentStep(currentStep - 1)
   }
 
   const handleActivate = async (): Promise<void> => {
@@ -67,32 +65,23 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
     try {
       const result = await window.api.license.activate(licenseKey.trim())
 
-      // Handle successful activation
       if (result && result.success === true) {
         markStepComplete(3)
         toast.success(t('messages.activationSuccess'))
-        setTimeout(() => {
-          onActivated()
-        }, 800)
+        setTimeout(() => onActivated(), 800)
         return
       }
 
-      // Handle explicit failure with message
       if (result && result.success === false) {
-        const errorMessage = result.message || t('messages.activationFailed')
-        toast.error(errorMessage)
+        toast.error(result.message || t('messages.activationFailed'))
         return
       }
 
-      // Handle unexpected response format
       console.error('Unexpected activation response:', result)
       toast.error(t('messages.activationError'))
     } catch (error) {
-      // Handle network errors, timeout, or other exceptions
       console.error('Error activating license:', error)
-
       if (error instanceof Error) {
-        // Check for specific error types
         if (error.message.includes('network') || error.message.includes('fetch')) {
           toast.error('Network error. Please check your internet connection.')
         } else if (error.message.includes('timeout')) {
@@ -127,9 +116,7 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
               {t('step1.button')}
             </Button>
           </div>
-          <p className="text-xs text-gray-500 text-center">
-            {ACTIVATION_PORTAL_URL}
-          </p>
+          <p className="text-xs text-gray-500 text-center">{ACTIVATION_PORTAL_URL}</p>
         </div>
       )
     },
@@ -143,16 +130,12 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
           <div className="rounded-xl bg-gray-800/50 border border-gray-700 p-6">
             <p className="text-sm text-gray-300 mb-4">{t('step2.description')}</p>
 
-            {/* Image placeholder - user will provide actual image */}
             <div className="relative rounded-lg overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 aspect-video flex items-center justify-center group">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="text-center z-10">
                 <KeyRound className="w-16 h-16 text-gray-600 mx-auto mb-3" />
-                <p className="text-sm text-gray-500 font-medium">
-                  {t('step2.imageAlt')}
-                </p>
+                <p className="text-sm text-gray-500 font-medium">{t('step2.imageAlt')}</p>
               </div>
-              {/* This div will hold the actual screenshot image when provided */}
               <img
                 src=""
                 alt={t('step2.imageAlt')}
@@ -191,15 +174,9 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
               onChange={(e) => setLicenseKey(e.target.value)}
               className="font-mono text-sm bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-200"
               disabled={isLoading}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !isLoading) {
-                  handleActivate()
-                }
-              }}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !isLoading) handleActivate() }}
             />
-            <p className="text-xs text-gray-500">
-              {t('step3.description')}
-            </p>
+            <p className="text-xs text-gray-500">{t('step3.description')}</p>
           </div>
 
           <Button
@@ -234,76 +211,35 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
           @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&display=swap');
 
           @keyframes slideIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
           }
 
           @keyframes pulse {
-            0%, 100% {
-              opacity: 1;
-            }
-            50% {
-              opacity: 0.5;
-            }
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.5; }
           }
 
           @keyframes checkmark {
-            0% {
-              transform: scale(0) rotate(45deg);
-            }
-            50% {
-              transform: scale(1.2) rotate(45deg);
-            }
-            100% {
-              transform: scale(1) rotate(45deg);
-            }
+            0%   { transform: scale(0) rotate(45deg); }
+            50%  { transform: scale(1.2) rotate(45deg); }
+            100% { transform: scale(1) rotate(45deg); }
           }
 
-          .animate-slideIn {
-            animation: slideIn 0.4s ease-out;
-          }
-
-          .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-          }
+          .animate-slideIn { animation: slideIn 0.4s ease-out; }
+          .animate-pulse   { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
 
           .license-activation-dialog {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           }
 
-          .step-indicator {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          }
+          .step-indicator { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+          .step-indicator.completed { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #10b981; }
+          .step-indicator.active    { background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%); border-color: #ea580c; box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1); }
+          .step-indicator.pending   { background: #1f2937; border-color: #374151; }
 
-          .step-indicator.completed {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-color: #10b981;
-          }
-
-          .step-indicator.active {
-            background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
-            border-color: #ea580c;
-            box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.1);
-          }
-
-          .step-indicator.pending {
-            background: #1f2937;
-            border-color: #374151;
-          }
-
-          .step-line {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-          }
-
-          .step-line.completed {
-            background: linear-gradient(to bottom, #10b981, #059669);
-          }
+          .step-line           { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+          .step-line.completed { background: linear-gradient(to bottom, #10b981, #059669); }
         `}
       </style>
 
@@ -312,12 +248,10 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
           className="license-activation-dialog bg-gradient-to-br from-gray-900 via-gray-900 to-gray-800 border-gray-700 text-white max-w-[700px] p-0 overflow-hidden"
           showCloseButton={false}
         >
-          {/* Language Selector - Top Right (RTL-aware) */}
           <div className="absolute top-4 ltr:right-4 rtl:left-4 z-10">
             <LanguageSelector />
           </div>
 
-          {/* Header */}
           <div className="relative bg-gradient-to-r from-orange-600 to-amber-600 px-8 py-6">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50" />
             <DialogHeader className="relative">
@@ -331,7 +265,6 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
           </div>
 
           <div className="px-8 py-6">
-            {/* Step Indicators */}
             <div className="flex items-start justify-between mb-8 relative">
               {steps.map((step, index) => {
                 const isCompleted = completedSteps.has(step.number)
@@ -341,38 +274,24 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
                 return (
                   <div key={step.number} className="flex-1 relative">
                     <div className="flex flex-col items-center">
-                      {/* Step Circle */}
                       <div
                         className={`step-indicator w-12 h-12 rounded-full flex items-center justify-center border-2 z-10 ${
-                          isCompleted
-                            ? 'completed'
-                            : isActive
-                              ? 'active'
-                              : 'pending'
+                          isCompleted ? 'completed' : isActive ? 'active' : 'pending'
                         }`}
                       >
                         {isCompleted ? (
                           <Check className="w-6 h-6 text-white" />
                         ) : (
-                          <StepIcon
-                            className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500'}`}
-                          />
+                          <StepIcon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500'}`} />
                         )}
                       </div>
-
-                      {/* Step Label */}
                       <div className="mt-3 text-center">
-                        <p
-                          className={`text-xs font-bold ${
-                            isActive || isCompleted ? 'text-white' : 'text-gray-500'
-                          }`}
-                        >
+                        <p className={`text-xs font-bold ${isActive || isCompleted ? 'text-white' : 'text-gray-500'}`}>
                           {step.title}
                         </p>
                       </div>
                     </div>
 
-                    {/* Connecting Line */}
                     {index < steps.length - 1 && (
                       <div
                         className={`step-line absolute top-6 left-[calc(50%+24px)] w-[calc(100%-48px)] h-0.5 ${
@@ -388,21 +307,16 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
               })}
             </div>
 
-            {/* Step Content */}
             <div className="min-h-[280px]">
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-white mb-2">
-                  {currentStepData.title}
-                </h3>
+                <h3 className="text-xl font-bold text-white mb-2">{currentStepData.title}</h3>
               </div>
               {currentStepData.content}
             </div>
           </div>
 
-          {/* Footer */}
           <div className="bg-gray-800/50 px-8 py-4 border-t border-gray-700">
             <div className="flex items-center justify-between">
-              {/* Back Button */}
               {currentStep > 1 ? (
                 <Button
                   onClick={handleStepBack}
@@ -416,13 +330,7 @@ export function LicenseActivation({ open, onActivated }: LicenseActivationProps)
               ) : (
                 <div></div>
               )}
-
-              {/* Step Counter */}
-              <p className="text-xs text-gray-400">
-                Step {currentStep} of {steps.length}
-              </p>
-
-              {/* Spacer for alignment */}
+              <p className="text-xs text-gray-400">Step {currentStep} of {steps.length}</p>
               <div className="w-20"></div>
             </div>
           </div>

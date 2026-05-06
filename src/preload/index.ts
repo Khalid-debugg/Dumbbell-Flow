@@ -7,7 +7,9 @@ const api = {
     getHardwareId: () => ipcRenderer.invoke('license:getHardwareId'),
     isLicensed: () => ipcRenderer.invoke('license:isLicensed'),
     activate: (licenseKey: string) => ipcRenderer.invoke('license:activate', licenseKey),
-    getStatus: () => ipcRenderer.invoke('license:getStatus')
+    activateOffline: (code: string) => ipcRenderer.invoke('license:activateOffline', code),
+    getStatus: () => ipcRenderer.invoke('license:getStatus'),
+    deactivate: () => ipcRenderer.invoke('license:deactivate')
   },
   seed: {
     database: (options?: {

@@ -1,9 +1,9 @@
 {
-  "title": "Ativar FitFlow",
-  "description": "Siga estes passos simples para ativar sua aplicação FitFlow",
+  "title": "Ativar DumbbellFlow",
+  "description": "Siga estes passos simples para ativar sua aplicação DumbbellFlow",
   "step1": {
     "title": "Visitar Portal de Ativação",
-    "description": "Vá ao portal de ativação do FitFlow para obter sua chave de licença",
+    "description": "Vá ao portal de ativação do DumbbellFlow para obter sua chave de licença",
     "button": "Abrir Portal"
   },
   "step2": {
@@ -13,7 +13,7 @@
   },
   "step3": {
     "title": "Ativar seu Aplicativo",
-    "description": "Cole sua chave de licença abaixo para ativar o FitFlow",
+    "description": "Cole sua chave de licença abaixo para ativar o DumbbellFlow",
     "inputLabel": "Chave de Licença",
     "inputPlaceholder": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
     "activateButton": "Ativar Agora",
@@ -31,5 +31,35 @@
   },
   "navigation": {
     "back": "Voltar"
+  },
+  "airgapped": {
+    "title": "Ativar DumbbellFlow",
+    "description": "Compartilhe seu ID de hardware com seu fornecedor para receber um código de ativação",
+    "hwidLabel": "Seu ID de Hardware",
+    "hwidDescription": "Envie este ID ao seu fornecedor — ele gerará um código de ativação para sua máquina",
+    "copyButton": "Copiar",
+    "copied": "Copiado!",
+    "codeLabel": "Código de Ativação",
+    "codePlaceholder": "Digite o código de ativação que você recebeu",
+    "activateButton": "Ativar",
+    "activatingButton": "Ativando...",
+    "enterCode": "Por favor, insira um código de ativação",
+    "activationSuccess": "Licença ativada com sucesso!",
+    "activationError": "Código de ativação inválido ou expirado"
+  },
+  "offlineExpiry": {
+    "message_one": "Sua licença expira em {{count}} dia. Entre em contato com seu fornecedor para renovar.",
+    "message_other": "Sua licença expira em {{count}} dias. Entre em contato com seu fornecedor para renovar."
+  },
+  "trialBanner": {
+    "message_one": "Seu teste gratuito expira em {{count}} dia. Assine para manter o acesso.",
+    "message_other": "Seu teste gratuito expira em {{count}} dias. Assine para manter o acesso.",
+    "subscribe": "Assinar"
+  },
+  "expired": {
+    "title": "Seu teste gratuito terminou",
+    "description": "Assine para continuar gerenciando sua academia com DumbbellFlow.",
+    "subscribeButton": "Assinar agora",
+    "deactivateButton": "Desativar dispositivo"
   }
 }

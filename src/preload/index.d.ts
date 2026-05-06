@@ -12,21 +12,27 @@ interface LicenseAPI {
     success: boolean
     message: string
   }>
+  activateOffline: (code: string) => Promise<{
+    success: boolean
+    message: string
+  }>
   getStatus: () => Promise<{
     isLicensed: boolean
     reason?: string
-    trialDaysRemaining?: number
+    daysRemaining?: number
     requiresPayment?: boolean
     hardwareId?: string
     formattedHardwareId?: string
     hasLicenseFile?: boolean
     licenseData?: {
       activatedAt: string
-      trialEndsAt: string | null
+      licenseEndsAt: string | null
       subscriptionStatus: string
+      planTier: string
     } | null
     error?: string
   }>
+  deactivate: () => Promise<{ success: boolean; message: string }>
 }
 
 interface SeedAPI {

@@ -1,5 +1,7 @@
 import { useLicense } from './useLicense'
 
+const IS_AIRGAPPED = import.meta.env.VITE_BUILD_VARIANT === 'airgapped'
+
 export interface PlanFeatures {
   members: boolean
   memberships: boolean
@@ -11,6 +13,16 @@ export interface PlanFeatures {
 }
 
 const PLAN_FEATURES: Record<string, PlanFeatures> = {
+  // Airgapped build: all features on except WhatsApp (requires internet)
+  airgapped: {
+    members: true,
+    memberships: true,
+    plans: true,
+    checkins: true,
+    reports: true,
+    financialDashboard: true,
+    whatsapp: false,
+  },
   trial: {
     members: true,
     memberships: true,
@@ -51,5 +63,6 @@ const PLAN_FEATURES: Record<string, PlanFeatures> = {
 
 export function usePlanFeatures(): PlanFeatures {
   const { planTier } = useLicense()
+  if (IS_AIRGAPPED) return PLAN_FEATURES.airgapped
   return PLAN_FEATURES[planTier] ?? PLAN_FEATURES.basic
 }

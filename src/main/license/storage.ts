@@ -15,8 +15,9 @@ export interface StoredLicenseData {
   licenseEndsAt: string // When the current license period ends (set by server on activation/renewal)
   subscriptionStatus: string
   planTier: string
-  signedLicense: string // Server-signed data for offline validation
+  signedLicense: string // Server-signed data for offline validation (empty for offline activations)
   lastOnlineCheck: string
+  source: 'online' | 'offline'
 }
 
 /**

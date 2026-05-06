@@ -1,9 +1,9 @@
 {
-  "title": "Activate FitFlow",
-  "description": "Follow these simple steps to activate your FitFlow application",
+  "title": "Activate DumbbellFlow",
+  "description": "Follow these simple steps to activate your DumbbellFlow application",
   "step1": {
     "title": "Visit Activation Portal",
-    "description": "Go to the FitFlow activation portal to get your license key",
+    "description": "Go to the DumbbellFlow activation portal to get your license key",
     "button": "Open Portal"
   },
   "step2": {
@@ -13,7 +13,7 @@
   },
   "step3": {
     "title": "Activate Your App",
-    "description": "Paste your license key below to activate FitFlow",
+    "description": "Paste your license key below to activate DumbbellFlow",
     "inputLabel": "License Key",
     "inputPlaceholder": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
     "activateButton": "Activate Now",
@@ -31,5 +31,35 @@
   },
   "navigation": {
     "back": "Back"
+  },
+  "offlineExpiry": {
+    "message_one": "Your license expires in {{count}} day. Contact your vendor to renew.",
+    "message_other": "Your license expires in {{count}} days. Contact your vendor to renew."
+  },
+  "airgapped": {
+    "title": "Activate DumbbellFlow",
+    "description": "Share your hardware ID with your vendor to receive an activation code",
+    "hwidLabel": "Your Hardware ID",
+    "hwidDescription": "Send this ID to your vendor — they will generate an activation code for your machine",
+    "copyButton": "Copy",
+    "copied": "Copied!",
+    "codeLabel": "Activation Code",
+    "codePlaceholder": "Enter the activation code you received",
+    "activateButton": "Activate",
+    "activatingButton": "Activating...",
+    "enterCode": "Please enter an activation code",
+    "activationSuccess": "License activated successfully!",
+    "activationError": "Invalid or expired activation code"
+  },
+  "trialBanner": {
+    "message_one": "Your free trial expires in {{count}} day. Subscribe to keep access.",
+    "message_other": "Your free trial expires in {{count}} days. Subscribe to keep access.",
+    "subscribe": "Subscribe"
+  },
+  "expired": {
+    "title": "Your free trial has ended",
+    "description": "Subscribe to continue managing your gym with DumbbellFlow.",
+    "subscribeButton": "Subscribe Now",
+    "deactivateButton": "Deactivate Device"
   }
 }

@@ -1,9 +1,9 @@
 {
-  "title": "Activar FitFlow",
-  "description": "Siga estos sencillos pasos para activar su aplicación FitFlow",
+  "title": "Activar DumbbellFlow",
+  "description": "Siga estos sencillos pasos para activar su aplicación DumbbellFlow",
   "step1": {
     "title": "Visitar Portal de Activación",
-    "description": "Vaya al portal de activación de FitFlow para obtener su clave de licencia",
+    "description": "Vaya al portal de activación de DumbbellFlow para obtener su clave de licencia",
     "button": "Abrir Portal"
   },
   "step2": {
@@ -13,7 +13,7 @@
   },
   "step3": {
     "title": "Activar su Aplicación",
-    "description": "Pegue su clave de licencia a continuación para activar FitFlow",
+    "description": "Pegue su clave de licencia a continuación para activar DumbbellFlow",
     "inputLabel": "Clave de Licencia",
     "inputPlaceholder": "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX",
     "activateButton": "Activar Ahora",
@@ -31,5 +31,35 @@
   },
   "navigation": {
     "back": "Atrás"
+  },
+  "airgapped": {
+    "title": "Activar DumbbellFlow",
+    "description": "Comparte tu ID de hardware con tu proveedor para recibir un código de activación",
+    "hwidLabel": "Tu ID de Hardware",
+    "hwidDescription": "Envía este ID a tu proveedor — generará un código de activación para tu máquina",
+    "copyButton": "Copiar",
+    "copied": "¡Copiado!",
+    "codeLabel": "Código de Activación",
+    "codePlaceholder": "Ingresa el código de activación que recibiste",
+    "activateButton": "Activar",
+    "activatingButton": "Activando...",
+    "enterCode": "Por favor ingresa un código de activación",
+    "activationSuccess": "¡Licencia activada exitosamente!",
+    "activationError": "Código de activación inválido o expirado"
+  },
+  "offlineExpiry": {
+    "message_one": "Su licencia expira en {{count}} día. Contacte a su proveedor para renovarla.",
+    "message_other": "Su licencia expira en {{count}} días. Contacte a su proveedor para renovarla."
+  },
+  "trialBanner": {
+    "message_one": "Tu prueba gratuita expira en {{count}} día. Suscríbete para mantener el acceso.",
+    "message_other": "Tu prueba gratuita expira en {{count}} días. Suscríbete para mantener el acceso.",
+    "subscribe": "Suscribirse"
+  },
+  "expired": {
+    "title": "Tu prueba gratuita ha terminado",
+    "description": "Suscríbete para continuar gestionando tu gimnasio con DumbbellFlow.",
+    "subscribeButton": "Suscribirse ahora",
+    "deactivateButton": "Desactivar dispositivo"
   }
 }
