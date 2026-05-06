@@ -1,6 +1,6 @@
 import { ipcMain, app } from 'electron'
 import { generateHardwareId, formatHardwareId } from './hwid'
-import { validateOfflineLicense } from './validator'
+import { validateOfflineLicense, verifyOfflineLicenseCode } from './validator'
 import {
   loadLicense,
   saveLicense,
@@ -28,9 +28,6 @@ export function getLicenseKey(): string | null {
     return null
   }
 }
-
-// Log the API URL on startup for debugging
-console.log('License API configured with base URL:', API_BASE_URL)
 
 /**
  * Check if the app is currently licensed (offline check only).
@@ -210,6 +207,11 @@ export function registerLicenseHandlers(): void {
       const licenseData = loadLicense()
       if (!licenseData) return false
 
+      // Offline licenses can't renew — expiry is final
+      if (licenseData.source === 'offline') {
+        return false
+      }
+
       const hardwareId = generateHardwareId()
       const onlineResult = await validateOnline(licenseData.licenseKey, hardwareId)
 
@@ -250,7 +252,8 @@ export function registerLicenseHandlers(): void {
           subscriptionStatus: result.data.subscriptionStatus,
           planTier: result.data.planTier,
           signedLicense: result.data.signedLicense,
-          lastOnlineCheck: new Date().toISOString()
+          lastOnlineCheck: new Date().toISOString(),
+          source: 'online'
         }
 
         saveLicense(licenseData)
@@ -265,6 +268,42 @@ export function registerLicenseHandlers(): void {
           message: result.message
         }
       }
+    } catch (error) {
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error'
+      }
+    }
+  })
+
+  // Activate with offline code (airgapped build)
+  ipcMain.handle('license:activateOffline', async (_, code: string) => {
+    try {
+      const hardwareId = generateHardwareId()
+      const result = verifyOfflineLicenseCode(code, hardwareId)
+
+      if (!result.valid) {
+        return { success: false, message: result.reason || 'Invalid activation code' }
+      }
+
+      const expiryDate = new Date(
+        (Math.floor(Date.now() / 1000) + (result.daysRemaining ?? 0) * 86400) * 1000
+      ).toISOString()
+
+      const licenseData: StoredLicenseData = {
+        licenseKey: '',
+        deviceId: hardwareId,
+        activatedAt: new Date().toISOString(),
+        licenseEndsAt: expiryDate,
+        subscriptionStatus: 'active',
+        planTier: 'offline',
+        signedLicense: '',
+        lastOnlineCheck: new Date().toISOString(),
+        source: 'offline'
+      }
+
+      saveLicense(licenseData)
+      return { success: true, message: 'License activated successfully' }
     } catch (error) {
       return {
         success: false,
