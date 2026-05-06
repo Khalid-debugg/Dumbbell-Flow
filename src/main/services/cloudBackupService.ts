@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import * as crypto from 'crypto'
 import { getDatabase } from '../database'
 import { SettingsDbRow } from '@renderer/models/settings'
 import { generateHardwareId } from '../license/hwid'
@@ -13,6 +14,7 @@ interface CloudBackupResult {
   success: boolean
   message?: string
   error?: string
+  code?: string
   data?: {
     id: string
     fileName: string
@@ -38,44 +40,20 @@ function getDeviceInfo() {
   }
 }
 
-/**
- * Create multipart form data boundary and body
- */
-function createMultipartFormData(
-  filePath: string,
-  fileName: string,
-  fields: Record<string, string>
-): { boundary: string; body: Buffer } {
-  const boundary = `----WebKitFormBoundary${Math.random().toString(36).substring(2)}`
-  const fileBuffer = fs.readFileSync(filePath)
-
-  const parts: Buffer[] = []
-
-  // Add text fields
-  for (const [key, value] of Object.entries(fields)) {
-    parts.push(Buffer.from(`--${boundary}\r\n`))
-    parts.push(Buffer.from(`Content-Disposition: form-data; name="${key}"\r\n\r\n`))
-    parts.push(Buffer.from(`${value}\r\n`))
-  }
-
-  // Add file field
-  parts.push(Buffer.from(`--${boundary}\r\n`))
-  parts.push(Buffer.from(`Content-Disposition: form-data; name="file"; filename="${fileName}"\r\n`))
-  parts.push(Buffer.from('Content-Type: application/octet-stream\r\n\r\n'))
-  parts.push(fileBuffer)
-  parts.push(Buffer.from('\r\n'))
-
-  // Add closing boundary
-  parts.push(Buffer.from(`--${boundary}--\r\n`))
-
-  return {
-    boundary,
-    body: Buffer.concat(parts)
+async function parseJsonResponse(response: Response): Promise<CloudBackupResult> {
+  const text = await response.text()
+  try {
+    return JSON.parse(text) as CloudBackupResult
+  } catch {
+    return { success: false, error: text || `HTTP ${response.status}` }
   }
 }
 
 /**
- * Upload backup file to cloud
+ * Upload backup file to cloud using pre-signed URL flow:
+ * 1. Get a signed upload URL from the API (enforces once-per-day server-side)
+ * 2. PUT the file directly to Supabase storage (no Vercel payload limit)
+ * 3. Confirm the upload with metadata so the API saves the DB record
  */
 export async function uploadBackupToCloud(
   backupPath: string,
@@ -87,15 +65,13 @@ export async function uploadBackupToCloud(
 
     if (!fs.existsSync(backupPath)) {
       console.error('[Cloud Backup] File not found:', backupPath)
-      return {
-        success: false,
-        error: 'Backup file not found'
-      }
+      return { success: false, error: 'Backup file not found' }
     }
 
     const stats = fs.statSync(backupPath)
     const fileName = path.basename(backupPath)
     const deviceInfo = getDeviceInfo()
+    const baseUrl = apiUrl || DEFAULT_API_URL
 
     console.log('[Cloud Backup] File info:', {
       fileName,
@@ -103,40 +79,78 @@ export async function uploadBackupToCloud(
       deviceId: deviceInfo.deviceId
     })
 
-    // Create multipart form data
-    const { boundary, body } = createMultipartFormData(backupPath, fileName, {
-      licenseKey,
-      deviceId: deviceInfo.deviceId,
-      deviceName: deviceInfo.deviceName,
-      fileName
-    })
-
-    const url = `${apiUrl || DEFAULT_API_URL}/upload`
-    console.log('[Cloud Backup] Uploading to:', url)
-
-    // Upload to cloud using native fetch
-    const response = await fetch(url, {
+    // Step 1: Request a pre-signed upload URL
+    console.log('[Cloud Backup] Requesting signed upload URL')
+    const urlResponse = await fetch(`${baseUrl}/get-upload-url`, {
       method: 'POST',
-      headers: {
-        'Content-Type': `multipart/form-data; boundary=${boundary}`,
-        'Content-Length': body.length.toString()
-      },
-      body: new Uint8Array(body)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        licenseKey,
+        deviceId: deviceInfo.deviceId,
+        deviceName: deviceInfo.deviceName,
+        fileName
+      })
     })
 
-    const result = await response.json()
-    console.log('[Cloud Backup] Upload response:', { status: response.status, result })
-
-    if (!response.ok) {
-      console.error('[Cloud Backup] Upload failed:', result)
+    const urlResult = await parseJsonResponse(urlResponse)
+    if (!urlResult.success) {
+      console.error('[Cloud Backup] Failed to get upload URL:', urlResult.error || urlResult.message)
       return {
         success: false,
-        error: result.message || 'Upload failed'
+        error: urlResult.message || urlResult.error || 'Failed to get upload URL',
+        code: urlResult.code
+      }
+    }
+
+    const { signedUrl, storagePath } = urlResult.data as unknown as {
+      signedUrl: string
+      storagePath: string
+    }
+
+    // Step 2: Read file, compute checksum, upload directly to Supabase
+    console.log('[Cloud Backup] Reading file and uploading to storage')
+    const fileBuffer = fs.readFileSync(backupPath)
+    const checksum = crypto.createHash('sha256').update(fileBuffer).digest('hex')
+
+    const storageResponse = await fetch(signedUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/octet-stream' },
+      body: new Uint8Array(fileBuffer)
+    })
+
+    if (!storageResponse.ok) {
+      const body = await storageResponse.text()
+      console.error('[Cloud Backup] Storage upload failed:', storageResponse.status, body)
+      return { success: false, error: `Storage upload failed (HTTP ${storageResponse.status})` }
+    }
+
+    // Step 3: Confirm upload so the server saves the metadata record
+    console.log('[Cloud Backup] Confirming upload metadata')
+    const confirmResponse = await fetch(`${baseUrl}/confirm-upload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        licenseKey,
+        deviceId: deviceInfo.deviceId,
+        deviceName: deviceInfo.deviceName,
+        storagePath,
+        fileName,
+        fileSize: stats.size,
+        checksum
+      })
+    })
+
+    const confirmResult = await parseJsonResponse(confirmResponse)
+    if (!confirmResult.success) {
+      console.error('[Cloud Backup] Confirm failed:', confirmResult.error || confirmResult.message)
+      return {
+        success: false,
+        error: confirmResult.message || confirmResult.error || 'Failed to confirm upload'
       }
     }
 
     console.log('[Cloud Backup] Upload successful')
-    return result
+    return confirmResult
   } catch (error) {
     console.error('[Cloud Backup] Upload error:', error)
     return {
@@ -366,6 +380,8 @@ export async function performAutoCloudBackup(backupPath: string): Promise<void> 
       settings.cloud_backup_api_url || undefined
     )
 
+    const { sendNotificationToRenderer } = await import('../utils/notificationBridge')
+
     if (result.success) {
       db.prepare('UPDATE settings SET last_cloud_backup_date = ? WHERE id = ?').run(
         new Date().toISOString(),
@@ -373,7 +389,6 @@ export async function performAutoCloudBackup(backupPath: string): Promise<void> 
       )
       console.log('[Cloud Backup] Success:', result.data?.fileName)
 
-      const { sendNotificationToRenderer } = await import('../utils/notificationBridge')
       sendNotificationToRenderer({
         type: 'success',
         title: 'settings:backup.autoSuccess.cloudUploadSuccess',
@@ -382,10 +397,23 @@ export async function performAutoCloudBackup(backupPath: string): Promise<void> 
           fileName: result.data?.fileName || 'backup'
         }
       })
+    } else if (result.code === 'DAILY_LIMIT_REACHED') {
+      // Server enforced the once-per-day limit — sync local timestamp and treat as expected
+      db.prepare('UPDATE settings SET last_cloud_backup_date = ? WHERE id = ?').run(
+        new Date().toISOString(),
+        '1'
+      )
+      console.log('[Cloud Backup] Skipped by server: daily limit reached')
+
+      sendNotificationToRenderer({
+        type: 'info',
+        title: 'settings:backup.autoErrors.cloudUploadRateLimited',
+        translationKey: 'settings:backup.autoErrors.cloudUploadRateLimited',
+        translationParams: { hours: 24 }
+      })
     } else {
       console.error('[Cloud Backup] Failed:', result.error)
 
-      const { sendNotificationToRenderer } = await import('../utils/notificationBridge')
       sendNotificationToRenderer({
         type: 'error',
         title: 'settings:backup.autoErrors.cloudUploadFailed',
