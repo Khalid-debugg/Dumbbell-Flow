@@ -6,6 +6,9 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   main: {
+    define: {
+      'process.env.BUILD_VARIANT': JSON.stringify(process.env.VITE_BUILD_VARIANT ?? 'online')
+    },
     plugins: [
       externalizeDepsPlugin(),
       viteStaticCopy({
