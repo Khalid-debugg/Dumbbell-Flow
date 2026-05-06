@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useCallback, useContext } from 'react'
+import { createContext, useState, ReactNode, useCallback, useContext, useMemo } from 'react'
 import { User } from '@renderer/models/account'
 import { SettingsContext } from './SettingsContext'
 
@@ -16,31 +16,29 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading] = useState(false)
   const settingsContext = useContext(SettingsContext)
 
-  const login = async (username: string, password: string) => {
-    try {
-      const loggedInUser = await window.electron.ipcRenderer.invoke(
-        'accounts:login',
-        username,
-        password
-      )
-      setUser(loggedInUser)
-
-      // Initialize periodic notifications after successful login (no immediate execution)
-      if (settingsContext?.initializeNotifications) {
-        settingsContext.initializeNotifications()
+  const login = useCallback(
+    async (username: string, password: string) => {
+      try {
+        const loggedInUser = await window.electron.ipcRenderer.invoke(
+          'accounts:login',
+          username,
+          password
+        )
+        setUser(loggedInUser)
+        settingsContext?.initializeNotifications()
+      } catch (error) {
+        console.error('Login failed:', error)
+        throw error
       }
-    } catch (error) {
-      console.error('Login failed:', error)
-      throw error
-    }
-  }
+    },
+    [settingsContext?.initializeNotifications]
+  )
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setUser(null)
-  }
+  }, [])
 
   const hasPermission = useCallback(
     (permission: string): boolean => {
@@ -51,24 +49,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user]
   )
 
-  const refreshUser = async () => {
-    if (user?.id) {
-      try {
-        const updatedUser = await window.electron.ipcRenderer.invoke('accounts:getById', user.id)
-        if (updatedUser && updatedUser.isActive) {
-          setUser(updatedUser)
-        } else {
-          await logout()
-        }
-      } catch (error) {
-        console.error('Failed to refresh user:', error)
+  const refreshUser = useCallback(async () => {
+    if (!user?.id) return
+    try {
+      const updatedUser = await window.electron.ipcRenderer.invoke('accounts:getById', user.id)
+      if (updatedUser && updatedUser.isActive) {
+        setUser(updatedUser)
+      } else {
         await logout()
       }
+    } catch (error) {
+      console.error('Failed to refresh user:', error)
+      await logout()
     }
-  }
+  }, [user?.id, logout])
+
+  const contextValue = useMemo(
+    () => ({ user, loading: false, login, logout, hasPermission, refreshUser }),
+    [user, login, logout, hasPermission, refreshUser]
+  )
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, hasPermission, refreshUser }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   )
