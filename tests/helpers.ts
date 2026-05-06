@@ -11,7 +11,7 @@ let testDbPath: string
  */
 export function createTestDatabase(): Database.Database {
   // Create temp directory for test database
-  const tempDir = path.join(os.tmpdir(), 'fitflow-test')
+  const tempDir = path.join(os.tmpdir(), 'dumbbellflow-test')
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true })
   }

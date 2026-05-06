@@ -6,7 +6,7 @@
 ┌─────────────────────────────────────────────────────────────────┐
 │                    GYM OWNER'S COMPUTER                         │
 │                                                                 │
-│  1. Launch FitFlow                                              │
+│  1. Launch DumbbellFlow                                              │
 │     └──> App generates Hardware ID from:                        │
 │          • Motherboard UUID                                     │
 │          • MAC Address                                          │
@@ -14,7 +14,7 @@
 │                                                                 │
 │  2. Activation Dialog appears                                   │
 │     ┌────────────────────────────────────┐                     │
-│     │  Activate FitFlow                  │                     │
+│     │  Activate DumbbellFlow                  │                     │
 │     │                                    │                     │
 │     │  Your Hardware ID:                 │                     │
 │     │  A1B2-C3D4-E5F6-... [Copy]         │                     │
@@ -61,7 +61,7 @@
 │     • If no match ❌ = Invalid key error                       │
 │                                                                 │
 │  9. License saved to disk (encrypted)                           │
-│     Location: %APPDATA%\fitflow\license.dat                    │
+│     Location: %APPDATA%\dumbbellflow\license.dat                    │
 │                                                                 │
 │  10. App opens and works normally                               │
 │      On every future launch:                                    │
@@ -106,6 +106,7 @@
 ## Security Components
 
 ### 1. Hardware ID Generation
+
 - **Unique per machine**: Uses motherboard UUID + MAC address
 - **Platform-specific**:
   - Windows: `wmic csproduct get UUID` + `getmac`
@@ -113,17 +114,20 @@
   - Linux: `/etc/machine-id`
 
 ### 2. License Key Generation
+
 - **Algorithm**: HMAC-SHA256
 - **Input**: SECRET_KEY + Hardware ID
 - **Output**: 24-character hex string (formatted as 6 groups)
 - **One-way**: Can't reverse-engineer Hardware ID from License Key
 
 ### 3. Storage
+
 - **Location**: Electron userData directory
 - **Encryption**: AES-256-CBC with random IV
 - **Why encrypt?**: Makes it harder to copy license files
 
 ### 4. Validation
+
 - **Every launch**: Checks if stored license matches current hardware
 - **Offline**: No internet connection needed after activation
 - **Automatic**: User doesn't need to re-enter key
@@ -131,22 +135,26 @@
 ## Limitations & Considerations
 
 ### ✅ What This Protects Against
+
 1. Casual copying to different computers
 2. Sharing app with other gyms
 3. Running on virtual machines (different hardware)
 
 ### ⚠️ What This Doesn't Protect Against
+
 1. Determined reverse engineers
 2. Code decompilation and modification
 3. VM cloning (if VM hardware is cloned too)
 
 ### 🎯 Perfect For
+
 - **MVP/Demo** distribution
 - **Preventing casual sharing**
 - **Small-scale distribution** (gyms, small businesses)
 - **Offline environments** (no server needed)
 
 ### 📈 Consider Upgrading To (For Commercial)
+
 - Online activation servers
 - Code obfuscation
 - Anti-debugging measures
@@ -156,6 +164,7 @@
 ## Summary
 
 This is a **simple, effective, offline licensing system** perfect for your MVP use case:
+
 - Quick to implement ✅
 - Works offline ✅
 - Prevents casual copying ✅

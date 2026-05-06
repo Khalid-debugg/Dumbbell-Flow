@@ -579,7 +579,7 @@ if (require.main === module) {
       (process.platform === 'darwin'
         ? path.join(os.homedir(), 'Library', 'Application Support')
         : path.join(os.homedir(), '.config'))
-    dbPath = path.join(appDataPath, 'fitflow', 'fitflow.db')
+    dbPath = path.join(appDataPath, 'dumbbellflow', 'dumbbellflow.db')
   }
 
   console.log(`📁 Using database: ${dbPath}`)

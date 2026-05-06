@@ -6,8 +6,8 @@ import { MigrationRunner } from './migrationRunner'
 let db: Database.Database | null = null
 
 export function initDatabase(): Database.Database {
-  const dataPath = join(app.getPath('documents'), 'FitFlow', 'backups')
-  const dbPath = join(dataPath, 'fitflow.db')
+  const dataPath = join(app.getPath('documents'), 'DumbbellFlow', 'backups')
+  const dbPath = join(dataPath, 'dumbbellflow.db')
 
   // Ensure the backups directory exists
   const fs = require('fs')

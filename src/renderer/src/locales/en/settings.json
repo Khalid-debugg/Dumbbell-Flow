@@ -29,7 +29,7 @@
     "logo": "Gym Logo",
     "selectLogo": "Select Logo",
     "changeLogo": "Change Logo",
-    "defaultLogo": "Using default FitFlow logo",
+    "defaultLogo": "Using default DumbbellFlow logo",
     "logoTip": "This logo will appear on member barcodes and receipts",
     "barcodeSize": "Barcode Card Size",
     "keychainSize": "Keychain (54x32mm)",

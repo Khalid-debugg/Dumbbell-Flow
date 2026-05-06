@@ -29,7 +29,7 @@
     "logo": "Logo da Academia",
     "selectLogo": "Selecionar Logo",
     "changeLogo": "Alterar Logo",
-    "defaultLogo": "Usando logo padrão FitFlow",
+    "defaultLogo": "Usando logo padrão DumbbellFlow",
     "logoTip": "Este logo aparecerá nos códigos de barras dos membros e recibos",
     "barcodeSize": "Tamanho do Cartão de Código de Barras",
     "keychainSize": "Chaveiro (54x32mm)",

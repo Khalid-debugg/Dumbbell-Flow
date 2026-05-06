@@ -29,7 +29,7 @@
     "logo": "Logo del Gimnasio",
     "selectLogo": "Seleccionar Logo",
     "changeLogo": "Cambiar Logo",
-    "defaultLogo": "Usando logo predeterminado de FitFlow",
+    "defaultLogo": "Usando logo predeterminado de DumbbellFlow",
     "logoTip": "Este logo aparecerá en los códigos de barras de miembros y recibos",
     "barcodeSize": "Tamaño de Tarjeta de Código de Barras",
     "keychainSize": "Llavero (54x32mm)",

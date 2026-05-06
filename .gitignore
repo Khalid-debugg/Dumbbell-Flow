@@ -5,10 +5,10 @@ out
 .eslintcache
 *.log*
 .claude
-FitFlow-Portable.zip
+DumbbellFlow-Portable.zip
 CLAUDE.md
 
-generate-license.js
+generate-offline-license.js
 .env*
 
 # Temporary Vite config files

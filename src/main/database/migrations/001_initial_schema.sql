@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS settings (
   language TEXT DEFAULT 'ar' CHECK (language IN ('ar', 'en', 'es', 'pt', 'fr', 'de')),
   currency TEXT DEFAULT 'EGP',
 
-  gym_name TEXT DEFAULT 'FitFlow Gym',
+  gym_name TEXT DEFAULT 'DumbbellFlow Gym',
   gym_address TEXT,
   gym_country_code TEXT DEFAULT '+20',
   gym_phone TEXT,
@@ -149,7 +149,7 @@ INSERT OR IGNORE INTO settings (
   '1',
   'ar',
   'EGP',
-  'FitFlow Gym',
+  'DumbbellFlow Gym',
   'both',
   'cash',
   1,

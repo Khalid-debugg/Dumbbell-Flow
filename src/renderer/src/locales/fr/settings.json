@@ -29,7 +29,7 @@
     "logo": "Logo de la Salle",
     "selectLogo": "Sélectionner le Logo",
     "changeLogo": "Changer le Logo",
-    "defaultLogo": "Utilisation du logo FitFlow par défaut",
+    "defaultLogo": "Utilisation du logo DumbbellFlow par défaut",
     "logoTip": "Ce logo apparaîtra sur les codes-barres des membres et les reçus",
     "barcodeSize": "Taille de la Carte Code-Barres",
     "keychainSize": "Porte-clés (54x32mm)",

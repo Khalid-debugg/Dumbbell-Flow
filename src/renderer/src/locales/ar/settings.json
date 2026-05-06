@@ -29,7 +29,7 @@
     "logo": "شعار الصالة",
     "selectLogo": "اختر الشعار",
     "changeLogo": "تغيير الشعار",
-    "defaultLogo": "يتم استخدام شعار FitFlow الافتراضي",
+    "defaultLogo": "يتم استخدام شعار DumbbellFlow الافتراضي",
     "logoTip": "سيظهر هذا الشعار على باركود الأعضاء والإيصالات",
     "barcodeSize": "حجم بطاقة الباركود",
     "keychainSize": "سلسلة مفاتيح (54x32ملم)",

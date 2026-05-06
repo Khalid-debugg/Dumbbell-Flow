@@ -25,7 +25,7 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     icon: icon,
-    title: 'FitFlow',
+    title: 'DumbbellFlow',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -53,7 +53,7 @@ ipcMain.handle('ping', async () => {
 })
 
 app.whenReady().then(async () => {
-  electronApp.setAppUserModelId('com.fitflow.app')
+  electronApp.setAppUserModelId('com.dumbbellflow.app')
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
