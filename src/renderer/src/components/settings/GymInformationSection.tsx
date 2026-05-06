@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useEffect } from 'react'
+import { memo, useCallback, useState, useEffect, type ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Building2, Upload, ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
@@ -74,6 +74,26 @@ export const GymInformationSection = memo(function GymInformationSection({
     toast.error('Failed to display logo preview')
   }, [])
 
+  const handleGymNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => onUpdate({ gymName: e.target.value }),
+    [onUpdate]
+  )
+
+  const handleGymAddressChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => onUpdate({ gymAddress: e.target.value }),
+    [onUpdate]
+  )
+
+  const handleCountryCodeChange = useCallback(
+    (code: string) => onUpdate({ gymCountryCode: code }),
+    [onUpdate]
+  )
+
+  const handlePhoneNumberChange = useCallback(
+    (number: string) => onUpdate({ gymPhone: number }),
+    [onUpdate]
+  )
+
   return (
     <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
       <div className="flex items-center gap-3 mb-6">
@@ -89,7 +109,7 @@ export const GymInformationSection = memo(function GymInformationSection({
           <Input
             type="text"
             value={gymName}
-            onChange={(e) => onUpdate({ gymName: e.target.value })}
+            onChange={handleGymNameChange}
             placeholder={t('gym.namePlaceholder')}
             className="bg-gray-900 border-gray-700 text-white"
             disabled={!canEdit}
@@ -102,8 +122,8 @@ export const GymInformationSection = memo(function GymInformationSection({
           </label>
           <Input
             type="text"
-            value={gymAddress || ''}
-            onChange={(e) => onUpdate({ gymAddress: e.target.value })}
+            value={gymAddress}
+            onChange={handleGymAddressChange}
             placeholder={t('gym.addressPlaceholder')}
             className="bg-gray-900 border-gray-700 text-white"
             disabled={!canEdit}
@@ -112,10 +132,10 @@ export const GymInformationSection = memo(function GymInformationSection({
 
         <div>
           <PhoneInput
-            countryCode={gymCountryCode || '+20'}
-            phoneNumber={gymPhone || ''}
-            onCountryCodeChange={(code) => onUpdate({ gymCountryCode: code })}
-            onPhoneNumberChange={(number) => onUpdate({ gymPhone: number })}
+            countryCode={gymCountryCode}
+            phoneNumber={gymPhone}
+            onCountryCodeChange={handleCountryCodeChange}
+            onPhoneNumberChange={handlePhoneNumberChange}
             label={t('gym.phone')}
             required={false}
             disabled={!canEdit}

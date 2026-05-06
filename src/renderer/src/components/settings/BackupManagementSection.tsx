@@ -25,6 +25,7 @@ interface BackupManagementSectionProps {
   language: SupportedLanguage
   canManageBackups: boolean
   onUpdate: (updates: Partial<Settings>) => void
+  showCloudBackup?: boolean
 }
 
 export const BackupManagementSection = memo(function BackupManagementSection({
@@ -34,7 +35,8 @@ export const BackupManagementSection = memo(function BackupManagementSection({
   cloudBackupEnabled,
   language,
   canManageBackups,
-  onUpdate
+  onUpdate,
+  showCloudBackup = true
 }: BackupManagementSectionProps) {
   const { t } = useTranslation('settings')
   const [backupInfo, setBackupInfo] = useState<BackupInfo | null>(null)
@@ -268,23 +270,25 @@ export const BackupManagementSection = memo(function BackupManagementSection({
             language={language}
             onOpenFolder={handleOpenFolder}
           />
-          <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
-            <div className="flex items-center gap-3">
-              <Cloud className="w-5 h-5 text-blue-400" />
-              <div>
-                <span className="text-sm font-medium text-gray-300 block">
-                  {t('backup.cloudBackup')}
-                </span>
-                <span className="text-xs text-gray-500">{t('backup.cloudBackupDesc')}</span>
+          {showCloudBackup && (
+            <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
+              <div className="flex items-center gap-3">
+                <Cloud className="w-5 h-5 text-blue-400" />
+                <div>
+                  <span className="text-sm font-medium text-gray-300 block">
+                    {t('backup.cloudBackup')}
+                  </span>
+                  <span className="text-xs text-gray-500">{t('backup.cloudBackupDesc')}</span>
+                </div>
               </div>
+              <Checkbox
+                checked={cloudBackupEnabled}
+                onCheckedChange={handleCloudBackupChange}
+                className="w-5 h-5"
+                disabled={!canManageBackups}
+              />
             </div>
-            <Checkbox
-              checked={cloudBackupEnabled}
-              onCheckedChange={handleCloudBackupChange}
-              className="w-5 h-5"
-              disabled={!canManageBackups}
-            />
-          </div>
+          )}
           <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-4">
             <p className="text-xs text-blue-300">{t('backup.tip')}</p>
           </div>

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react'
+import { createContext, useState, useEffect, ReactNode, useCallback, useRef, useMemo } from 'react'
 import { Settings } from '@renderer/models/settings'
 import { useTranslation } from 'react-i18next'
 import { notificationService } from '@renderer/services/notificationService'
@@ -20,100 +20,106 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const { i18n } = useTranslation()
+  const settingsRef = useRef<Settings | null>(null)
   const notificationsInitialized = useRef(false)
+
+  const applyLanguage = useCallback(
+    async (language: string) => {
+      if (language !== i18n.language) {
+        await i18n.changeLanguage(language)
+      }
+      document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr'
+      document.documentElement.lang = language
+    },
+    [i18n]
+  )
 
   const loadSettings = useCallback(async () => {
     try {
       setError(null)
       const loadedSettings = await window.electron.ipcRenderer.invoke('settings:get')
+      settingsRef.current = loadedSettings
       setSettings(loadedSettings)
-
-      if (loadedSettings.language !== i18n.language) {
-        await i18n.changeLanguage(loadedSettings.language)
-      }
-
-      document.documentElement.dir = loadedSettings.language === 'ar' ? 'rtl' : 'ltr'
-      document.documentElement.lang = loadedSettings.language
+      await applyLanguage(loadedSettings.language)
     } catch (error) {
       console.error('Failed to load settings:', error)
       setError(error instanceof Error ? error : new Error('Failed to load settings'))
     } finally {
       setLoading(false)
     }
-  }, [i18n])
+  }, [applyLanguage])
 
-  const updateSettings = useCallback(async (newSettings: Settings) => {
-    try {
-      await window.electron.ipcRenderer.invoke('settings:update', newSettings)
+  const updateSettings = useCallback(
+    async (newSettings: Settings) => {
+      try {
+        await window.electron.ipcRenderer.invoke('settings:update', newSettings)
 
-      // Only update periodic checks if WhatsApp or backup settings actually changed
-      if (settings) {
-        const whatsappChanged =
-          newSettings.whatsappEnabled !== settings.whatsappEnabled ||
-          newSettings.whatsappAutoSend !== settings.whatsappAutoSend
-        const backupChanged = newSettings.cloudBackupEnabled !== settings.cloudBackupEnabled
+        const current = settingsRef.current
+        if (current) {
+          const whatsappChanged =
+            newSettings.whatsappEnabled !== current.whatsappEnabled ||
+            newSettings.whatsappAutoSend !== current.whatsappAutoSend
+          const backupChanged = newSettings.cloudBackupEnabled !== current.cloudBackupEnabled
 
-        if (whatsappChanged || backupChanged) {
-          console.log('WhatsApp/Backup settings changed, updating periodic checks...')
-          notificationService.updatePeriodicChecks(
-            newSettings.whatsappEnabled || false,
-            newSettings.whatsappAutoSend || false,
-            newSettings.cloudBackupEnabled || false
-          )
+          if (whatsappChanged || backupChanged) {
+            notificationService.updatePeriodicChecks(
+              newSettings.whatsappEnabled || false,
+              newSettings.whatsappAutoSend || false,
+              newSettings.cloudBackupEnabled || false
+            )
+          }
         }
+
+        settingsRef.current = newSettings
+        setSettings(newSettings)
+        await applyLanguage(newSettings.language)
+      } catch (error) {
+        console.error('Failed to update settings:', error)
+        throw error
       }
-
-      setSettings(newSettings)
-
-      if (newSettings.language !== i18n.language) {
-        await i18n.changeLanguage(newSettings.language)
-      }
-
-      document.documentElement.dir = newSettings.language === 'ar' ? 'rtl' : 'ltr'
-      document.documentElement.lang = newSettings.language
-    } catch (error) {
-      console.error('Failed to update settings:', error)
-      throw error
-    }
-  }, [i18n])
-
-  const refreshSettings = useCallback(async () => {
-    await loadSettings()
-  }, [loadSettings])
+    },
+    [applyLanguage]
+  )
 
   const initializeNotifications = useCallback(() => {
-    // Only initialize once to prevent multiple timers
-    if (notificationsInitialized.current) {
-      console.log('Notifications already initialized, skipping...')
-      return
-    }
+    if (notificationsInitialized.current) return
 
-    if (settings) {
-      console.log('Initializing periodic notifications...')
+    const current = settingsRef.current
+    if (current) {
       notificationService.initializePeriodicChecks(
-        settings.whatsappEnabled || false,
-        settings.whatsappAutoSend || false,
-        settings.cloudBackupEnabled || false
+        current.whatsappEnabled || false,
+        current.whatsappAutoSend || false,
+        current.cloudBackupEnabled || false
       )
       notificationsInitialized.current = true
     }
-  }, [settings])
+  }, [])
 
   useEffect(() => {
     loadSettings()
   }, [loadSettings])
 
-  // Cleanup periodic checks on unmount
   useEffect(() => {
     return () => {
-      console.log('SettingsProvider unmounting, stopping all periodic checks...')
       notificationService.stopAllPeriodicChecks()
       notificationsInitialized.current = false
     }
   }, [])
 
+  const contextValue = useMemo(
+    () => ({
+      settings,
+      loading,
+      error,
+      updateSettings,
+      refreshSettings: loadSettings,
+      initializeNotifications
+    }),
+    [settings, loading, error, updateSettings, loadSettings, initializeNotifications]
+  )
+
   return (
-    <SettingsContext.Provider value={{ settings, loading, error, updateSettings, refreshSettings, initializeNotifications }}>
+    <SettingsContext.Provider value={contextValue}>
       {children}
     </SettingsContext.Provider>
   )

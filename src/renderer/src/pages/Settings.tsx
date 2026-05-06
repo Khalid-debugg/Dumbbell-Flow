@@ -16,6 +16,8 @@ import { LicenseManagementSection } from '@renderer/components/settings/LicenseM
 import { BackupManagementSection } from '@renderer/components/settings/BackupManagementSection'
 import { WhatsAppNotificationSection } from '@renderer/components/settings/WhatsAppNotificationSection'
 
+const IS_AIRGAPPED = import.meta.env.VITE_BUILD_VARIANT === 'airgapped'
+
 function Settings() {
   const { t } = useTranslation('settings')
   const { settings: contextSettings, updateSettings, loading: contextLoading, error, refreshSettings } = useSettings()
@@ -196,28 +198,31 @@ function Settings() {
           language={formData.language}
           canManageBackups={permissions.canManageBackups}
           onUpdate={handleUpdate}
+          showCloudBackup={!IS_AIRGAPPED}
         />
 
-        {planFeatures.whatsapp ? (
-          <WhatsAppNotificationSection
-            whatsappEnabled={formData.whatsappEnabled}
-            whatsappAutoSend={formData.whatsappAutoSend}
-            whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
-            whatsappLastCheckDate={formData.whatsappLastCheckDate}
-            canManageWhatsApp={permissions.canManageWhatsApp}
-            onUpdate={handleUpdate}
-          />
-        ) : (
-          <PlanGate requiredPlan="premium">
+        {!IS_AIRGAPPED && (
+          planFeatures.whatsapp ? (
             <WhatsAppNotificationSection
               whatsappEnabled={formData.whatsappEnabled}
               whatsappAutoSend={formData.whatsappAutoSend}
               whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
               whatsappLastCheckDate={formData.whatsappLastCheckDate}
-              canManageWhatsApp={false}
-              onUpdate={() => {}}
+              canManageWhatsApp={permissions.canManageWhatsApp}
+              onUpdate={handleUpdate}
             />
-          </PlanGate>
+          ) : (
+            <PlanGate requiredPlan="premium">
+              <WhatsAppNotificationSection
+                whatsappEnabled={formData.whatsappEnabled}
+                whatsappAutoSend={formData.whatsappAutoSend}
+                whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
+                whatsappLastCheckDate={formData.whatsappLastCheckDate}
+                canManageWhatsApp={false}
+                onUpdate={() => {}}
+              />
+            </PlanGate>
+          )
         )}
 
         {/* Developer Tools - Only visible in development mode */}
