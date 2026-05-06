@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS settings_new (
   language TEXT DEFAULT 'ar' CHECK (language IN ('ar', 'en', 'es', 'pt', 'fr', 'de')),
   currency TEXT DEFAULT 'EGP',
 
-  gym_name TEXT DEFAULT 'FitFlow Gym',
+  gym_name TEXT DEFAULT 'DumbbellFlow Gym',
   gym_address TEXT,
   gym_country_code TEXT DEFAULT '+20',
   gym_phone TEXT,
@@ -29,8 +29,7 @@ CREATE TABLE IF NOT EXISTS settings_new (
   whatsapp_enabled INTEGER DEFAULT 0 CHECK (whatsapp_enabled IN (0, 1)),
   whatsapp_auto_send INTEGER DEFAULT 0 CHECK (whatsapp_auto_send IN (0, 1)),
   whatsapp_days_before_expiry INTEGER DEFAULT 3,
-  whatsapp_message_template TEXT DEFAULT 'مرحباً {name}، عضويتك في {gym_name} ستنتهي في {days_left} أيام بتاريخ {end_date}. يرجى التجديد للاستمرار في استخدام النادي.',
-  whatsapp_message_language TEXT DEFAULT 'ar' CHECK (whatsapp_message_language IN ('ar', 'en', 'es', 'pt', 'fr', 'de')),
+  whatsapp_message_template TEXT DEFAULT 'Hello {name}, your membership at {gym_name} will expire in {days_left} days on {end_date}. Please renew to continue using the gym.',
   whatsapp_last_check_date DATETIME,
 
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -123,7 +122,7 @@ CREATE TABLE IF NOT EXISTS settings_old (
   language TEXT DEFAULT 'ar' CHECK (language IN ('ar', 'en', 'es', 'pt', 'fr', 'de')),
   currency TEXT DEFAULT 'EGP',
 
-  gym_name TEXT DEFAULT 'FitFlow Gym',
+  gym_name TEXT DEFAULT 'DumbbellFlow Gym',
   gym_address TEXT,
   gym_country_code TEXT DEFAULT '+20',
   gym_phone TEXT,

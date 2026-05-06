@@ -34,7 +34,6 @@ export interface Settings {
   whatsappAutoSend: boolean
   whatsappDaysBeforeExpiry: number
   whatsappMessageTemplate: string
-  whatsappMessageLanguage: SupportedLanguage
   whatsappLastCheckDate?: string
 
   createdAt?: string
@@ -74,7 +73,6 @@ export interface SettingsDbRow {
   whatsapp_auto_send: 0 | 1
   whatsapp_days_before_expiry: number
   whatsapp_message_template: string
-  whatsapp_message_language: SupportedLanguage
   whatsapp_last_check_date: string | null
 
   created_at: string

@@ -67,9 +67,9 @@ async function performAutoBackup(): Promise<void> {
     }
 
     // Perform periodic backup
-    const dbPath = path.join(app.getPath('documents'), 'FitFlow', 'backups', 'fitflow.db')
+    const dbPath = path.join(app.getPath('documents'), 'DumbbellFlow', 'backups', 'dumbbellflow.db')
     const backupDir =
-      settings?.backup_folder_path || path.join(app.getPath('documents'), 'FitFlow', 'backups')
+      settings?.backup_folder_path || path.join(app.getPath('documents'), 'DumbbellFlow', 'backups')
 
     if (!fs.existsSync(backupDir)) {
       fs.mkdirSync(backupDir, { recursive: true })
@@ -79,7 +79,7 @@ async function performAutoBackup(): Promise<void> {
       new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] +
       '_' +
       new Date().toLocaleTimeString('en-US', { hour12: false }).replace(/:/g, '-')
-    const backupPath = path.join(backupDir, `fitflow-backup-${timestamp}.db`)
+    const backupPath = path.join(backupDir, `dumbbellflow-backup-${timestamp}.db`)
 
     fs.copyFileSync(dbPath, backupPath)
 
@@ -110,7 +110,7 @@ export function registerSettingsHandlers() {
         id: '1',
         language: 'ar' as const,
         currency: 'EGP',
-        gymName: 'FitFlow Gym',
+        gymName: 'DumbbellFlow Gym',
         gymAddress: undefined,
         gymPhone: undefined,
         gymLogoPath: undefined,
@@ -152,8 +152,7 @@ export function registerSettingsHandlers() {
       whatsappDaysBeforeExpiry: settings.whatsapp_days_before_expiry || 3,
       whatsappMessageTemplate:
         settings.whatsapp_message_template ||
-        'مرحباً {name}، عضويتك في {gym_name} ستنتهي في {days_left} أيام بتاريخ {end_date}. يرجى التجديد للاستمرار في استخدام النادي.',
-      whatsappMessageLanguage: settings.whatsapp_message_language || 'ar',
+        'Hello {name}, your membership at {gym_name} will expire in {days_left} days on {end_date}. Please renew to continue using the gym.',
       whatsappLastCheckDate: settings.whatsapp_last_check_date || undefined,
       createdAt: settings.created_at,
       updatedAt: settings.updated_at
@@ -164,7 +163,7 @@ export function registerSettingsHandlers() {
     const db = getDatabase()
 
     db.prepare(
-      `UPDATE settings SET language = ?, currency = ?, gym_name = ?, gym_address = ?, gym_country_code = ?, gym_phone = ?, gym_logo_path = ?, barcode_size = ?, allowed_genders = ?, default_payment_method = ?, allow_instant_checkin = ?, allow_custom_member_id = ?, auto_backup = ?, backup_frequency = ?, backup_folder_path = ?, cloud_backup_enabled = ?, cloud_backup_api_url = ?, whatsapp_enabled = ?, whatsapp_auto_send = ?, whatsapp_days_before_expiry = ?, whatsapp_message_template = ?, whatsapp_message_language = ? WHERE id = '1'`
+      `UPDATE settings SET language = ?, currency = ?, gym_name = ?, gym_address = ?, gym_country_code = ?, gym_phone = ?, gym_logo_path = ?, barcode_size = ?, allowed_genders = ?, default_payment_method = ?, allow_instant_checkin = ?, allow_custom_member_id = ?, auto_backup = ?, backup_frequency = ?, backup_folder_path = ?, cloud_backup_enabled = ?, cloud_backup_api_url = ?, whatsapp_enabled = ?, whatsapp_auto_send = ?, whatsapp_days_before_expiry = ?, whatsapp_message_template = ? WHERE id = '1'`
     ).run(
       settings.language,
       settings.currency,
@@ -187,8 +186,7 @@ export function registerSettingsHandlers() {
       settings.whatsappAutoSend ? 1 : 0,
       settings.whatsappDaysBeforeExpiry || 3,
       settings.whatsappMessageTemplate ||
-        'مرحباً {name}، عضويتك في {gym_name} ستنتهي في {days_left} أيام بتاريخ {end_date}. يرجى التجديد للاستمرار في استخدام النادي.',
-      settings.whatsappMessageLanguage || 'ar'
+        'Hello {name}, your membership at {gym_name} will expire in {days_left} days on {end_date}. Please renew to continue using the gym.'
     )
 
     return { success: true }
@@ -218,9 +216,15 @@ export function registerSettingsHandlers() {
         | SettingsDbRow
         | undefined
 
-      const dbPath = path.join(app.getPath('documents'), 'FitFlow', 'backups', 'fitflow.db')
+      const dbPath = path.join(
+        app.getPath('documents'),
+        'DumbbellFlow',
+        'backups',
+        'dumbbellflow.db'
+      )
       const backupDir =
-        settings?.backup_folder_path || path.join(app.getPath('documents'), 'FitFlow', 'backups')
+        settings?.backup_folder_path ||
+        path.join(app.getPath('documents'), 'DumbbellFlow', 'backups')
 
       if (!fs.existsSync(backupDir)) {
         fs.mkdirSync(backupDir, { recursive: true })
@@ -230,7 +234,7 @@ export function registerSettingsHandlers() {
         new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] +
         '_' +
         new Date().toLocaleTimeString('en-US', { hour12: false }).replace(/:/g, '-')
-      const backupPath = path.join(backupDir, `fitflow-backup-${timestamp}.db`)
+      const backupPath = path.join(backupDir, `dumbbellflow-backup-${timestamp}.db`)
 
       fs.copyFileSync(dbPath, backupPath)
 
@@ -272,7 +276,8 @@ export function registerSettingsHandlers() {
         | undefined
 
       const backupDir =
-        settings?.backup_folder_path || path.join(app.getPath('documents'), 'FitFlow', 'backups')
+        settings?.backup_folder_path ||
+        path.join(app.getPath('documents'), 'DumbbellFlow', 'backups')
 
       if (!fs.existsSync(backupDir)) {
         return {
@@ -286,7 +291,7 @@ export function registerSettingsHandlers() {
 
       const files: BackupFile[] = fs
         .readdirSync(backupDir)
-        .filter((f) => f.startsWith('fitflow-backup-') && f.endsWith('.db'))
+        .filter((f) => f.startsWith('dumbbellflow-backup-') && f.endsWith('.db'))
         .map((f) => {
           const filePath = path.join(backupDir, f)
           const stats = fs.statSync(filePath)
@@ -315,14 +320,19 @@ export function registerSettingsHandlers() {
         backupCount: 0,
         totalSize: 0,
         backups: [],
-        folderPath: path.join(app.getPath('documents'), 'FitFlow', 'backups')
+        folderPath: path.join(app.getPath('documents'), 'DumbbellFlow', 'backups')
       }
     }
   })
 
   ipcMain.handle('backup:restore', async (_event, backupPath: string) => {
     try {
-      const dbPath = path.join(app.getPath('documents'), 'FitFlow', 'backups', 'fitflow.db')
+      const dbPath = path.join(
+        app.getPath('documents'),
+        'DumbbellFlow',
+        'backups',
+        'dumbbellflow.db'
+      )
 
       if (!fs.existsSync(backupPath)) {
         return {
@@ -333,9 +343,9 @@ export function registerSettingsHandlers() {
 
       const emergencyBackupPath = path.join(
         app.getPath('documents'),
-        'FitFlow',
+        'DumbbellFlow',
         'backups',
-        `fitflow-before-restore-${Date.now()}.db`
+        `dumbbellflow-before-restore-${Date.now()}.db`
       )
       fs.copyFileSync(dbPath, emergencyBackupPath)
 
@@ -379,7 +389,8 @@ export function registerSettingsHandlers() {
         | undefined
 
       const backupDir =
-        settings?.backup_folder_path || path.join(app.getPath('documents'), 'FitFlow', 'backups')
+        settings?.backup_folder_path ||
+        path.join(app.getPath('documents'), 'DumbbellFlow', 'backups')
 
       if (!fs.existsSync(backupDir)) {
         return { success: true, deleted: 0 }
@@ -387,9 +398,9 @@ export function registerSettingsHandlers() {
 
       // Define retention limits based on backup frequency
       const retentionLimits: Record<string, number> = {
-        daily: 30,    // 1 month of daily backups
-        weekly: 12,   // 3 months of weekly backups
-        monthly: 12   // 1 year of monthly backups
+        daily: 30, // 1 month of daily backups
+        weekly: 12, // 3 months of weekly backups
+        monthly: 12 // 1 year of monthly backups
       }
 
       const backupFrequency = settings?.backup_frequency || 'daily'
@@ -397,7 +408,7 @@ export function registerSettingsHandlers() {
 
       const files = fs
         .readdirSync(backupDir)
-        .filter((f) => f.startsWith('fitflow-backup-') && f.endsWith('.db'))
+        .filter((f) => f.startsWith('dumbbellflow-backup-') && f.endsWith('.db'))
         .map((f) => {
           const filePath = path.join(backupDir, f)
           const stats = fs.statSync(filePath)
@@ -517,7 +528,7 @@ export function registerSettingsHandlers() {
 
   ipcMain.handle('gym:getDefaultLogo', async () => {
     try {
-      // Return the path to the default FitFlow logo in resources
+      // Return the path to the default DumbbellFlow logo in resources
       const defaultLogoPath = path.join(process.resourcesPath, 'icon.png')
       if (fs.existsSync(defaultLogoPath)) {
         return { success: true, path: defaultLogoPath }

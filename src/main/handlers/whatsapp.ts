@@ -4,6 +4,9 @@ import { SettingsDbRow } from '@renderer/models/settings'
 import { randomUUID } from 'crypto'
 import { sendNotificationToRenderer } from '../utils/notificationBridge'
 
+const WHATSAPP_MESSAGE_TEMPLATE =
+  'Hello {name}, your membership at {gym_name} will expire in {days_left} days on {end_date}. Please renew to continue using the gym.'
+
 let whatsappSchedulerInterval: NodeJS.Timeout | null = null
 
 interface WhatsAppNotificationLog {
@@ -24,27 +27,29 @@ async function sendWhatsAppMessage(
   instanceId: string
 ): Promise<{ success: boolean; message: string }> {
   try {
-    const formattedPhone = phoneNumber.replace(/[+@]/g, '')
-    const apiUrl = `https://wawp.net/wp-json/awp/v1/send?instance_id=${encodeURIComponent(instanceId)}&access_token=${encodeURIComponent(token)}&chatId=${encodeURIComponent(formattedPhone)}&message=${encodeURIComponent(message)}`
+    const formattedPhone = phoneNumber.replace(/[+@]/g, '') + '@c.us'
+    const apiUrl = `https://api.wawp.net/v2/send/text?instance_id=${encodeURIComponent(instanceId)}&access_token=${encodeURIComponent(token)}`
 
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({
+        chatId: formattedPhone,
+        text: message
+      })
     })
 
     const data = await response.json()
 
-    // Wawp API returns object with _data or id field on success
-    if (response.ok && (data._data || data.id)) {
+    if (response.ok) {
       return {
         success: true,
         message: 'Message sent successfully'
       }
     } else {
-      // Map technical API errors to user-friendly messages
-      const apiError = data.message || data.data?.details?.[0] || ''
+      const apiError = data.message || data.error || data.data?.details?.[0] || ''
       let friendlyMessage = 'Unable to send message'
 
       if (apiError.toLowerCase().includes('token') || apiError.toLowerCase().includes('auth')) {
@@ -65,7 +70,6 @@ async function sendWhatsAppMessage(
       }
     }
   } catch (error) {
-    // Map connection errors to user-friendly messages
     const errorMsg = error instanceof Error ? error.message : ''
     let friendlyMessage = 'Unable to connect to WhatsApp service'
 
@@ -256,7 +260,7 @@ async function performAutoWhatsAppCheck(): Promise<void> {
         continue
       }
 
-      const message = replaceTemplateVariables(settings.whatsapp_message_template, {
+      const message = replaceTemplateVariables(WHATSAPP_MESSAGE_TEMPLATE, {
         name: membership.memberName,
         gymName: settings.gym_name,
         daysLeft: membership.daysLeft,
@@ -421,7 +425,7 @@ export function registerWhatsAppHandlers() {
           continue
         }
 
-        const message = replaceTemplateVariables(settings.whatsapp_message_template, {
+        const message = replaceTemplateVariables(WHATSAPP_MESSAGE_TEMPLATE, {
           name: membership.memberName,
           gymName: settings.gym_name,
           daysLeft: membership.daysLeft,
