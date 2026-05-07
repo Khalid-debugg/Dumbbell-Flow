@@ -124,7 +124,8 @@
     "checkins": "Check-ins",
     "reports": "Berichte",
     "settings": "Einstellungen",
-    "accounts": "Konten"
+    "accounts": "Konten",
+    "store": "Shop"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Kann Finanzdaten einsehen",
@@ -166,6 +167,11 @@
     "accounts.delete": "Kann Benutzerkonten löschen",
     "accounts.manage_permissions": "Kann Berechtigungen verwalten",
     "accounts.change_password": "Kann Passwörter ändern",
-    "accounts.manage_admin": "Kann Admin-Status verwalten"
+    "accounts.manage_admin": "Kann Admin-Status verwalten",
+    "store.view": "Kann auf den Shop zugreifen",
+    "store.create_sale": "Kann Verkäufe erstellen (Kasse)",
+    "store.view_sales": "Kann Verkaufshistorie einsehen",
+    "store.delete_sale": "Kann Verkaufsdatensätze löschen",
+    "store.manage_products": "Kann Produkte hinzufügen, bearbeiten und entfernen"
   }
 }

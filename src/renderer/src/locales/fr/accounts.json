@@ -124,7 +124,8 @@
     "checkins": "Pointages",
     "reports": "Rapports",
     "settings": "Paramètres",
-    "accounts": "Comptes"
+    "accounts": "Comptes",
+    "store": "Boutique"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Peut voir les données financières",
@@ -166,6 +167,11 @@
     "accounts.delete": "Peut supprimer les comptes utilisateurs",
     "accounts.manage_permissions": "Peut gérer les permissions",
     "accounts.change_password": "Peut changer les mots de passe",
-    "accounts.manage_admin": "Peut gérer le statut d'administrateur"
+    "accounts.manage_admin": "Peut gérer le statut d'administrateur",
+    "store.view": "Peut accéder à la boutique",
+    "store.create_sale": "Peut créer des ventes (POS)",
+    "store.view_sales": "Peut voir l'historique des ventes",
+    "store.delete_sale": "Peut supprimer des enregistrements de ventes",
+    "store.manage_products": "Peut ajouter, modifier et supprimer des produits"
   }
 }

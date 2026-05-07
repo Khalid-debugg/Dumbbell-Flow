@@ -124,7 +124,8 @@
     "checkins": "Check-ins",
     "reports": "Reports",
     "settings": "Settings",
-    "accounts": "Accounts"
+    "accounts": "Accounts",
+    "store": "Store"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Can view financial data",
@@ -166,6 +167,11 @@
     "accounts.delete": "Can delete user accounts",
     "accounts.manage_permissions": "Can manage permissions",
     "accounts.change_password": "Can change passwords",
-    "accounts.manage_admin": "Can manage admin status"
+    "accounts.manage_admin": "Can manage admin status",
+    "store.view": "Can access the store",
+    "store.create_sale": "Can create sales (POS)",
+    "store.view_sales": "Can view sales history",
+    "store.delete_sale": "Can delete sales records",
+    "store.manage_products": "Can add, edit, and remove products"
   }
 }

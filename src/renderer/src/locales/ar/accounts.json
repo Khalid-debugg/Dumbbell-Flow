@@ -124,7 +124,8 @@
     "checkins": "تسجيل الحضور",
     "reports": "التقارير",
     "settings": "الإعدادات",
-    "accounts": "الحسابات"
+    "accounts": "الحسابات",
+    "store": "المتجر"
   },
   "permissionLabels": {
     "dashboard.view_financial": "يمكنه عرض البيانات المالية",
@@ -166,6 +167,11 @@
     "accounts.delete": "يمكنه حذف حسابات المستخدمين",
     "accounts.manage_permissions": "يمكنه إدارة الصلاحيات",
     "accounts.change_password": "يمكنه تغيير كلمات المرور",
-    "accounts.manage_admin": "يمكنه إدارة صلاحيات المدير"
+    "accounts.manage_admin": "يمكنه إدارة صلاحيات المدير",
+    "store.view": "يمكنه الوصول إلى المتجر",
+    "store.create_sale": "يمكنه إنشاء مبيعات (نقطة البيع)",
+    "store.view_sales": "يمكنه عرض سجل المبيعات",
+    "store.delete_sale": "يمكنه حذف سجلات المبيعات",
+    "store.manage_products": "يمكنه إضافة وتعديل وحذف المنتجات"
   }
 }

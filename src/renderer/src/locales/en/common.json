@@ -11,7 +11,8 @@
     "memberships": "Memberships",
     "reports": "Reports",
     "accounts": "Accounts",
-    "settings": "Settings"
+    "settings": "Settings",
+    "store": "Store"
   },
   "user": {
     "admin": "Admin",

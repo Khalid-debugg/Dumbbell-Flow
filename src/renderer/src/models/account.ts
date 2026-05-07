@@ -55,6 +55,13 @@ export const PERMISSIONS = {
     manage_permissions: 'accounts.manage_permissions',
     change_password: 'accounts.change_password',
     manage_admin: 'accounts.manage_admin'
+  },
+  store: {
+    view: 'store.view',
+    create_sale: 'store.create_sale',
+    view_sales: 'store.view_sales',
+    delete_sale: 'store.delete_sale',
+    manage_products: 'store.manage_products'
   }
 } as const
 
@@ -117,7 +124,14 @@ export const PERMISSION_LABELS: Record<string, string> = {
   'accounts.delete': 'Can delete user accounts',
   'accounts.manage_permissions': 'Can manage permissions',
   'accounts.change_password': 'Can change passwords',
-  'accounts.manage_admin': 'Can manage admin status'
+  'accounts.manage_admin': 'Can manage admin status',
+
+  // Store
+  'store.view': 'Can access the store',
+  'store.create_sale': 'Can create sales (POS)',
+  'store.view_sales': 'Can view sales history',
+  'store.delete_sale': 'Can delete sales records',
+  'store.manage_products': 'Can add, edit, and remove products'
 }
 
 // Permission dependencies - maps each permission to the permissions it requires
@@ -172,7 +186,13 @@ export const PERMISSION_DEPENDENCIES: Record<string, string[]> = {
   'accounts.delete': ['accounts.view'],
   'accounts.manage_permissions': ['accounts.view', 'accounts.edit'],
   'accounts.change_password': ['accounts.view', 'accounts.edit'],
-  'accounts.manage_admin': ['accounts.view', 'accounts.edit']
+  'accounts.manage_admin': ['accounts.view', 'accounts.edit'],
+
+  // Store
+  'store.create_sale': ['store.view'],
+  'store.view_sales': ['store.view'],
+  'store.delete_sale': ['store.view', 'store.view_sales'],
+  'store.manage_products': ['store.view']
 }
 
 // Page names for grouping
@@ -184,7 +204,8 @@ export const PAGE_NAMES: Record<string, string> = {
   checkins: 'Check-ins',
   reports: 'Reports',
   settings: 'Settings',
-  accounts: 'Accounts'
+  accounts: 'Accounts',
+  store: 'Store'
 }
 
 // User permissions type
@@ -288,7 +309,10 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'accounts.delete': false,
     'accounts.manage_permissions': false,
     'accounts.change_password': false,
-    'accounts.manage_admin': false
+    'accounts.manage_admin': false,
+
+    // Store - Full access
+    ...Object.fromEntries(Object.values(PERMISSIONS.store).map((p) => [p, true]))
   },
 
   coach: {
@@ -327,7 +351,14 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     ...Object.fromEntries(Object.values(PERMISSIONS.settings).map((p) => [p, false])),
 
     // Accounts - No access
-    ...Object.fromEntries(Object.values(PERMISSIONS.accounts).map((p) => [p, false]))
+    ...Object.fromEntries(Object.values(PERMISSIONS.accounts).map((p) => [p, false])),
+
+    // Store - Can operate POS and view sales, cannot delete sales or manage products
+    'store.view': true,
+    'store.create_sale': true,
+    'store.view_sales': true,
+    'store.delete_sale': false,
+    'store.manage_products': false
   },
 
   receptionist: {
@@ -369,7 +400,14 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     ...Object.fromEntries(Object.values(PERMISSIONS.settings).map((p) => [p, false])),
 
     // Accounts - No access
-    ...Object.fromEntries(Object.values(PERMISSIONS.accounts).map((p) => [p, false]))
+    ...Object.fromEntries(Object.values(PERMISSIONS.accounts).map((p) => [p, false])),
+
+    // Store - Can operate POS only
+    'store.view': true,
+    'store.create_sale': true,
+    'store.view_sales': false,
+    'store.delete_sale': false,
+    'store.manage_products': false
   },
 
   custom: getEmptyPermissions()
