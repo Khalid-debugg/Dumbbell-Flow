@@ -74,6 +74,7 @@ function Reports() {
         startDate: currentFilters.startDate,
         endDate: currentFilters.endDate,
         totalRevenue: reportData.summary.totalRevenue,
+        storeRevenue: reportData.summary.storeRevenue,
         totalMembers: reportData.summary.totalMembers,
         newMembers: reportData.summary.newMembers,
         totalMemberships: reportData.summary.totalMemberships,

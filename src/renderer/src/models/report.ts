@@ -6,6 +6,7 @@ export interface Report {
   startDate: string
   endDate: string
   totalRevenue: number
+  storeRevenue?: number
   totalMembers: number
   newMembers: number
   totalMemberships: number
@@ -25,6 +26,8 @@ export interface ComparisonData {
 export interface ReportData {
   summary: {
     totalRevenue: number
+    membershipRevenue: number
+    storeRevenue: number
     totalMembers: number
     newMembers: number
     totalMemberships: number
@@ -45,6 +48,7 @@ export interface ReportData {
     date: string
     revenue: number
     memberships: number
+    store: number
   }>
   checkInsByDay: Array<{
     date: string

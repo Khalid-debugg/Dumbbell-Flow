@@ -30,6 +30,16 @@ export function registerReportsHandlers() {
       )
       .get(startDate, endDate) as { total: number | null }
 
+    const storeRevenueResult = db
+      .prepare(
+        `
+      SELECT COALESCE(SUM(total_amount), 0) as total
+      FROM store_sales
+      WHERE DATE(sold_at) BETWEEN ? AND ?
+    `
+      )
+      .get(startDate, endDate) as { total: number }
+
     // Total Members (all time)
     const totalMembersResult = db.prepare('SELECT COUNT(*) as count FROM members').get() as {
       count: number
@@ -112,6 +122,16 @@ export function registerReportsHandlers() {
       )
       .get(prevStartDate, prevEndDate) as { total: number | null }
 
+    const prevStoreRevenueResult = db
+      .prepare(
+        `
+      SELECT COALESCE(SUM(total_amount), 0) as total
+      FROM store_sales
+      WHERE DATE(sold_at) BETWEEN ? AND ?
+    `
+      )
+      .get(prevStartDate, prevEndDate) as { total: number }
+
     // Previous New Members
     const prevNewMembersResult = db
       .prepare(
@@ -145,21 +165,35 @@ export function registerReportsHandlers() {
       )
       .get(prevStartDate, prevEndDate) as { count: number }
 
-    // Revenue by Day
+    // Revenue by Day — stacked: memberships + store
     const revenueByDay = db
       .prepare(
         `
-      SELECT 
-        DATE(payment_date) as date,
-        SUM(amount_paid) as revenue,
-        COUNT(*) as memberships
-      FROM memberships
-      WHERE payment_date BETWEEN ? AND ?
-      GROUP BY DATE(payment_date)
-      ORDER BY date ASC
+      WITH RECURSIVE dates(date) AS (
+        SELECT ?
+        UNION ALL
+        SELECT DATE(date, '+1 day')
+        FROM dates
+        WHERE date < ?
+      )
+      SELECT
+        dates.date,
+        COALESCE(SUM(m.amount_paid), 0)   AS memberships,
+        COALESCE(SUM(ss.total_amount), 0)  AS store,
+        COALESCE(SUM(m.amount_paid), 0) + COALESCE(SUM(ss.total_amount), 0) AS revenue
+      FROM dates
+      LEFT JOIN memberships m  ON DATE(m.payment_date) = dates.date
+      LEFT JOIN store_sales ss ON DATE(ss.sold_at)     = dates.date
+      GROUP BY dates.date
+      ORDER BY dates.date ASC
     `
       )
-      .all(startDate, endDate) as Array<{ date: string; revenue: number; memberships: number }>
+      .all(startDate, endDate) as Array<{
+        date: string
+        memberships: number
+        store: number
+        revenue: number
+      }>
 
     // Check-ins by Day
     const checkInsByDay = db
@@ -176,8 +210,14 @@ export function registerReportsHandlers() {
       )
       .all(startDate, endDate) as Array<{ date: string; count: number }>
 
-    const totalRevenue = revenueResult.total || 0
-    const prevTotalRevenue = prevRevenueResult.total || 0
+    const membershipRevenue = revenueResult.total || 0
+    const storeRevenue = storeRevenueResult.total
+    const totalRevenue = membershipRevenue + storeRevenue
+
+    const prevMembershipRevenue = prevRevenueResult.total || 0
+    const prevStoreRevenue = prevStoreRevenueResult.total
+    const prevTotalRevenue = prevMembershipRevenue + prevStoreRevenue
+
     const revenueChange =
       prevTotalRevenue > 0 ? ((totalRevenue - prevTotalRevenue) / prevTotalRevenue) * 100 : 0
 
@@ -200,6 +240,8 @@ export function registerReportsHandlers() {
     return {
       summary: {
         totalRevenue,
+        membershipRevenue,
+        storeRevenue,
         totalMembers: totalMembersResult.count,
         newMembers,
         totalMemberships: totalMembershipsResult.count,
@@ -254,10 +296,10 @@ export function registerReportsHandlers() {
     db.prepare(
       `
       INSERT INTO reports (
-        id, report_type, start_date, end_date, total_revenue,
+        id, report_type, start_date, end_date, total_revenue, store_revenue,
         total_members, new_members, total_memberships, new_memberships,
         total_check_ins, generated_by
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `
     ).run(
       id,
@@ -265,6 +307,7 @@ export function registerReportsHandlers() {
       report.startDate,
       report.endDate,
       report.totalRevenue,
+      report.storeRevenue ?? 0,
       report.totalMembers,
       report.newMembers,
       report.totalMemberships,
