@@ -17,7 +17,11 @@
     "thisMonth": "هذا الشهر",
     "lastMonth": "الشهر الماضي",
     "avgDaily": "المتوسط اليومي",
-    "highestDay": "أعلى يوم"
+    "highestDay": "أعلى يوم",
+    "memberships": "الاشتراكات",
+    "store": "المتجر",
+    "membershipRevenue": "إيرادات الاشتراكات",
+    "storeRevenue": "إيرادات المتجر"
   },
 
   "recentCheckIns": {

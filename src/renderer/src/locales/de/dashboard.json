@@ -17,7 +17,11 @@
     "thisMonth": "Dieser Monat",
     "lastMonth": "Letzter Monat",
     "avgDaily": "Durchschn./Tag",
-    "highestDay": "Höchster Tag"
+    "highestDay": "Höchster Tag",
+    "memberships": "Mitgliedschaften",
+    "store": "Shop",
+    "membershipRevenue": "Mitgliedschaftsumsatz",
+    "storeRevenue": "Shop-Umsatz"
   },
 
   "recentCheckIns": {

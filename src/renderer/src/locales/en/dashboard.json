@@ -17,7 +17,11 @@
     "thisMonth": "This Month",
     "lastMonth": "Last Month",
     "avgDaily": "Avg/Day",
-    "highestDay": "Highest Day"
+    "highestDay": "Highest Day",
+    "memberships": "Memberships",
+    "store": "Store",
+    "membershipRevenue": "Membership Revenue",
+    "storeRevenue": "Store Revenue"
   },
 
   "recentCheckIns": {

@@ -24,13 +24,15 @@ import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
 import { PlanGate } from '@renderer/components/ui/PlanGate'
 
 interface RevenueData {
-  dailyRevenue: { date: string; revenue: number }[]
+  dailyRevenue: { date: string; memberships: number; store: number }[]
   summary: {
     totalThisMonth: number
     totalLastMonth: number
+    thisMonthMemberships: number
+    thisMonthStore: number
     percentageChange: number
     averageDaily: number
-    highestDay: { date: string; revenue: number }
+    highestDay: { date: string; memberships: number; store: number }
   }
 }
 
@@ -56,9 +58,11 @@ function Dashboard() {
     summary: {
       totalThisMonth: 0,
       totalLastMonth: 0,
+      thisMonthMemberships: 0,
+      thisMonthStore: 0,
       percentageChange: 0,
       averageDaily: 0,
-      highestDay: { date: '', revenue: 0 }
+      highestDay: { date: '', memberships: 0, store: 0 }
     }
   })
 

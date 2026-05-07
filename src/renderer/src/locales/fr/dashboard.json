@@ -17,7 +17,11 @@
     "thisMonth": "Ce Mois-ci",
     "lastMonth": "Mois Dernier",
     "avgDaily": "Moy/Jour",
-    "highestDay": "Jour le Plus Élevé"
+    "highestDay": "Jour le Plus Élevé",
+    "memberships": "Adhésions",
+    "store": "Boutique",
+    "membershipRevenue": "Revenus des Adhésions",
+    "storeRevenue": "Revenus de la Boutique"
   },
 
   "recentCheckIns": {

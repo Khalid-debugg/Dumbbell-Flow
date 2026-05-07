@@ -6,7 +6,7 @@ export function registerDashboardHandlers() {
   ipcMain.handle('dashboard:getRevenueData', async () => {
     const db = getDatabase()
 
-    // Generate all dates for the last 30 days and join with actual revenue
+    // Stacked daily revenue: memberships + store sales, last 30 days
     const dailyRevenue = db
       .prepare(
         `
@@ -19,37 +19,59 @@ export function registerDashboardHandlers() {
       )
       SELECT
         dates.date,
-        COALESCE(SUM(m.amount_paid), 0) as revenue
+        COALESCE(SUM(m.amount_paid), 0)   AS memberships,
+        COALESCE(SUM(ss.total_amount), 0)  AS store
       FROM dates
-      LEFT JOIN memberships m ON DATE(m.payment_date) = dates.date
+      LEFT JOIN memberships m  ON DATE(m.payment_date) = dates.date
+      LEFT JOIN store_sales ss ON DATE(ss.sold_at)     = dates.date
       GROUP BY dates.date
       ORDER BY dates.date ASC
     `
       )
-      .all() as { date: string; revenue: number }[]
+      .all() as { date: string; memberships: number; store: number }[]
 
-    const thisMonthResult = db
-      .prepare(
-        `
-      SELECT SUM(amount_paid) as total
-      FROM memberships
-      WHERE strftime('%Y-%m', payment_date) = strftime('%Y-%m', 'now')
-    `
-      )
-      .get() as { total: number | null }
+    const thisMonthMemberships = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount_paid), 0) as total
+           FROM memberships
+           WHERE strftime('%Y-%m', payment_date) = strftime('%Y-%m', 'now')`
+        )
+        .get() as { total: number }
+    ).total
 
-    const lastMonthResult = db
-      .prepare(
-        `
-      SELECT SUM(amount_paid) as total
-      FROM memberships
-      WHERE strftime('%Y-%m', payment_date) = strftime('%Y-%m', 'now', '-1 month')
-    `
-      )
-      .get() as { total: number | null }
+    const thisMonthStore = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(total_amount), 0) as total
+           FROM store_sales
+           WHERE strftime('%Y-%m', sold_at) = strftime('%Y-%m', 'now')`
+        )
+        .get() as { total: number }
+    ).total
 
-    const totalThisMonth = thisMonthResult.total || 0
-    const totalLastMonth = lastMonthResult.total || 0
+    const lastMonthMemberships = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount_paid), 0) as total
+           FROM memberships
+           WHERE strftime('%Y-%m', payment_date) = strftime('%Y-%m', 'now', '-1 month')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const lastMonthStore = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(total_amount), 0) as total
+           FROM store_sales
+           WHERE strftime('%Y-%m', sold_at) = strftime('%Y-%m', 'now', '-1 month')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const totalThisMonth = thisMonthMemberships + thisMonthStore
+    const totalLastMonth = lastMonthMemberships + lastMonthStore
     const percentageChange =
       totalLastMonth > 0 ? ((totalThisMonth - totalLastMonth) / totalLastMonth) * 100 : 0
 
@@ -58,14 +80,20 @@ export function registerDashboardHandlers() {
 
     const highestDay =
       dailyRevenue.length > 0
-        ? dailyRevenue.reduce((max, day) => (day.revenue > max.revenue ? day : max))
-        : { date: '', revenue: 0 }
+        ? dailyRevenue.reduce((max, day) => {
+            const dayTotal = day.memberships + day.store
+            const maxTotal = max.memberships + max.store
+            return dayTotal > maxTotal ? day : max
+          })
+        : { date: '', memberships: 0, store: 0 }
 
     return {
       dailyRevenue,
       summary: {
         totalThisMonth,
         totalLastMonth,
+        thisMonthMemberships,
+        thisMonthStore,
         percentageChange: Math.round(percentageChange * 10) / 10,
         averageDaily: Math.round(averageDaily * 10) / 10,
         highestDay
