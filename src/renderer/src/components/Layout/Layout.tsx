@@ -321,8 +321,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto">
-        <div className="p-8">{children}</div>
+      <main className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto p-8">{children}</div>
       </main>
     </div>
   )
