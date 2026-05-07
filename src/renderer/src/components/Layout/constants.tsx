@@ -4,6 +4,7 @@ import {
   LayoutDashboardIcon,
   NotebookPen,
   Settings,
+  ShoppingCart,
   SquareChartGantt,
   UserCog,
   Users
@@ -30,6 +31,12 @@ export const menuItems = [
     icon: <BadgeCheck />,
     label: 'nav.checkin',
     permission: PERMISSIONS.checkins.view
+  },
+  {
+    path: '/store',
+    icon: <ShoppingCart />,
+    label: 'nav.store',
+    permission: PERMISSIONS.store.view
   },
   {
     path: '/reports',

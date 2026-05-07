@@ -1,0 +1,128 @@
+{
+  "nav": "Tienda",
+  "tabs": {
+    "pos": "Ventas",
+    "products": "Productos",
+    "history": "Historial"
+  },
+  "pos": {
+    "searchProducts": "Buscar producto...",
+    "categories": {
+      "all": "Todo",
+      "drinks": "Bebidas",
+      "meals": "Comidas y Snacks",
+      "supplements": "Suplementos",
+      "apparel": "Ropa",
+      "essentials": "Esenciales",
+      "other": "Otro"
+    },
+    "outOfStock": "Sin stock",
+    "lowStock": "{{count}} restante(s)",
+    "cart": {
+      "title": "Carrito",
+      "empty": "El carrito está vacío",
+      "emptyHint": "Toca un producto para añadirlo",
+      "member": "Miembro (opcional)",
+      "searchMember": "Buscar por nombre o teléfono...",
+      "noMember": "Sin miembro vinculado",
+      "removeMember": "Eliminar",
+      "paymentMethod": "Método de pago",
+      "total": "Total",
+      "charge": "Cobrar {{amount}}",
+      "clear": "Vaciar carrito",
+      "each": "c/u"
+    },
+    "payment": {
+      "cash": "Efectivo",
+      "card": "Tarjeta",
+      "transfer": "Transferencia",
+      "e-wallet": "Monedero electrónico"
+    },
+    "saleSuccess": "Venta completada con éxito",
+    "saleError": "Error al completar la venta",
+    "insufficientStock": "Stock insuficiente para {{name}}",
+    "noPermission": "No tienes permiso para crear ventas"
+  },
+  "products": {
+    "title": "Productos",
+    "add": "Añadir producto",
+    "edit": "Editar producto",
+    "delete": "Eliminar producto",
+    "deleteConfirm": "¿Seguro que quieres eliminar \"{{name}}\"? Esta acción no se puede deshacer.",
+    "search": "Buscar producto...",
+    "inStockOnly": "Solo en stock",
+    "noProducts": "No se encontraron productos",
+    "noProductsHint": "Añade tu primer producto para empezar",
+    "stockBadge": "{{count}} en stock",
+    "outOfStock": "Sin stock",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "ej. Batido de proteínas",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Descripción opcional",
+      "category": "Categoría",
+      "price": "Precio de venta",
+      "costPrice": "Precio de coste",
+      "stock": "Cantidad en stock",
+      "cancel": "Cancelar",
+      "save": "Guardar producto",
+      "create": "Crear producto"
+    },
+    "adjustStock": {
+      "title": "Ajustar stock",
+      "current": "Stock actual",
+      "newQty": "Nueva cantidad",
+      "change": "Cambio",
+      "confirm": "Actualizar stock",
+      "cancel": "Cancelar",
+      "error": "El stock no puede ser negativo"
+    }
+  },
+  "errors": {
+    "loadFailed": "Error al cargar los datos",
+    "saveFailed": "Error al guardar el producto",
+    "deleteFailed": "Error al eliminar el producto"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "history": {
+    "title": "Historial de ventas",
+    "noSales": "Aún no hay ventas",
+    "noSalesHint": "Las ventas completadas aparecerán aquí",
+    "columns": {
+      "date": "Fecha",
+      "member": "Miembro",
+      "items": "Artículos",
+      "total": "Total",
+      "payment": "Pago",
+      "actions": "Acciones"
+    },
+    "walkIn": "Cliente externo",
+    "viewDetails": "Ver detalles",
+    "delete": "Eliminar venta",
+    "deleteConfirm": "¿Seguro que quieres eliminar este registro de venta? Esta acción no se puede deshacer.",
+    "filters": {
+      "dateFrom": "Desde",
+      "dateTo": "Hasta",
+      "paymentMethod": "Pago",
+      "allPayments": "Todos los pagos",
+      "reset": "Restablecer"
+    },
+    "detail": {
+      "title": "Detalles de la venta",
+      "product": "Producto",
+      "qty": "Cant.",
+      "unitPrice": "Precio unitario",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "member": "Miembro",
+      "payment": "Pago",
+      "date": "Fecha",
+      "notes": "Notas"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "nav": "Shop",
+  "tabs": {
+    "pos": "Verkauf",
+    "products": "Produkte",
+    "history": "Verlauf"
+  },
+  "pos": {
+    "searchProducts": "Produkt suchen...",
+    "categories": {
+      "all": "Alle",
+      "drinks": "Getränke",
+      "meals": "Mahlzeiten & Snacks",
+      "supplements": "Supplements",
+      "apparel": "Kleidung",
+      "essentials": "Grundbedarf",
+      "other": "Sonstiges"
+    },
+    "outOfStock": "Nicht vorrätig",
+    "lowStock": "{{count}} verbleibend",
+    "cart": {
+      "title": "Warenkorb",
+      "empty": "Warenkorb ist leer",
+      "emptyHint": "Tippe auf ein Produkt, um es hinzuzufügen",
+      "member": "Mitglied (optional)",
+      "searchMember": "Nach Name oder Telefon suchen...",
+      "noMember": "Kein Mitglied verknüpft",
+      "removeMember": "Entfernen",
+      "paymentMethod": "Zahlungsmethode",
+      "total": "Gesamt",
+      "charge": "{{amount}} berechnen",
+      "clear": "Warenkorb leeren",
+      "each": "je"
+    },
+    "payment": {
+      "cash": "Bargeld",
+      "card": "Karte",
+      "transfer": "Überweisung",
+      "e-wallet": "E-Wallet"
+    },
+    "saleSuccess": "Verkauf erfolgreich abgeschlossen",
+    "saleError": "Verkauf konnte nicht abgeschlossen werden",
+    "insufficientStock": "Nicht genug Bestand für {{name}}",
+    "noPermission": "Du hast keine Berechtigung, Verkäufe zu erstellen"
+  },
+  "products": {
+    "title": "Produkte",
+    "add": "Produkt hinzufügen",
+    "edit": "Produkt bearbeiten",
+    "delete": "Produkt entfernen",
+    "deleteConfirm": "Möchtest du \"{{name}}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "search": "Produkt suchen...",
+    "inStockOnly": "Nur vorrätige",
+    "noProducts": "Keine Produkte gefunden",
+    "noProductsHint": "Füge dein erstes Produkt hinzu, um loszulegen",
+    "stockBadge": "{{count}} auf Lager",
+    "outOfStock": "Nicht vorrätig",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "z.B. Protein-Shake",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Optionale Beschreibung",
+      "category": "Kategorie",
+      "price": "Verkaufspreis",
+      "costPrice": "Einkaufspreis",
+      "stock": "Lagerbestand",
+      "cancel": "Abbrechen",
+      "save": "Produkt speichern",
+      "create": "Produkt erstellen"
+    },
+    "adjustStock": {
+      "title": "Bestand anpassen",
+      "current": "Aktueller Bestand",
+      "newQty": "Neue Menge",
+      "change": "Änderung",
+      "confirm": "Bestand aktualisieren",
+      "cancel": "Abbrechen",
+      "error": "Bestand kann nicht negativ sein"
+    }
+  },
+  "errors": {
+    "loadFailed": "Fehler beim Laden der Daten",
+    "saveFailed": "Fehler beim Speichern des Produkts",
+    "deleteFailed": "Fehler beim Löschen des Produkts"
+  },
+  "pagination": {
+    "page": "Seite",
+    "of": "von",
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "history": {
+    "title": "Verkaufsverlauf",
+    "noSales": "Noch keine Verkäufe",
+    "noSalesHint": "Abgeschlossene Verkäufe werden hier angezeigt",
+    "columns": {
+      "date": "Datum",
+      "member": "Mitglied",
+      "items": "Artikel",
+      "total": "Gesamt",
+      "payment": "Zahlung",
+      "actions": "Aktionen"
+    },
+    "walkIn": "Laufkunde",
+    "viewDetails": "Details anzeigen",
+    "delete": "Verkauf löschen",
+    "deleteConfirm": "Möchtest du diesen Verkaufsbeleg wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "filters": {
+      "dateFrom": "Von",
+      "dateTo": "Bis",
+      "paymentMethod": "Zahlung",
+      "allPayments": "Alle Zahlungen",
+      "reset": "Zurücksetzen"
+    },
+    "detail": {
+      "title": "Verkaufsdetails",
+      "product": "Produkt",
+      "qty": "Menge",
+      "unitPrice": "Einzelpreis",
+      "subtotal": "Zwischensumme",
+      "total": "Gesamt",
+      "member": "Mitglied",
+      "payment": "Zahlung",
+      "date": "Datum",
+      "notes": "Notizen"
+    }
+  }
+}

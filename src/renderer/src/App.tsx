@@ -45,6 +45,7 @@ const Members = lazy(() => import('./pages/Members'))
 const Memberships = lazy(() => import('./pages/Memberships'))
 const Plans = lazy(() => import('./pages/Plans'))
 const CheckIn = lazy(() => import('./pages/Checkin'))
+const Store = lazy(() => import('./pages/Store'))
 const Reports = lazy(() => import('./pages/Reports'))
 const Settings = lazy(() => import('./pages/Settings'))
 const Accounts = lazy(() => import('./pages/Accounts'))
@@ -103,6 +104,14 @@ function AppContent() {
           element={
             <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
               <CheckIn />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/store"
+          element={
+            <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+              <Store />
             </Suspense>
           }
         />

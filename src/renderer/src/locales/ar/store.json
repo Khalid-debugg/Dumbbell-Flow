@@ -1,0 +1,128 @@
+{
+  "nav": "المتجر",
+  "tabs": {
+    "pos": "المبيعات",
+    "products": "المنتجات",
+    "history": "السجل"
+  },
+  "pos": {
+    "searchProducts": "ابحث عن منتج...",
+    "categories": {
+      "all": "الكل",
+      "drinks": "مشروبات",
+      "meals": "وجبات وسناكس",
+      "supplements": "مكملات",
+      "apparel": "ملابس",
+      "essentials": "مستلزمات",
+      "other": "أخرى"
+    },
+    "outOfStock": "نفد من المخزون",
+    "lowStock": "{{count}} متبقي",
+    "cart": {
+      "title": "السلة",
+      "empty": "السلة فارغة",
+      "emptyHint": "اضغط على منتج لإضافته",
+      "member": "عضو (اختياري)",
+      "searchMember": "ابحث بالاسم أو الهاتف...",
+      "noMember": "لم يتم ربط عضو",
+      "removeMember": "إزالة",
+      "paymentMethod": "طريقة الدفع",
+      "total": "الإجمالي",
+      "charge": "تحصيل {{amount}}",
+      "clear": "تفريغ السلة",
+      "each": "للوحدة"
+    },
+    "payment": {
+      "cash": "نقداً",
+      "card": "بطاقة",
+      "transfer": "تحويل",
+      "e-wallet": "محفظة إلكترونية"
+    },
+    "saleSuccess": "تم إتمام البيع بنجاح",
+    "saleError": "فشل إتمام عملية البيع",
+    "insufficientStock": "المخزون غير كافٍ لـ {{name}}",
+    "noPermission": "ليس لديك صلاحية لإنشاء مبيعات"
+  },
+  "products": {
+    "title": "المنتجات",
+    "add": "إضافة منتج",
+    "edit": "تعديل المنتج",
+    "delete": "حذف المنتج",
+    "deleteConfirm": "هل أنت متأكد من حذف \"{{name}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+    "search": "ابحث عن منتج...",
+    "inStockOnly": "المتوفر فقط",
+    "noProducts": "لا توجد منتجات",
+    "noProductsHint": "أضف أول منتج للبدء",
+    "stockBadge": "{{count}} في المخزون",
+    "outOfStock": "نفد من المخزون",
+    "form": {
+      "name": "الاسم",
+      "namePlaceholder": "مثال: شيك بروتين",
+      "description": "الوصف",
+      "descriptionPlaceholder": "وصف اختياري",
+      "category": "الفئة",
+      "price": "سعر البيع",
+      "costPrice": "سعر التكلفة",
+      "stock": "الكمية في المخزون",
+      "cancel": "إلغاء",
+      "save": "حفظ المنتج",
+      "create": "إنشاء المنتج"
+    },
+    "adjustStock": {
+      "title": "تعديل المخزون",
+      "current": "المخزون الحالي",
+      "newQty": "الكمية الجديدة",
+      "change": "التغيير",
+      "confirm": "تحديث المخزون",
+      "cancel": "إلغاء",
+      "error": "لا يمكن أن ينخفض المخزون عن الصفر"
+    }
+  },
+  "errors": {
+    "loadFailed": "فشل في تحميل البيانات",
+    "saveFailed": "فشل في حفظ المنتج",
+    "deleteFailed": "فشل في حذف المنتج"
+  },
+  "pagination": {
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "history": {
+    "title": "سجل المبيعات",
+    "noSales": "لا توجد مبيعات بعد",
+    "noSalesHint": "ستظهر المبيعات المكتملة هنا",
+    "columns": {
+      "date": "التاريخ",
+      "member": "العضو",
+      "items": "المنتجات",
+      "total": "الإجمالي",
+      "payment": "الدفع",
+      "actions": "الإجراءات"
+    },
+    "walkIn": "زائر",
+    "viewDetails": "عرض التفاصيل",
+    "delete": "حذف البيع",
+    "deleteConfirm": "هل أنت متأكد من حذف سجل البيع هذا؟ لا يمكن التراجع عن هذا الإجراء.",
+    "filters": {
+      "dateFrom": "من",
+      "dateTo": "إلى",
+      "paymentMethod": "الدفع",
+      "allPayments": "جميع طرق الدفع",
+      "reset": "إعادة تعيين"
+    },
+    "detail": {
+      "title": "تفاصيل البيع",
+      "product": "المنتج",
+      "qty": "الكمية",
+      "unitPrice": "سعر الوحدة",
+      "subtotal": "المجموع الجزئي",
+      "total": "الإجمالي",
+      "member": "العضو",
+      "payment": "الدفع",
+      "date": "التاريخ",
+      "notes": "ملاحظات"
+    }
+  }
+}
