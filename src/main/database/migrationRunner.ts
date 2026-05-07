@@ -88,15 +88,23 @@ export class MigrationRunner {
       try {
         console.log(`Applying migration: ${migration.id} - ${migration.name}`)
 
-        // Run the migration in a transaction
-        this.db.exec('BEGIN TRANSACTION')
-        this.db.exec(migration.up)
+        // Disable FK enforcement before the transaction so table-recreation
+        // migrations can drop tables that are referenced by other tables' FKs.
+        // PRAGMA foreign_keys cannot be changed inside an active transaction.
+        const fkWasOn = this.db.pragma('foreign_keys', { simple: true }) as number
+        if (fkWasOn) this.db.pragma('foreign_keys = OFF')
 
-        // Record the migration
-        const stmt = this.db.prepare('INSERT INTO migrations (id, name, filename) VALUES (?, ?, ?)')
-        stmt.run(migration.id, migration.name, migration.filename)
+        try {
+          this.db.exec('BEGIN TRANSACTION')
+          this.db.exec(migration.up)
 
-        this.db.exec('COMMIT')
+          const stmt = this.db.prepare('INSERT INTO migrations (id, name, filename) VALUES (?, ?, ?)')
+          stmt.run(migration.id, migration.name, migration.filename)
+
+          this.db.exec('COMMIT')
+        } finally {
+          if (fkWasOn) this.db.pragma('foreign_keys = ON')
+        }
 
         console.log(`✓ Migration ${migration.id} applied successfully`)
       } catch (error) {
