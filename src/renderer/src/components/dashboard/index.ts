@@ -1,5 +1,6 @@
 export { default as WelcomeHeader } from './WelcomeHeader'
 export { default as RevenueChart } from './RevenueChart'
 export { default as RecentCheckIns } from './RecentCheckIns'
+export { default as TodaysClasses } from './TodaysClasses'
 export { default as ExpiringMemberships } from './ExpiringMemberships'
 export { default as QuickActions } from './QuickActions'

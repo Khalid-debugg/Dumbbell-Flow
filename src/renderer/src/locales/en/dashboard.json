@@ -18,15 +18,23 @@
     "lastMonth": "Last Month",
     "avgDaily": "Avg/Day",
     "highestDay": "Highest Day",
+    "all": "All",
     "memberships": "Memberships",
     "store": "Store",
+    "classes": "Classes",
     "membershipRevenue": "Membership Revenue",
-    "storeRevenue": "Store Revenue"
+    "storeRevenue": "Store Revenue",
+    "classesRevenue": "Classes Revenue"
   },
 
   "recentCheckIns": {
     "title": "Recent Check-ins",
     "noData": "No check-ins yet today"
+  },
+
+  "todaysClasses": {
+    "title": "Today's Classes",
+    "noData": "No classes scheduled for today"
   },
 
   "expiringMemberships": {

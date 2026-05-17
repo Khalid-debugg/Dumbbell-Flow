@@ -18,15 +18,23 @@
     "lastMonth": "الشهر الماضي",
     "avgDaily": "المتوسط اليومي",
     "highestDay": "أعلى يوم",
+    "all": "الكل",
     "memberships": "الاشتراكات",
     "store": "المتجر",
+    "classes": "الحصص",
     "membershipRevenue": "إيرادات الاشتراكات",
-    "storeRevenue": "إيرادات المتجر"
+    "storeRevenue": "إيرادات المتجر",
+    "classesRevenue": "إيرادات الحصص"
   },
 
   "recentCheckIns": {
     "title": "أحدث عمليات الحضور",
     "noData": "لا يوجد حضور اليوم بعد"
+  },
+
+  "todaysClasses": {
+    "title": "حصص اليوم",
+    "noData": "لا توجد حصص مجدولة لهذا اليوم"
   },
 
   "expiringMemberships": {

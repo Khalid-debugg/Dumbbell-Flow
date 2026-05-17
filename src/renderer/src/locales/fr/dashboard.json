@@ -18,15 +18,23 @@
     "lastMonth": "Mois Dernier",
     "avgDaily": "Moy/Jour",
     "highestDay": "Jour le Plus Élevé",
+    "all": "Tout",
     "memberships": "Adhésions",
     "store": "Boutique",
+    "classes": "Cours",
     "membershipRevenue": "Revenus des Adhésions",
-    "storeRevenue": "Revenus de la Boutique"
+    "storeRevenue": "Revenus de la Boutique",
+    "classesRevenue": "Revenus des Cours"
   },
 
   "recentCheckIns": {
     "title": "Pointages Récents",
     "noData": "Aucun pointage aujourd'hui"
+  },
+
+  "todaysClasses": {
+    "title": "Cours d'Aujourd'hui",
+    "noData": "Aucun cours prévu aujourd'hui"
   },
 
   "expiringMemberships": {

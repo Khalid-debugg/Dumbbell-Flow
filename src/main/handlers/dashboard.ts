@@ -1,12 +1,13 @@
 import { ipcMain } from 'electron'
 import { getDatabase } from '../database'
 import { Membership, MembershipDbRow } from '@renderer/models/membership'
+import type { ClassInstanceDbRow } from '../../renderer/src/models/classRule'
 
 export function registerDashboardHandlers() {
   ipcMain.handle('dashboard:getRevenueData', async () => {
     const db = getDatabase()
 
-    // Stacked daily revenue: memberships + store sales, last 30 days
+    // Stacked daily revenue: memberships + store sales + classes, last 30 days
     const dailyRevenue = db
       .prepare(
         `
@@ -16,19 +17,35 @@ export function registerDashboardHandlers() {
         SELECT DATE(date, '+1 day')
         FROM dates
         WHERE date < DATE('now')
+      ),
+      membership_daily AS (
+        SELECT DATE(payment_date) as date, SUM(amount_paid) as total
+        FROM memberships
+        GROUP BY DATE(payment_date)
+      ),
+      store_daily AS (
+        SELECT DATE(sold_at) as date, SUM(total_amount) as total
+        FROM store_sales
+        GROUP BY DATE(sold_at)
+      ),
+      classes_daily AS (
+        SELECT DATE(created_at) as date, SUM(amount_paid) as total
+        FROM class_subscribers
+        GROUP BY DATE(created_at)
       )
       SELECT
         dates.date,
-        COALESCE(SUM(m.amount_paid), 0)   AS memberships,
-        COALESCE(SUM(ss.total_amount), 0)  AS store
+        COALESCE(md.total, 0) AS memberships,
+        COALESCE(sd.total, 0) AS store,
+        COALESCE(cd.total, 0) AS classes
       FROM dates
-      LEFT JOIN memberships m  ON DATE(m.payment_date) = dates.date
-      LEFT JOIN store_sales ss ON DATE(ss.sold_at)     = dates.date
-      GROUP BY dates.date
+      LEFT JOIN membership_daily md ON md.date = dates.date
+      LEFT JOIN store_daily sd ON sd.date = dates.date
+      LEFT JOIN classes_daily cd ON cd.date = dates.date
       ORDER BY dates.date ASC
     `
       )
-      .all() as { date: string; memberships: number; store: number }[]
+      .all() as { date: string; memberships: number; store: number; classes: number }[]
 
     const thisMonthMemberships = (
       db
@@ -70,8 +87,28 @@ export function registerDashboardHandlers() {
         .get() as { total: number }
     ).total
 
-    const totalThisMonth = thisMonthMemberships + thisMonthStore
-    const totalLastMonth = lastMonthMemberships + lastMonthStore
+    const thisMonthClasses = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount_paid), 0) as total
+           FROM class_subscribers
+           WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const lastMonthClasses = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount_paid), 0) as total
+           FROM class_subscribers
+           WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now', '-1 month')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const totalThisMonth = thisMonthMemberships + thisMonthStore + thisMonthClasses
+    const totalLastMonth = lastMonthMemberships + lastMonthStore + lastMonthClasses
     const percentageChange =
       totalLastMonth > 0 ? ((totalThisMonth - totalLastMonth) / totalLastMonth) * 100 : 0
 
@@ -81,11 +118,11 @@ export function registerDashboardHandlers() {
     const highestDay =
       dailyRevenue.length > 0
         ? dailyRevenue.reduce((max, day) => {
-            const dayTotal = day.memberships + day.store
-            const maxTotal = max.memberships + max.store
+            const dayTotal = day.memberships + day.store + day.classes
+            const maxTotal = max.memberships + max.store + max.classes
             return dayTotal > maxTotal ? day : max
           })
-        : { date: '', memberships: 0, store: 0 }
+        : { date: '', memberships: 0, store: 0, classes: 0 }
 
     return {
       dailyRevenue,
@@ -94,6 +131,7 @@ export function registerDashboardHandlers() {
         totalLastMonth,
         thisMonthMemberships,
         thisMonthStore,
+        thisMonthClasses,
         percentageChange: Math.round(percentageChange * 10) / 10,
         averageDaily: Math.round(averageDaily * 10) / 10,
         highestDay
@@ -246,6 +284,60 @@ export function registerDashboardHandlers() {
       data: processedMemberships,
       page,
       totalPages
+    }
+  })
+
+  ipcMain.handle('dashboard:getTodaysClasses', async (_event, page: number = 1) => {
+    const db = getDatabase()
+    const limit = 5
+    const offset = (page - 1) * limit
+
+    const d = new Date()
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+
+    const countResult = db
+      .prepare('SELECT COUNT(*) AS total FROM class_instances WHERE scheduled_date = ?')
+      .get(today) as { total: number }
+
+    const rows = db
+      .prepare(`
+        SELECT ci.*,
+          (SELECT COUNT(*) FROM class_subscribers cs WHERE cs.instance_id = ci.id) AS subscriber_count
+        FROM class_instances ci
+        WHERE ci.scheduled_date = ?
+        ORDER BY
+          CASE WHEN ci.start_time IS NULL THEN 1 ELSE 0 END,
+          ci.start_time ASC,
+          ci.name ASC
+        LIMIT ? OFFSET ?
+      `)
+      .all(today, limit, offset) as (ClassInstanceDbRow & { subscriber_count: number })[]
+
+    const instances = rows.map((row) => ({
+      id: row.id,
+      ruleId: row.rule_id,
+      name: row.name,
+      category: row.category,
+      color: row.color,
+      coachName: row.coach_name,
+      scheduledDate: row.scheduled_date,
+      dayOfWeek: row.day_of_week,
+      isRecurring: Boolean(row.is_recurring),
+      status: row.status,
+      startTime: row.start_time,
+      pricePerClass: row.price_per_class,
+      pricePerWeek: row.price_per_week,
+      pricePerMonth: row.price_per_month,
+      pricePerYear: row.price_per_year,
+      subscriberCount: row.subscriber_count,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at
+    }))
+
+    return {
+      data: instances,
+      page,
+      totalPages: Math.ceil(countResult.total / limit)
     }
   })
 }

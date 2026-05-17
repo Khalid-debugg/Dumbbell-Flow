@@ -3,15 +3,12 @@ import { LoaderCircle } from 'lucide-react'
 import {
   WelcomeHeader,
   RevenueChart,
-  RecentCheckIns,
+  TodaysClasses,
   ExpiringMemberships,
   QuickActions
 } from '@renderer/components/dashboard'
-import { ViewMember } from '@renderer/components/members'
-import { Member } from '@renderer/models/member'
-import { QuickCheckInWidget } from '@renderer/components/checkIns'
-import MemberCheckInCard from '@renderer/components/checkIns/MemberCheckInCard'
 import { Membership } from '@renderer/models/membership'
+import { QuickCheckInWidget } from '@renderer/components/checkIns'
 import EditMembership from '@renderer/components/memberships/EditMembership'
 import CreateMember from '@renderer/components/members/CreateMember'
 import CreateMembership from '@renderer/components/memberships/CreateMembership'
@@ -22,28 +19,20 @@ import { useAuth } from '@renderer/hooks/useAuth'
 import { PERMISSIONS } from '@renderer/models/account'
 import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
 import { PlanGate } from '@renderer/components/ui/PlanGate'
+import type { ClassInstance } from '@renderer/models/classRule'
 
 interface RevenueData {
-  dailyRevenue: { date: string; memberships: number; store: number }[]
+  dailyRevenue: { date: string; memberships: number; store: number; classes: number }[]
   summary: {
     totalThisMonth: number
     totalLastMonth: number
     thisMonthMemberships: number
     thisMonthStore: number
+    thisMonthClasses: number
     percentageChange: number
     averageDaily: number
-    highestDay: { date: string; memberships: number; store: number }
+    highestDay: { date: string; memberships: number; store: number; classes: number }
   }
-}
-
-interface CheckIn {
-  id: string
-  memberId: string
-  checkInTime: string
-  memberName: string
-  memberCountryCode: string
-  memberPhone: string
-  membershipStatus: 'active' | 'expired' | 'none'
 }
 
 export type ExpiringMembership = Membership & { daysRemaining: number }
@@ -60,23 +49,22 @@ function Dashboard() {
       totalLastMonth: 0,
       thisMonthMemberships: 0,
       thisMonthStore: 0,
+      thisMonthClasses: 0,
       percentageChange: 0,
       averageDaily: 0,
-      highestDay: { date: '', memberships: 0, store: 0 }
+      highestDay: { date: '', memberships: 0, store: 0, classes: 0 }
     }
   })
 
-  const [recentCheckIns, setRecentCheckIns] = useState<CheckIn[]>([])
-  const [checkInsPage, setCheckInsPage] = useState(1)
-  const [checkInsTotalPages, setCheckInsTotalPages] = useState(1)
+  const [todaysClasses, setTodaysClasses] = useState<ClassInstance[]>([])
+  const [classesPage, setClassesPage] = useState(1)
+  const [classesTotalPages, setClassesTotalPages] = useState(1)
 
   const [expiringMemberships, setExpiringMemberships] = useState<ExpiringMembership[]>([])
   const [expiringPage, setExpiringPage] = useState(1)
   const [expiringTotalPages, setExpiringTotalPages] = useState(1)
 
   // Dialog states
-  const [viewMember, setViewMember] = useState<Member | null>(null)
-  const [viewMemberCard, setViewMemberCard] = useState<Member | null>(null)
   const [editMembershipId, setEditMembershipId] = useState<string | null>(null)
   const [editMembership, setEditMembership] = useState<Membership | null>(null)
 
@@ -85,14 +73,14 @@ function Dashboard() {
   const [showCreateMembership, setShowCreateMembership] = useState(false)
   const [showCreatePlan, setShowCreatePlan] = useState(false)
 
-  const loadCheckIns = useCallback(async (page: number) => {
+  const loadTodaysClasses = useCallback(async (page: number) => {
     try {
-      const result = await window.electron.ipcRenderer.invoke('dashboard:getRecentCheckIns', page)
-      setRecentCheckIns(result.data)
-      setCheckInsPage(result.page)
-      setCheckInsTotalPages(result.totalPages)
+      const result = await window.electron.ipcRenderer.invoke('dashboard:getTodaysClasses', page)
+      setTodaysClasses(result.data)
+      setClassesPage(result.page)
+      setClassesTotalPages(result.totalPages)
     } catch (error) {
-      console.error('Failed to load check-ins:', error)
+      console.error('Failed to load today\'s classes:', error)
     }
   }, [])
 
@@ -115,7 +103,7 @@ function Dashboard() {
     try {
       const [revenue] = await Promise.all([
         window.electron.ipcRenderer.invoke('dashboard:getRevenueData'),
-        loadCheckIns(1),
+        loadTodaysClasses(1),
         loadExpiringMemberships(1)
       ])
 
@@ -125,30 +113,11 @@ function Dashboard() {
     } finally {
       setLoading(false)
     }
-  }, [loadCheckIns, loadExpiringMemberships])
+  }, [loadTodaysClasses, loadExpiringMemberships])
 
   useEffect(() => {
     loadDashboardData()
   }, [loadDashboardData])
-
-  const handleViewMember = useCallback(async (memberId: string) => {
-    try {
-      const member = await window.electron.ipcRenderer.invoke('members:getById', memberId)
-      setViewMember(member)
-    } catch (error) {
-      console.error('Failed to load member:', error)
-    }
-  }, [])
-
-  const handleViewMemberCard = useCallback(async (memberId: string) => {
-    try {
-      const member = await window.electron.ipcRenderer.invoke('members:getById', memberId)
-      setViewMemberCard(member)
-    } catch (error) {
-      console.error('Failed to load member:', error)
-      toast.error(t('error.loadFailed'))
-    }
-  }, [t])
 
   const handleRenewMembership = useCallback(async (membershipId: string) => {
     if (!hasPermission(PERMISSIONS.memberships.extend)) {
@@ -175,15 +144,6 @@ function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <ViewMember member={viewMember} open={!!viewMember} onClose={() => setViewMember(null)} />
-      {viewMemberCard && (
-        <MemberCheckInCard
-          member={viewMemberCard}
-          open={!!viewMemberCard}
-          onCancel={() => setViewMemberCard(null)}
-          viewOnly={true}
-        />
-      )}
       <EditMembership
         membership={editMembership}
         open={!!editMembershipId}
@@ -242,13 +202,11 @@ function Dashboard() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RecentCheckIns
-          data={recentCheckIns}
-          onViewMember={handleViewMember}
-          onRowClick={handleViewMemberCard}
-          page={checkInsPage}
-          totalPages={checkInsTotalPages}
-          onPageChange={loadCheckIns}
+        <TodaysClasses
+          data={todaysClasses}
+          page={classesPage}
+          totalPages={classesTotalPages}
+          onPageChange={loadTodaysClasses}
         />
 
         <ExpiringMemberships

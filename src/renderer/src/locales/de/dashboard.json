@@ -18,15 +18,23 @@
     "lastMonth": "Letzter Monat",
     "avgDaily": "Durchschn./Tag",
     "highestDay": "Höchster Tag",
+    "all": "Alle",
     "memberships": "Mitgliedschaften",
     "store": "Shop",
+    "classes": "Kurse",
     "membershipRevenue": "Mitgliedschaftsumsatz",
-    "storeRevenue": "Shop-Umsatz"
+    "storeRevenue": "Shop-Umsatz",
+    "classesRevenue": "Kursumsatz"
   },
 
   "recentCheckIns": {
     "title": "Letzte Check-ins",
     "noData": "Heute noch keine Check-ins"
+  },
+
+  "todaysClasses": {
+    "title": "Heutige Kurse",
+    "noData": "Keine Kurse für heute geplant"
   },
 
   "expiringMemberships": {

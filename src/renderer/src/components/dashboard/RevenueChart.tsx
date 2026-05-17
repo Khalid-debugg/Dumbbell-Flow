@@ -1,4 +1,4 @@
-import { memo, useMemo, useCallback } from 'react'
+import { memo, useMemo, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   AreaChart,
@@ -10,13 +10,24 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
-import { TrendingUp, TrendingDown, DollarSign, Calendar, ShoppingCart, Users } from 'lucide-react'
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Calendar,
+  ShoppingCart,
+  Users,
+  Dumbbell
+} from 'lucide-react'
 import { useSettings } from '@renderer/hooks/useSettings'
+
+type RevenueSeriesFilter = 'all' | 'memberships' | 'store' | 'classes'
 
 interface DailyRevenueEntry {
   date: string
   memberships: number
   store: number
+  classes: number
 }
 
 interface RevenueData {
@@ -26,9 +37,10 @@ interface RevenueData {
     totalLastMonth: number
     thisMonthMemberships: number
     thisMonthStore: number
+    thisMonthClasses: number
     percentageChange: number
     averageDaily: number
-    highestDay: { date: string; memberships: number; store: number }
+    highestDay: { date: string; memberships: number; store: number; classes: number }
   }
 }
 
@@ -49,36 +61,62 @@ interface CustomTooltipProps {
   formatCurrency: (v: number) => string
   membershipLabel: string
   storeLabel: string
+  classesLabel: string
 }
 
-function CustomTooltip({ active, payload, label, formatCurrency, membershipLabel, storeLabel }: CustomTooltipProps) {
+function CustomTooltip({
+  active,
+  payload,
+  label,
+  formatCurrency,
+  membershipLabel,
+  storeLabel,
+  classesLabel
+}: CustomTooltipProps) {
   if (!active || !payload?.length) return null
 
   const memberships = payload.find((p) => p.name === 'memberships')?.value ?? 0
   const store = payload.find((p) => p.name === 'store')?.value ?? 0
+  const classes = payload.find((p) => p.name === 'classes')?.value ?? 0
+  const total = payload.reduce((sum, p) => sum + (p.value ?? 0), 0)
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800 p-3 text-sm shadow-xl">
       <p className="mb-2 font-medium text-gray-300">{label}</p>
       <div className="space-y-1">
-        <div className="flex items-center justify-between gap-6">
-          <span className="flex items-center gap-1.5 text-yellow-400">
-            <span className="h-2 w-2 rounded-full bg-yellow-400" />
-            {membershipLabel}
-          </span>
-          <span className="font-semibold text-white">{formatCurrency(memberships)}</span>
-        </div>
-        <div className="flex items-center justify-between gap-6">
-          <span className="flex items-center gap-1.5 text-teal-400">
-            <span className="h-2 w-2 rounded-full bg-teal-400" />
-            {storeLabel}
-          </span>
-          <span className="font-semibold text-white">{formatCurrency(store)}</span>
-        </div>
-        <div className="mt-1.5 border-t border-gray-700 pt-1.5 flex items-center justify-between">
-          <span className="text-gray-400">Total</span>
-          <span className="font-bold text-white">{formatCurrency(memberships + store)}</span>
-        </div>
+        {payload.some((p) => p.name === 'memberships') && (
+          <div className="flex items-center justify-between gap-6">
+            <span className="flex items-center gap-1.5 text-yellow-400">
+              <span className="h-2 w-2 rounded-full bg-yellow-400" />
+              {membershipLabel}
+            </span>
+            <span className="font-semibold text-white">{formatCurrency(memberships)}</span>
+          </div>
+        )}
+        {payload.some((p) => p.name === 'store') && (
+          <div className="flex items-center justify-between gap-6">
+            <span className="flex items-center gap-1.5 text-teal-400">
+              <span className="h-2 w-2 rounded-full bg-teal-400" />
+              {storeLabel}
+            </span>
+            <span className="font-semibold text-white">{formatCurrency(store)}</span>
+          </div>
+        )}
+        {payload.some((p) => p.name === 'classes') && (
+          <div className="flex items-center justify-between gap-6">
+            <span className="flex items-center gap-1.5 text-indigo-400">
+              <span className="h-2 w-2 rounded-full bg-indigo-400" />
+              {classesLabel}
+            </span>
+            <span className="font-semibold text-white">{formatCurrency(classes)}</span>
+          </div>
+        )}
+        {payload.length > 1 && (
+          <div className="mt-1.5 border-t border-gray-700 pt-1.5 flex items-center justify-between">
+            <span className="text-gray-400">Total</span>
+            <span className="font-bold text-white">{formatCurrency(total)}</span>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -87,6 +125,7 @@ function CustomTooltip({ active, payload, label, formatCurrency, membershipLabel
 function RevenueChart({ data }: RevenueChartProps) {
   const { t } = useTranslation('dashboard')
   const { settings } = useSettings()
+  const [seriesFilter, setSeriesFilter] = useState<RevenueSeriesFilter>('all')
 
   const formatCurrency = useCallback(
     (value: number) =>
@@ -102,26 +141,77 @@ function RevenueChart({ data }: RevenueChartProps) {
     () =>
       data.dailyRevenue.map((item) => ({
         date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        memberships: item.memberships,
-        store: item.store
+        memberships: item.memberships ?? 0,
+        store: item.store ?? 0,
+        classes: item.classes ?? 0
       })),
     [data.dailyRevenue]
   )
 
   const membershipLabel = t('revenueChart.memberships')
   const storeLabel = t('revenueChart.store')
+  const classesLabel = t('revenueChart.classes')
+
+  const showMemberships = seriesFilter === 'all' || seriesFilter === 'memberships'
+  const showStore = seriesFilter === 'all' || seriesFilter === 'store'
+  const showClasses = seriesFilter === 'all' || seriesFilter === 'classes'
 
   const highestDayTotal =
-    data.summary.highestDay.memberships + data.summary.highestDay.store
+    (data.summary.highestDay.memberships ?? 0) +
+    (data.summary.highestDay.store ?? 0) +
+    (data.summary.highestDay.classes ?? 0)
+
+  const filterButtons: {
+    key: RevenueSeriesFilter
+    label: string
+    activeClass: string
+  }[] = [
+    {
+      key: 'all',
+      label: t('revenueChart.all'),
+      activeClass: 'bg-gray-600 border-gray-500 text-white'
+    },
+    {
+      key: 'memberships',
+      label: membershipLabel,
+      activeClass: 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300'
+    },
+    {
+      key: 'store',
+      label: storeLabel,
+      activeClass: 'bg-teal-500/20 border-teal-500/50 text-teal-300'
+    },
+    {
+      key: 'classes',
+      label: classesLabel,
+      activeClass: 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
+    }
+  ]
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800 p-6">
-      <div className="mb-6">
-        <h2 className="mb-1 text-xl font-semibold text-white">{t('revenueChart.title')}</h2>
-        <p className="text-sm text-gray-400">{t('revenueChart.subtitle')}</p>
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="mb-1 text-xl font-semibold text-white">{t('revenueChart.title')}</h2>
+          <p className="text-sm text-gray-400">{t('revenueChart.subtitle')}</p>
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {filterButtons.map(({ key, label, activeClass }) => (
+            <button
+              key={key}
+              onClick={() => setSeriesFilter(key)}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                seriesFilter === key
+                  ? activeClass
+                  : 'border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Stacked area chart */}
       <div className="mb-6">
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={chartData}>
@@ -133,6 +223,10 @@ function RevenueChart({ data }: RevenueChartProps) {
               <linearGradient id="gradStore" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#2dd4bf" stopOpacity={0.5} />
                 <stop offset="95%" stopColor="#2dd4bf" stopOpacity={0.05} />
+              </linearGradient>
+              <linearGradient id="gradClasses" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#818cf8" stopOpacity={0.5} />
+                <stop offset="95%" stopColor="#818cf8" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -149,38 +243,53 @@ function RevenueChart({ data }: RevenueChartProps) {
                   formatCurrency={formatCurrency}
                   membershipLabel={membershipLabel}
                   storeLabel={storeLabel}
+                  classesLabel={classesLabel}
                 />
               }
             />
             <Legend
-              formatter={(value) =>
-                value === 'memberships' ? membershipLabel : storeLabel
-              }
+              formatter={(value) => {
+                if (value === 'memberships') return membershipLabel
+                if (value === 'store') return storeLabel
+                return classesLabel
+              }}
               wrapperStyle={{ fontSize: '12px', color: '#9ca3af', paddingTop: '12px' }}
             />
-            <Area
-              type="monotone"
-              dataKey="memberships"
-              stackId="revenue"
-              stroke="#f59e0b"
-              strokeWidth={2}
-              fill="url(#gradMemberships)"
-            />
-            <Area
-              type="monotone"
-              dataKey="store"
-              stackId="revenue"
-              stroke="#2dd4bf"
-              strokeWidth={2}
-              fill="url(#gradStore)"
-            />
+            {showMemberships && (
+              <Area
+                type="monotone"
+                dataKey="memberships"
+                stackId="revenue"
+                stroke="#f59e0b"
+                strokeWidth={2}
+                fill="url(#gradMemberships)"
+              />
+            )}
+            {showStore && (
+              <Area
+                type="monotone"
+                dataKey="store"
+                stackId="revenue"
+                stroke="#2dd4bf"
+                strokeWidth={2}
+                fill="url(#gradStore)"
+              />
+            )}
+            {showClasses && (
+              <Area
+                type="monotone"
+                dataKey="classes"
+                stackId="revenue"
+                stroke="#818cf8"
+                strokeWidth={2}
+                fill="url(#gradClasses)"
+              />
+            )}
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Summary cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        {/* This month — with breakdown */}
         <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-gray-400">{t('revenueChart.thisMonth')}</span>
@@ -221,10 +330,18 @@ function RevenueChart({ data }: RevenueChartProps) {
                 {formatCurrency(data.summary.thisMonthStore)}
               </span>
             </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1 text-indigo-400">
+                <Dumbbell className="h-3 w-3" />
+                {classesLabel}
+              </span>
+              <span className="text-gray-300">
+                {formatCurrency(data.summary.thisMonthClasses ?? 0)}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Last month */}
         <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-gray-400">{t('revenueChart.lastMonth')}</span>
@@ -235,7 +352,6 @@ function RevenueChart({ data }: RevenueChartProps) {
           </p>
         </div>
 
-        {/* Avg/day */}
         <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-gray-400">{t('revenueChart.avgDaily')}</span>
@@ -246,7 +362,6 @@ function RevenueChart({ data }: RevenueChartProps) {
           </p>
         </div>
 
-        {/* Highest day */}
         <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-gray-400">{t('revenueChart.highestDay')}</span>

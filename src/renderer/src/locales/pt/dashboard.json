@@ -18,15 +18,23 @@
     "lastMonth": "Mês Passado",
     "avgDaily": "Média/Dia",
     "highestDay": "Dia Mais Alto",
+    "all": "Tudo",
     "memberships": "Matrículas",
     "store": "Loja",
+    "classes": "Aulas",
     "membershipRevenue": "Receita de Matrículas",
-    "storeRevenue": "Receita da Loja"
+    "storeRevenue": "Receita da Loja",
+    "classesRevenue": "Receita de Aulas"
   },
 
   "recentCheckIns": {
     "title": "Check-ins Recentes",
     "noData": "Nenhum check-in ainda hoje"
+  },
+
+  "todaysClasses": {
+    "title": "Aulas de Hoje",
+    "noData": "Nenhuma aula agendada para hoje"
   },
 
   "expiringMemberships": {
