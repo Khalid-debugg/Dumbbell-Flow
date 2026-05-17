@@ -62,6 +62,14 @@ export const PERMISSIONS = {
     view_sales: 'store.view_sales',
     delete_sale: 'store.delete_sale',
     manage_products: 'store.manage_products'
+  },
+  classes: {
+    view: 'classes.view',
+    create: 'classes.create',
+    edit: 'classes.edit',
+    delete: 'classes.delete',
+    complete: 'classes.complete',
+    manage_subscribers: 'classes.manage_subscribers'
   }
 } as const
 
@@ -131,7 +139,15 @@ export const PERMISSION_LABELS: Record<string, string> = {
   'store.create_sale': 'Can create sales (POS)',
   'store.view_sales': 'Can view sales history',
   'store.delete_sale': 'Can delete sales records',
-  'store.manage_products': 'Can add, edit, and remove products'
+  'store.manage_products': 'Can add, edit, and remove products',
+
+  // Classes
+  'classes.view': 'Can view classes',
+  'classes.create': 'Can create class rules and instances',
+  'classes.edit': 'Can edit class rules and instances',
+  'classes.delete': 'Can delete class rules and instances',
+  'classes.complete': 'Can mark classes as completed',
+  'classes.manage_subscribers': 'Can manage class subscribers'
 }
 
 // Permission dependencies - maps each permission to the permissions it requires
@@ -192,7 +208,14 @@ export const PERMISSION_DEPENDENCIES: Record<string, string[]> = {
   'store.create_sale': ['store.view'],
   'store.view_sales': ['store.view'],
   'store.delete_sale': ['store.view', 'store.view_sales'],
-  'store.manage_products': ['store.view']
+  'store.manage_products': ['store.view'],
+
+  // Classes
+  'classes.create': ['classes.view'],
+  'classes.edit': ['classes.view'],
+  'classes.delete': ['classes.view'],
+  'classes.complete': ['classes.view'],
+  'classes.manage_subscribers': ['classes.view']
 }
 
 // Page names for grouping
@@ -205,7 +228,8 @@ export const PAGE_NAMES: Record<string, string> = {
   reports: 'Reports',
   settings: 'Settings',
   accounts: 'Accounts',
-  store: 'Store'
+  store: 'Store',
+  classes: 'Classes'
 }
 
 // User permissions type
@@ -312,7 +336,10 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'accounts.manage_admin': false,
 
     // Store - Full access
-    ...Object.fromEntries(Object.values(PERMISSIONS.store).map((p) => [p, true]))
+    ...Object.fromEntries(Object.values(PERMISSIONS.store).map((p) => [p, true])),
+
+    // Classes - Full access
+    ...Object.fromEntries(Object.values(PERMISSIONS.classes).map((p) => [p, true]))
   },
 
   coach: {
@@ -358,7 +385,15 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'store.create_sale': true,
     'store.view_sales': true,
     'store.delete_sale': false,
-    'store.manage_products': false
+    'store.manage_products': false,
+
+    // Classes - View, complete, manage subscribers (no delete)
+    'classes.view': true,
+    'classes.create': true,
+    'classes.edit': true,
+    'classes.delete': false,
+    'classes.complete': true,
+    'classes.manage_subscribers': true
   },
 
   receptionist: {
@@ -407,7 +442,15 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'store.create_sale': true,
     'store.view_sales': false,
     'store.delete_sale': false,
-    'store.manage_products': false
+    'store.manage_products': false,
+
+    // Classes - View only
+    'classes.view': true,
+    'classes.create': false,
+    'classes.edit': false,
+    'classes.delete': false,
+    'classes.complete': false,
+    'classes.manage_subscribers': false
   },
 
   custom: getEmptyPermissions()
