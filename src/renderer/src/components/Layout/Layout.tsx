@@ -1,7 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
-import { ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Languages, ShieldUser, LogOut } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Dumbbell,
+  Languages,
+  ShieldUser,
+  LogOut
+} from 'lucide-react'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -178,7 +186,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               const inactiveHover =
                 'text-gray-300 hover:bg-gray-700/50 hover:text-white hover:shadow-md'
 
-              const groupIcon = (
+              const collapsedGroupIcon = (
                 <div
                   className={`
                     relative flex items-center justify-center w-8 h-8 rounded-lg
@@ -203,6 +211,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </div>
               )
 
+              const groupIcon = (
+                <div className="relative flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-300 ease-in-out group-hover:bg-yellow-500/10 group-hover:shadow-md group-hover:shadow-yellow-500/20">
+                  <span className="text-lg transition-all duration-300 ease-in-out group-hover:scale-125 group-hover:drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]">
+                    {item.icon}
+                  </span>
+                  <div className="absolute inset-0 rounded-lg transition-all duration-300 group-hover:ring-2 group-hover:ring-yellow-400/40" />
+                </div>
+              )
+
               if (collapsed) {
                 return (
                   <Link
@@ -214,7 +231,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       ${isGroupActive ? activeGradient : inactiveHover}
                     `}
                   >
-                    {groupIcon}
+                    {collapsedGroupIcon}
                     {isGroupActive && (
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
                     )}
@@ -229,7 +246,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     className={`
                       w-full flex items-center rounded-lg transition-all duration-300 ease-in-out
                       group relative overflow-hidden min-h-[2.5rem] gap-2.5 px-3 py-[1vh]
-                      ${isGroupActive ? activeGradient : inactiveHover}
+                      ${inactiveHover}
                     `}
                   >
                     {groupIcon}
@@ -239,12 +256,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <ChevronDown
                       className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                     />
-                    {isGroupActive && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
-                    )}
                   </button>
                   {isExpanded && (
-                    <div className="mt-1 ms-4 ps-2 space-y-0.5 border-s-2 border-gray-700">
+                    <div className="mt-1 ms-3 space-y-[0.5vh]">
                       {visibleChildren.map((child) => {
                         const isChildActive = location.pathname === child.path
                         return (
@@ -252,11 +266,41 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             key={child.path}
                             to={child.path}
                             className={`
-                              flex items-center rounded-lg px-3 py-2 text-sm transition-all duration-200
-                              ${isChildActive ? 'bg-gray-700 text-white font-medium' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white'}
+                              flex items-center rounded-lg
+                              group relative overflow-hidden
+                              min-h-[2.5rem] gap-2.5 px-3 py-[1vh]
+                              transition-all duration-300 ease-in-out
+                              ${isChildActive ? activeGradient : 'text-gray-300 hover:bg-gray-700/50 hover:text-white hover:shadow-md hover:translate-x-1'}
                             `}
                           >
-                            {t(child.label)}
+                            <div
+                              className={`
+                                relative flex items-center justify-center w-8 h-8 rounded-lg
+                                transition-all duration-300 ease-in-out
+                                ${isChildActive ? 'bg-white/20 shadow-lg shadow-white/20' : 'group-hover:bg-yellow-500/10 group-hover:shadow-md group-hover:shadow-yellow-500/20'}
+                              `}
+                            >
+                              <span
+                                className={`
+                                  text-lg transition-all duration-300 ease-in-out
+                                  ${isChildActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] animate-pulse' : 'group-hover:scale-125 group-hover:drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]'}
+                                `}
+                              >
+                                {child.icon}
+                              </span>
+                              <div
+                                className={`
+                                  absolute inset-0 rounded-lg transition-all duration-300
+                                  ${isChildActive ? 'ring-2 ring-white/40 ring-offset-2 ring-offset-yellow-600/50' : 'group-hover:ring-2 group-hover:ring-yellow-400/40'}
+                                `}
+                              />
+                            </div>
+                            <span className="font-medium text-sm transition-all duration-300">
+                              {t(child.label)}
+                            </span>
+                            {isChildActive && (
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                            )}
                           </Link>
                         )
                       })}
@@ -273,7 +317,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 to={item.path!}
                 className={`
                   flex items-center rounded-lg
-                  transition-all duration-300 ease-in-out
                   group relative overflow-hidden
                   min-h-[2.5rem]  p-3
                   ${collapsed ? 'justify-center' : 'gap-2.5 px-3 py-[1vh]'}
