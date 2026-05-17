@@ -1,0 +1,177 @@
+{
+  "nav": "Clases",
+  "tabs": {
+    "rules": "Reglas Recurrentes",
+    "schedule": "Horario",
+    "subscribers": "Suscriptores"
+  },
+  "rules": {
+    "title": "Reglas Recurrentes",
+    "add": "Agregar Regla",
+    "edit": "Editar Regla",
+    "noRules": "No se encontraron reglas recurrentes",
+    "noRulesHint": "Crea tu primera regla de clase para comenzar",
+    "status": {
+      "active": "Activo",
+      "completed": "Completado"
+    },
+    "columns": {
+      "name": "Nombre de Clase",
+      "category": "Categoría",
+      "coach": "Entrenador",
+      "days": "Días",
+      "pricing": "Precios",
+      "subscribers": "Suscriptores",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "complete": "Marcar como Completada",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "addSubscriber": "Agregar Suscriptor"
+    },
+    "deleteConfirm": "¿Eliminar esta regla recurrente? Se eliminarán todas sus instancias del calendario.",
+    "selected": "seleccionado(s)",
+    "bulkDeleteTitle": "Eliminar reglas seleccionadas",
+    "bulkDeleteConfirm": "¿Eliminar {{count}} reglas recurrentes? Se eliminarán todas sus instancias del calendario.",
+    "completeConfirm": "¿Marcar esta regla como completada? No se generarán nuevas instancias.",
+    "form": {
+      "create": "Crear Regla Recurrente",
+      "edit": "Editar Regla Recurrente",
+      "name": "Nombre de Clase",
+      "namePlaceholder": "ej. Yoga Matutino",
+      "category": "Categoría",
+      "categoryPlaceholder": "Selecciona una categoría",
+      "categoryOther": "Otro",
+      "categoryOtherPlaceholder": "Escribe el nombre de la categoría...",
+      "color": "Color",
+      "coach": "Nombre del Entrenador",
+      "coachPlaceholder": "ej. Carlos García",
+      "startDate": "Fecha de Inicio",
+      "days": "Repetir en Días",
+      "daysError": "Selecciona al menos un día",
+      "pricing": "Planes de Precios",
+      "pricingHint": "Establece al menos una opción de precio",
+      "pricePerClass": "Por Clase",
+      "pricePerWeek": "Por Semana",
+      "pricePerMonth": "Por Mes",
+      "pricePerYear": "Por Año",
+      "subscribers": "Agregar Suscriptores",
+      "subscriberSearch": "Buscar por nombre, teléfono o ID...",
+      "noSubscribers": "No hay suscriptores agregados",
+      "cancel": "Cancelar",
+      "startTime": "Hora de Clase",
+      "save": "Guardar Regla",
+      "create": "Crear Regla"
+    },
+    "days": {
+      "0": "Dom",
+      "1": "Lun",
+      "2": "Mar",
+      "3": "Mié",
+      "4": "Jue",
+      "5": "Vie",
+      "6": "Sáb"
+    }
+  },
+  "schedule": {
+    "title": "Horario",
+    "today": "Hoy",
+    "noClasses": "No hay clases este día",
+    "addClass": "Agregar Clase",
+    "dayPanel": "Clases del {{date}}",
+    "confirmComplete": "¿Marcar esta clase como completada?",
+    "confirmDelete": "¿Eliminar esta clase? Esta acción no se puede deshacer.",
+    "completedSuccess": "Clase marcada como completada",
+    "nextClassCreated": "Próxima clase programada para {{date}}",
+    "instanceDeleted": "Clase eliminada",
+    "instanceCreated": "Clase agregada",
+    "instanceUpdated": "Clase actualizada",
+    "instanceStatus": {
+      "upcoming": "Próxima",
+      "completed": "Completada"
+    },
+    "instanceType": {
+      "recurring": "Recurrente",
+      "oneOff": "Puntual"
+    },
+    "form": {
+      "create": "Agregar Clase Puntual",
+      "edit": "Editar Clase"
+    },
+    "detail": {
+      "members": "Miembros Inscritos",
+      "noMembers": "No hay miembros inscritos aún"
+    }
+  },
+  "subscribers": {
+    "title": "Suscriptores",
+    "noSubscribers": "Sin suscriptores aún",
+    "noSubscribersHint": "Inscribe miembros en clases para verlos aquí",
+    "columns": {
+      "member": "Miembro",
+      "phone": "Teléfono",
+      "class": "Clase",
+      "plan": "Plan",
+      "amount": "Monto",
+      "paid": "Pagado",
+      "partial": "Parcial",
+      "date": "Inscrito"
+    },
+    "planType": {
+      "all": "Todos",
+      "per_class": "Por Clase",
+      "per_week": "Por Semana",
+      "per_month": "Por Mes",
+      "per_year": "Por Año"
+    },
+    "detail": {
+      "title": "Clases de {{name}}",
+      "noClasses": "No se encontraron suscripciones a clases",
+      "noAttendance": "No se encontraron registros de asistencia",
+      "remaining": "{{amount}} pendiente",
+      "tabs": {
+        "attendance": "Historial de Asistencia",
+        "payments": "Detalles de Pago"
+      }
+    },
+    "remove": "Eliminar",
+    "removeConfirm": "¿Eliminar este suscriptor de la clase?",
+    "removeSuccess": "Suscriptor eliminado",
+    "markPaid": "Marcar como Pagado",
+    "markPaidConfirm": "¿Marcar esta suscripción como totalmente pagada? ({{amount}} pendiente se eliminará)",
+    "markPaidSuccess": "Marcado como totalmente pagado"
+  },
+  "subscriberForm": {
+    "title": "Agregar Suscriptor",
+    "memberSearch": "Buscar por nombre, teléfono o ID...",
+    "member": "Miembro",
+    "planType": "Plan de Precio",
+    "amount": "Monto",
+    "amountPaid": "Monto Pagado",
+    "partial": "Pago Parcial",
+    "partialHint": "El miembro no paga el monto completo",
+    "add": "Agregar",
+    "cancel": "Cancelar",
+    "noPricing": "Esta clase no tiene precio para el plan seleccionado"
+  },
+  "filters": {
+    "all": "Todos",
+    "allClasses": "Todas las Clases"
+  },
+  "errors": {
+    "required": "{{field}} es obligatorio",
+    "loadFailed": "Error al cargar datos",
+    "saveFailed": "Error al guardar",
+    "deleteFailed": "Error al eliminar",
+    "noPricingPlan": "Se debe establecer al menos un plan de precio",
+    "noDaysSelected": "Se debe seleccionar al menos un día"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  }
+}

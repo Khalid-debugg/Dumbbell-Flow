@@ -1,0 +1,177 @@
+{
+  "nav": "Kurse",
+  "tabs": {
+    "rules": "Wiederkehrende Regeln",
+    "schedule": "Stundenplan",
+    "subscribers": "Teilnehmer"
+  },
+  "rules": {
+    "title": "Wiederkehrende Regeln",
+    "add": "Regel Hinzufügen",
+    "edit": "Regel Bearbeiten",
+    "noRules": "Keine wiederkehrenden Regeln gefunden",
+    "noRulesHint": "Erstellen Sie Ihre erste Kursregel, um zu beginnen",
+    "status": {
+      "active": "Aktiv",
+      "completed": "Abgeschlossen"
+    },
+    "columns": {
+      "name": "Kursname",
+      "category": "Kategorie",
+      "coach": "Trainer",
+      "days": "Tage",
+      "pricing": "Preise",
+      "subscribers": "Teilnehmer",
+      "status": "Status",
+      "actions": "Aktionen"
+    },
+    "actions": {
+      "complete": "Als Abgeschlossen Markieren",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "addSubscriber": "Teilnehmer Hinzufügen"
+    },
+    "deleteConfirm": "Diese wiederkehrende Regel löschen? Alle Kalenderinstanzen werden entfernt.",
+    "selected": "ausgewählt",
+    "bulkDeleteTitle": "Ausgewählte Regeln löschen",
+    "bulkDeleteConfirm": "{{count}} wiederkehrende Regeln löschen? Alle Kalenderinstanzen werden entfernt.",
+    "completeConfirm": "Diese Regel als abgeschlossen markieren? Es werden keine neuen Instanzen erstellt.",
+    "form": {
+      "create": "Wiederkehrende Regel Erstellen",
+      "edit": "Wiederkehrende Regel Bearbeiten",
+      "name": "Kursname",
+      "namePlaceholder": "z.B. Morgen-Yoga",
+      "category": "Kategorie",
+      "categoryPlaceholder": "Kategorie auswählen",
+      "categoryOther": "Andere",
+      "categoryOtherPlaceholder": "Kategoriename eingeben...",
+      "color": "Farbe",
+      "coach": "Trainername",
+      "coachPlaceholder": "z.B. Max Müller",
+      "startDate": "Startdatum",
+      "days": "An Tagen Wiederholen",
+      "daysError": "Wählen Sie mindestens einen Tag",
+      "pricing": "Preispläne",
+      "pricingHint": "Legen Sie mindestens eine Preisoption fest",
+      "pricePerClass": "Pro Kurs",
+      "pricePerWeek": "Pro Woche",
+      "pricePerMonth": "Pro Monat",
+      "pricePerYear": "Pro Jahr",
+      "subscribers": "Teilnehmer Hinzufügen",
+      "subscriberSearch": "Nach Name, Telefon oder ID suchen...",
+      "noSubscribers": "Noch keine Teilnehmer hinzugefügt",
+      "cancel": "Abbrechen",
+      "startTime": "Kurszeit",
+      "save": "Regel Speichern",
+      "create": "Regel Erstellen"
+    },
+    "days": {
+      "0": "So",
+      "1": "Mo",
+      "2": "Di",
+      "3": "Mi",
+      "4": "Do",
+      "5": "Fr",
+      "6": "Sa"
+    }
+  },
+  "schedule": {
+    "title": "Stundenplan",
+    "today": "Heute",
+    "noClasses": "Keine Kurse an diesem Tag",
+    "addClass": "Kurs Hinzufügen",
+    "dayPanel": "Kurse am {{date}}",
+    "confirmComplete": "Diesen Kurs als abgeschlossen markieren?",
+    "confirmDelete": "Diesen Kurs löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "completedSuccess": "Kurs als abgeschlossen markiert",
+    "nextClassCreated": "Nächster Kurs für {{date}} geplant",
+    "instanceDeleted": "Kurs gelöscht",
+    "instanceCreated": "Kurs hinzugefügt",
+    "instanceUpdated": "Kurs aktualisiert",
+    "instanceStatus": {
+      "upcoming": "Bevorstehend",
+      "completed": "Abgeschlossen"
+    },
+    "instanceType": {
+      "recurring": "Wiederkehrend",
+      "oneOff": "Einmalig"
+    },
+    "form": {
+      "create": "Einmaligen Kurs Hinzufügen",
+      "edit": "Kurs Bearbeiten"
+    },
+    "detail": {
+      "members": "Angemeldete Teilnehmer",
+      "noMembers": "Noch keine Teilnehmer angemeldet"
+    }
+  },
+  "subscribers": {
+    "title": "Teilnehmer",
+    "noSubscribers": "Noch keine Teilnehmer",
+    "noSubscribersHint": "Melden Sie Mitglieder für Kurse an, um sie hier zu sehen",
+    "columns": {
+      "member": "Mitglied",
+      "phone": "Telefon",
+      "class": "Kurs",
+      "plan": "Plan",
+      "amount": "Betrag",
+      "paid": "Bezahlt",
+      "partial": "Teilzahlung",
+      "date": "Angemeldet"
+    },
+    "planType": {
+      "all": "Alle",
+      "per_class": "Pro Kurs",
+      "per_week": "Pro Woche",
+      "per_month": "Pro Monat",
+      "per_year": "Pro Jahr"
+    },
+    "detail": {
+      "title": "Kurse von {{name}}",
+      "noClasses": "Keine Kursanmeldungen gefunden",
+      "noAttendance": "Keine Anwesenheitsaufzeichnungen gefunden",
+      "remaining": "{{amount}} ausstehend",
+      "tabs": {
+        "attendance": "Anwesenheitsverlauf",
+        "payments": "Zahlungsdetails"
+      }
+    },
+    "remove": "Entfernen",
+    "removeConfirm": "Diesen Teilnehmer aus dem Kurs entfernen?",
+    "removeSuccess": "Teilnehmer entfernt",
+    "markPaid": "Als Bezahlt Markieren",
+    "markPaidConfirm": "Dieses Abonnement als vollständig bezahlt markieren? ({{amount}} ausstehend wird gelöscht)",
+    "markPaidSuccess": "Als vollständig bezahlt markiert"
+  },
+  "subscriberForm": {
+    "title": "Teilnehmer Hinzufügen",
+    "memberSearch": "Nach Name, Telefon oder ID suchen...",
+    "member": "Mitglied",
+    "planType": "Preisplan",
+    "amount": "Betrag",
+    "amountPaid": "Bezahlter Betrag",
+    "partial": "Teilzahlung",
+    "partialHint": "Das Mitglied zahlt nicht den vollen Betrag",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "noPricing": "Für diesen Kurs ist kein Preis für den ausgewählten Plan festgelegt"
+  },
+  "filters": {
+    "all": "Alle",
+    "allClasses": "Alle Kurse"
+  },
+  "errors": {
+    "required": "{{field}} ist erforderlich",
+    "loadFailed": "Fehler beim Laden der Daten",
+    "saveFailed": "Fehler beim Speichern",
+    "deleteFailed": "Fehler beim Löschen",
+    "noPricingPlan": "Mindestens ein Preisplan muss festgelegt werden",
+    "noDaysSelected": "Mindestens ein Tag muss ausgewählt werden"
+  },
+  "pagination": {
+    "page": "Seite",
+    "of": "von",
+    "previous": "Zurück",
+    "next": "Weiter"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "nav": "Classes",
+  "tabs": {
+    "rules": "Recurring Rules",
+    "schedule": "Schedule",
+    "subscribers": "Subscribers"
+  },
+  "rules": {
+    "title": "Recurring Rules",
+    "add": "Add Rule",
+    "edit": "Edit Rule",
+    "noRules": "No recurring rules found",
+    "noRulesHint": "Create your first class rule to get started",
+    "status": {
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "columns": {
+      "name": "Class Name",
+      "category": "Category",
+      "coach": "Coach",
+      "days": "Days",
+      "pricing": "Pricing",
+      "subscribers": "Subscribers",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "complete": "Mark as Completed",
+      "edit": "Edit",
+      "delete": "Delete",
+      "addSubscriber": "Add Subscriber"
+    },
+    "deleteConfirm": "Delete this recurring rule? All its calendar instances will be removed.",
+    "selected": "selected",
+    "bulkDeleteTitle": "Delete Selected Rules",
+    "bulkDeleteConfirm": "Delete {{count}} recurring rules? All their calendar instances will be removed.",
+    "completeConfirm": "Mark this rule as completed? No new instances will be generated.",
+    "form": {
+      "create": "Create Recurring Rule",
+      "edit": "Edit Recurring Rule",
+      "name": "Class Name",
+      "namePlaceholder": "e.g. Morning Yoga",
+      "category": "Category",
+      "categoryPlaceholder": "Select a category",
+      "categoryOther": "Other",
+      "categoryOtherPlaceholder": "Type category name...",
+      "color": "Color",
+      "coach": "Coach Name",
+      "coachPlaceholder": "e.g. Ahmed Hassan",
+      "startDate": "Starting Date",
+      "days": "Repeat on Days",
+      "daysError": "Select at least one day",
+      "pricing": "Pricing Plans",
+      "pricingHint": "Set at least one pricing option",
+      "pricePerClass": "Per Class",
+      "pricePerWeek": "Per Week",
+      "pricePerMonth": "Per Month",
+      "pricePerYear": "Per Year",
+      "subscribers": "Add Subscribers",
+      "subscriberSearch": "Search by name, phone or ID...",
+      "noSubscribers": "No subscribers added yet",
+      "cancel": "Cancel",
+      "startTime": "Class Time",
+      "save": "Save Rule",
+      "create": "Create Rule"
+    },
+    "days": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    }
+  },
+  "schedule": {
+    "title": "Schedule",
+    "today": "Today",
+    "noClasses": "No classes on this day",
+    "addClass": "Add Class",
+    "dayPanel": "Classes for {{date}}",
+    "confirmComplete": "Mark this class as completed?",
+    "confirmDelete": "Delete this class? This cannot be undone.",
+    "completedSuccess": "Class marked as completed",
+    "nextClassCreated": "Next class scheduled for {{date}}",
+    "instanceDeleted": "Class deleted",
+    "instanceCreated": "Class added",
+    "instanceUpdated": "Class updated",
+    "instanceStatus": {
+      "upcoming": "Upcoming",
+      "completed": "Completed"
+    },
+    "instanceType": {
+      "recurring": "Recurring",
+      "oneOff": "One-off"
+    },
+    "form": {
+      "create": "Add One-off Class",
+      "edit": "Edit Class"
+    },
+    "detail": {
+      "members": "Enrolled Members",
+      "noMembers": "No members enrolled yet"
+    }
+  },
+  "subscribers": {
+    "title": "Subscribers",
+    "noSubscribers": "No subscribers yet",
+    "noSubscribersHint": "Enroll members in classes to see them here",
+    "columns": {
+      "member": "Member",
+      "phone": "Phone",
+      "class": "Class",
+      "plan": "Plan",
+      "amount": "Amount",
+      "paid": "Paid",
+      "partial": "Partial",
+      "date": "Enrolled"
+    },
+    "planType": {
+      "all": "All",
+      "per_class": "Per Class",
+      "per_week": "Per Week",
+      "per_month": "Per Month",
+      "per_year": "Per Year"
+    },
+    "detail": {
+      "title": "{{name}}'s Classes",
+      "noClasses": "No class subscriptions found",
+      "noAttendance": "No attendance records found",
+      "remaining": "{{amount}} remaining",
+      "tabs": {
+        "attendance": "Attendance History",
+        "payments": "Payment Details"
+      }
+    },
+    "remove": "Remove",
+    "removeConfirm": "Remove this subscriber from the class?",
+    "removeSuccess": "Subscriber removed",
+    "markPaid": "Mark as Paid",
+    "markPaidConfirm": "Mark this subscription as fully paid? ({{amount}} remaining will be cleared)",
+    "markPaidSuccess": "Marked as fully paid"
+  },
+  "subscriberForm": {
+    "title": "Add Subscriber",
+    "memberSearch": "Search by name, phone or ID...",
+    "member": "Member",
+    "planType": "Pricing Plan",
+    "amount": "Amount",
+    "amountPaid": "Amount Paid",
+    "partial": "Partial Payment",
+    "partialHint": "Member is not paying the full amount",
+    "add": "Add",
+    "cancel": "Cancel",
+    "noPricing": "This class has no pricing set for the selected plan"
+  },
+  "filters": {
+    "all": "All",
+    "allClasses": "All Classes"
+  },
+  "errors": {
+    "required": "{{field}} is required",
+    "loadFailed": "Failed to load data",
+    "saveFailed": "Failed to save",
+    "deleteFailed": "Failed to delete",
+    "noPricingPlan": "At least one pricing plan must be set",
+    "noDaysSelected": "At least one day must be selected"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
+  }
+}

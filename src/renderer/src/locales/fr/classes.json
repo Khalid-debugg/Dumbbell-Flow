@@ -1,0 +1,177 @@
+{
+  "nav": "Cours",
+  "tabs": {
+    "rules": "Règles Récurrentes",
+    "schedule": "Planning",
+    "subscribers": "Abonnés"
+  },
+  "rules": {
+    "title": "Règles Récurrentes",
+    "add": "Ajouter une Règle",
+    "edit": "Modifier la Règle",
+    "noRules": "Aucune règle récurrente trouvée",
+    "noRulesHint": "Créez votre première règle de cours pour commencer",
+    "status": {
+      "active": "Actif",
+      "completed": "Terminé"
+    },
+    "columns": {
+      "name": "Nom du Cours",
+      "category": "Catégorie",
+      "coach": "Coach",
+      "days": "Jours",
+      "pricing": "Tarifs",
+      "subscribers": "Abonnés",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "actions": {
+      "complete": "Marquer comme Terminé",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "addSubscriber": "Ajouter un Abonné"
+    },
+    "deleteConfirm": "Supprimer cette règle récurrente ? Toutes ses instances du calendrier seront supprimées.",
+    "selected": "sélectionné(s)",
+    "bulkDeleteTitle": "Supprimer les règles sélectionnées",
+    "bulkDeleteConfirm": "Supprimer {{count}} règles récurrentes ? Toutes leurs instances seront supprimées.",
+    "completeConfirm": "Marquer cette règle comme terminée ? Aucune nouvelle instance ne sera générée.",
+    "form": {
+      "create": "Créer une Règle Récurrente",
+      "edit": "Modifier la Règle Récurrente",
+      "name": "Nom du Cours",
+      "namePlaceholder": "ex. Yoga du Matin",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Sélectionner une catégorie",
+      "categoryOther": "Autre",
+      "categoryOtherPlaceholder": "Saisir le nom de la catégorie...",
+      "color": "Couleur",
+      "coach": "Nom du Coach",
+      "coachPlaceholder": "ex. Pierre Martin",
+      "startDate": "Date de Début",
+      "days": "Répéter les Jours",
+      "daysError": "Sélectionnez au moins un jour",
+      "pricing": "Plans Tarifaires",
+      "pricingHint": "Définissez au moins une option tarifaire",
+      "pricePerClass": "Par Cours",
+      "pricePerWeek": "Par Semaine",
+      "pricePerMonth": "Par Mois",
+      "pricePerYear": "Par An",
+      "subscribers": "Ajouter des Abonnés",
+      "subscriberSearch": "Rechercher par nom, téléphone ou ID...",
+      "noSubscribers": "Aucun abonné ajouté",
+      "cancel": "Annuler",
+      "startTime": "Heure du Cours",
+      "save": "Enregistrer la Règle",
+      "create": "Créer la Règle"
+    },
+    "days": {
+      "0": "Dim",
+      "1": "Lun",
+      "2": "Mar",
+      "3": "Mer",
+      "4": "Jeu",
+      "5": "Ven",
+      "6": "Sam"
+    }
+  },
+  "schedule": {
+    "title": "Planning",
+    "today": "Aujourd'hui",
+    "noClasses": "Pas de cours ce jour",
+    "addClass": "Ajouter un Cours",
+    "dayPanel": "Cours du {{date}}",
+    "confirmComplete": "Marquer ce cours comme terminé ?",
+    "confirmDelete": "Supprimer ce cours ? Cette action est irréversible.",
+    "completedSuccess": "Cours marqué comme terminé",
+    "nextClassCreated": "Prochain cours programmé le {{date}}",
+    "instanceDeleted": "Cours supprimé",
+    "instanceCreated": "Cours ajouté",
+    "instanceUpdated": "Cours mis à jour",
+    "instanceStatus": {
+      "upcoming": "À venir",
+      "completed": "Terminé"
+    },
+    "instanceType": {
+      "recurring": "Récurrent",
+      "oneOff": "Ponctuel"
+    },
+    "form": {
+      "create": "Ajouter un Cours Ponctuel",
+      "edit": "Modifier le Cours"
+    },
+    "detail": {
+      "members": "Membres Inscrits",
+      "noMembers": "Aucun membre inscrit pour l'instant"
+    }
+  },
+  "subscribers": {
+    "title": "Abonnés",
+    "noSubscribers": "Aucun abonné pour l'instant",
+    "noSubscribersHint": "Inscrivez des membres aux cours pour les voir ici",
+    "columns": {
+      "member": "Membre",
+      "phone": "Téléphone",
+      "class": "Cours",
+      "plan": "Plan",
+      "amount": "Montant",
+      "paid": "Payé",
+      "partial": "Partiel",
+      "date": "Inscrit le"
+    },
+    "planType": {
+      "all": "Tous",
+      "per_class": "Par Cours",
+      "per_week": "Par Semaine",
+      "per_month": "Par Mois",
+      "per_year": "Par An"
+    },
+    "detail": {
+      "title": "Cours de {{name}}",
+      "noClasses": "Aucune inscription aux cours trouvée",
+      "noAttendance": "Aucun historique de présence trouvé",
+      "remaining": "{{amount}} restant",
+      "tabs": {
+        "attendance": "Historique de Présence",
+        "payments": "Détails des Paiements"
+      }
+    },
+    "remove": "Retirer",
+    "removeConfirm": "Retirer cet abonné du cours ?",
+    "removeSuccess": "Abonné retiré",
+    "markPaid": "Marquer comme Payé",
+    "markPaidConfirm": "Marquer cet abonnement comme entièrement payé ? ({{amount}} restant sera effacé)",
+    "markPaidSuccess": "Marqué comme entièrement payé"
+  },
+  "subscriberForm": {
+    "title": "Ajouter un Abonné",
+    "memberSearch": "Rechercher par nom, téléphone ou ID...",
+    "member": "Membre",
+    "planType": "Plan Tarifaire",
+    "amount": "Montant",
+    "amountPaid": "Montant Payé",
+    "partial": "Paiement Partiel",
+    "partialHint": "Le membre ne paie pas le montant total",
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "noPricing": "Ce cours n'a pas de tarif défini pour le plan sélectionné"
+  },
+  "filters": {
+    "all": "Tous",
+    "allClasses": "Tous les Cours"
+  },
+  "errors": {
+    "required": "{{field}} est obligatoire",
+    "loadFailed": "Échec du chargement des données",
+    "saveFailed": "Échec de l'enregistrement",
+    "deleteFailed": "Échec de la suppression",
+    "noPricingPlan": "Au moins un plan tarifaire doit être défini",
+    "noDaysSelected": "Au moins un jour doit être sélectionné"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "sur",
+    "previous": "Précédent",
+    "next": "Suivant"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "nav": "الحصص",
+  "tabs": {
+    "rules": "القواعد المتكررة",
+    "schedule": "الجدول الزمني",
+    "subscribers": "المشتركون"
+  },
+  "rules": {
+    "title": "القواعد المتكررة",
+    "add": "إضافة قاعدة",
+    "edit": "تعديل القاعدة",
+    "noRules": "لا توجد قواعد متكررة",
+    "noRulesHint": "أنشئ قاعدة حصة جديدة للبدء",
+    "status": {
+      "active": "نشط",
+      "completed": "مكتمل"
+    },
+    "columns": {
+      "name": "اسم الحصة",
+      "category": "الفئة",
+      "coach": "المدرب",
+      "days": "الأيام",
+      "pricing": "الأسعار",
+      "subscribers": "المشتركون",
+      "status": "الحالة",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "complete": "تحديد كمكتملة",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "addSubscriber": "إضافة مشترك"
+    },
+    "deleteConfirm": "هل تريد حذف هذه القاعدة المتكررة؟ سيتم إزالة جميع حصصها من التقويم.",
+    "selected": "محدد",
+    "bulkDeleteTitle": "حذف القواعد المحددة",
+    "bulkDeleteConfirm": "هل تريد حذف {{count}} قواعد متكررة؟ سيتم إزالة جميع حصصها من التقويم.",
+    "completeConfirm": "هل تريد تحديد هذه القاعدة كمكتملة؟ لن يتم إنشاء حصص جديدة.",
+    "form": {
+      "create": "إنشاء قاعدة متكررة",
+      "edit": "تعديل قاعدة متكررة",
+      "name": "اسم الحصة",
+      "namePlaceholder": "مثال: يوغا الصباح",
+      "category": "الفئة",
+      "categoryPlaceholder": "اختر فئة",
+      "categoryOther": "أخرى",
+      "categoryOtherPlaceholder": "اكتب اسم الفئة...",
+      "color": "اللون",
+      "coach": "اسم المدرب",
+      "coachPlaceholder": "مثال: أحمد حسن",
+      "startDate": "تاريخ البداية",
+      "days": "تكرار في الأيام",
+      "daysError": "اختر يوماً واحداً على الأقل",
+      "pricing": "خطط الأسعار",
+      "pricingHint": "حدد خيار سعر واحد على الأقل",
+      "pricePerClass": "لكل حصة",
+      "pricePerWeek": "أسبوعياً",
+      "pricePerMonth": "شهرياً",
+      "pricePerYear": "سنوياً",
+      "subscribers": "إضافة مشتركين",
+      "subscriberSearch": "البحث بالاسم أو الهاتف أو المعرف...",
+      "noSubscribers": "لم يتم إضافة مشتركين بعد",
+      "cancel": "إلغاء",
+      "startTime": "وقت الحصة",
+      "save": "حفظ القاعدة",
+      "create": "إنشاء القاعدة"
+    },
+    "days": {
+      "0": "أحد",
+      "1": "اثنين",
+      "2": "ثلاثاء",
+      "3": "أربعاء",
+      "4": "خميس",
+      "5": "جمعة",
+      "6": "سبت"
+    }
+  },
+  "schedule": {
+    "title": "الجدول الزمني",
+    "today": "اليوم",
+    "noClasses": "لا توجد حصص في هذا اليوم",
+    "addClass": "إضافة حصة",
+    "dayPanel": "حصص {{date}}",
+    "confirmComplete": "هل تريد تحديد هذه الحصة كمكتملة؟",
+    "confirmDelete": "هل تريد حذف هذه الحصة؟ لا يمكن التراجع.",
+    "completedSuccess": "تم تحديد الحصة كمكتملة",
+    "nextClassCreated": "تم جدولة الحصة التالية في {{date}}",
+    "instanceDeleted": "تم حذف الحصة",
+    "instanceCreated": "تمت إضافة الحصة",
+    "instanceUpdated": "تم تحديث الحصة",
+    "instanceStatus": {
+      "upcoming": "قادمة",
+      "completed": "مكتملة"
+    },
+    "instanceType": {
+      "recurring": "متكررة",
+      "oneOff": "مرة واحدة"
+    },
+    "form": {
+      "create": "إضافة حصة غير متكررة",
+      "edit": "تعديل الحصة"
+    },
+    "detail": {
+      "members": "المشتركون",
+      "noMembers": "لا يوجد مشتركون بعد"
+    }
+  },
+  "subscribers": {
+    "title": "المشتركون",
+    "noSubscribers": "لا يوجد مشتركون بعد",
+    "noSubscribersHint": "قم بتسجيل الأعضاء في الحصص لرؤيتهم هنا",
+    "columns": {
+      "member": "العضو",
+      "phone": "الهاتف",
+      "class": "الحصة",
+      "plan": "الخطة",
+      "amount": "المبلغ",
+      "paid": "المدفوع",
+      "partial": "جزئي",
+      "date": "تاريخ الاشتراك"
+    },
+    "planType": {
+      "all": "الكل",
+      "per_class": "لكل حصة",
+      "per_week": "أسبوعياً",
+      "per_month": "شهرياً",
+      "per_year": "سنوياً"
+    },
+    "detail": {
+      "title": "حصص {{name}}",
+      "noClasses": "لا توجد اشتراكات في الحصص",
+      "noAttendance": "لا توجد سجلات حضور",
+      "remaining": "{{amount}} متبقية",
+      "tabs": {
+        "attendance": "سجل الحضور",
+        "payments": "تفاصيل المدفوعات"
+      }
+    },
+    "remove": "إزالة",
+    "removeConfirm": "هل تريد إزالة هذا المشترك من الحصة؟",
+    "removeSuccess": "تمت إزالة المشترك",
+    "markPaid": "تحديد كمدفوع",
+    "markPaidConfirm": "تحديد هذا الاشتراك كمدفوع بالكامل؟ (سيتم مسح {{amount}} المتبقية)",
+    "markPaidSuccess": "تم التحديد كمدفوع بالكامل"
+  },
+  "subscriberForm": {
+    "title": "إضافة مشترك",
+    "memberSearch": "البحث بالاسم أو الهاتف أو المعرف...",
+    "member": "العضو",
+    "planType": "خطة الأسعار",
+    "amount": "المبلغ",
+    "amountPaid": "المبلغ المدفوع",
+    "partial": "دفعة جزئية",
+    "partialHint": "العضو لا يدفع المبلغ كاملاً",
+    "add": "إضافة",
+    "cancel": "إلغاء",
+    "noPricing": "لا يوجد سعر محدد لهذه الحصة للخطة المختارة"
+  },
+  "filters": {
+    "all": "الكل",
+    "allClasses": "كل الحصص"
+  },
+  "errors": {
+    "required": "{{field}} مطلوب",
+    "loadFailed": "فشل تحميل البيانات",
+    "saveFailed": "فشل الحفظ",
+    "deleteFailed": "فشل الحذف",
+    "noPricingPlan": "يجب تحديد خطة سعر واحدة على الأقل",
+    "noDaysSelected": "يجب اختيار يوم واحد على الأقل"
+  },
+  "pagination": {
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
+  }
+}
