@@ -12,7 +12,11 @@
     "reports": "Relatórios",
     "accounts": "Contas",
     "settings": "Configurações",
-    "store": "Loja"
+    "store": "Loja",
+    "classes": "Aulas",
+    "classesRules": "Regras Recorrentes",
+    "classesSchedule": "Horário",
+    "classesSubscribers": "Assinantes"
   },
   "user": {
     "admin": "Administrador",

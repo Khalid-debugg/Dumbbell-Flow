@@ -12,7 +12,11 @@
     "reports": "التقارير",
     "accounts": "الحسابات",
     "settings": "الإعدادات",
-    "store": "المتجر"
+    "store": "المتجر",
+    "classes": "الحصص",
+    "classesRules": "القواعد المتكررة",
+    "classesSchedule": "الجدول",
+    "classesSubscribers": "المشتركون"
   },
   "user": {
     "admin": "المدير",

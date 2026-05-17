@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Layout from './components/Layout/Layout'
 import { Toaster, toast } from 'sonner'
@@ -49,6 +49,9 @@ const Store = lazy(() => import('./pages/Store'))
 const Reports = lazy(() => import('./pages/Reports'))
 const Settings = lazy(() => import('./pages/Settings'))
 const Accounts = lazy(() => import('./pages/Accounts'))
+const ClassesRules = lazy(() => import('./pages/ClassesRules'))
+const ClassesSchedule = lazy(() => import('./pages/ClassesSchedule'))
+const ClassesSubscribers = lazy(() => import('./pages/ClassesSubscribers'))
 function AppContent() {
   const { user, loading } = useAuth()
 
@@ -112,6 +115,31 @@ function AppContent() {
           element={
             <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
               <Store />
+            </Suspense>
+          }
+        />
+        <Route path="/classes" element={<Navigate to="/classes/rules" replace />} />
+        <Route
+          path="/classes/rules"
+          element={
+            <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+              <ClassesRules />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/classes/schedule"
+          element={
+            <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+              <ClassesSchedule />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/classes/subscribers"
+          element={
+            <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+              <ClassesSubscribers />
             </Suspense>
           }
         />

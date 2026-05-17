@@ -12,7 +12,11 @@
     "reports": "Rapports",
     "accounts": "Comptes",
     "settings": "Paramètres",
-    "store": "Boutique"
+    "store": "Boutique",
+    "classes": "Cours",
+    "classesRules": "Règles Récurrentes",
+    "classesSchedule": "Horaire",
+    "classesSubscribers": "Abonnés"
   },
   "user": {
     "admin": "Admin",

@@ -12,7 +12,11 @@
     "reports": "Reports",
     "accounts": "Accounts",
     "settings": "Settings",
-    "store": "Store"
+    "store": "Store",
+    "classes": "Classes",
+    "classesRules": "Recurring Rules",
+    "classesSchedule": "Schedule",
+    "classesSubscribers": "Subscribers"
   },
   "user": {
     "admin": "Admin",

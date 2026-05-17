@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Dumbbell, Languages, ShieldUser, LogOut } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { ChevronDown, ChevronLeft, ChevronRight, Dumbbell, Languages, ShieldUser, LogOut } from 'lucide-react'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -21,6 +21,37 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout, hasPermission } = useAuth()
   const { t, i18n } = useTranslation()
   const [collapsed, setCollapsed] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => {
+    const initial = new Set<string>()
+    for (const item of menuItems) {
+      if (item.children?.some((c) => location.pathname.startsWith(c.path))) {
+        initial.add(item.label)
+      }
+    }
+    return initial
+  })
+
+  useEffect(() => {
+    for (const item of menuItems) {
+      if (item.children?.some((c) => location.pathname.startsWith(c.path))) {
+        setExpandedGroups((prev) => {
+          if (prev.has(item.label)) return prev
+          const next = new Set(prev)
+          next.add(item.label)
+          return next
+        })
+      }
+    }
+  }, [location.pathname])
+
+  const toggleGroup = (label: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev)
+      if (next.has(label)) next.delete(label)
+      else next.add(label)
+      return next
+    })
+  }
 
   // Filter menu items based on user permissions
   const visibleMenuItems = menuItems.filter((item) => {
@@ -133,11 +164,113 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           className={`flex-1 space-y-[0.5vh] overflow-y-auto ${collapsed ? 'px-2 py-4' : 'p-4'}`}
         >
           {visibleMenuItems.map((item) => {
+            if (item.children) {
+              const visibleChildren = item.children.filter(
+                (c) => !c.permission || hasPermission(c.permission)
+              )
+              if (visibleChildren.length === 0) return null
+              const isGroupActive = visibleChildren.some((c) =>
+                location.pathname.startsWith(c.path)
+              )
+              const isExpanded = expandedGroups.has(item.label)
+              const activeGradient =
+                'bg-gradient-to-r from-yellow-600 to-orange-600 text-white shadow-lg shadow-yellow-500/20'
+              const inactiveHover =
+                'text-gray-300 hover:bg-gray-700/50 hover:text-white hover:shadow-md'
+
+              const groupIcon = (
+                <div
+                  className={`
+                    relative flex items-center justify-center w-8 h-8 rounded-lg
+                    transition-all duration-300 ease-in-out
+                    ${isGroupActive ? 'bg-white/20 shadow-lg shadow-white/20' : 'group-hover:bg-yellow-500/10 group-hover:shadow-md group-hover:shadow-yellow-500/20'}
+                  `}
+                >
+                  <span
+                    className={`
+                      text-lg transition-all duration-300 ease-in-out
+                      ${isGroupActive ? 'scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.6)] animate-pulse' : 'group-hover:scale-125 group-hover:drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]'}
+                    `}
+                  >
+                    {item.icon}
+                  </span>
+                  <div
+                    className={`
+                      absolute inset-0 rounded-lg transition-all duration-300
+                      ${isGroupActive ? 'ring-2 ring-white/40 ring-offset-2 ring-offset-yellow-600/50' : 'group-hover:ring-2 group-hover:ring-yellow-400/40'}
+                    `}
+                  />
+                </div>
+              )
+
+              if (collapsed) {
+                return (
+                  <Link
+                    key={item.label}
+                    to={visibleChildren[0].path}
+                    className={`
+                      flex items-center rounded-lg transition-all duration-300 ease-in-out
+                      group relative overflow-hidden min-h-[2.5rem] p-3 justify-center
+                      ${isGroupActive ? activeGradient : inactiveHover}
+                    `}
+                  >
+                    {groupIcon}
+                    {isGroupActive && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                    )}
+                  </Link>
+                )
+              }
+
+              return (
+                <div key={item.label}>
+                  <button
+                    onClick={() => toggleGroup(item.label)}
+                    className={`
+                      w-full flex items-center rounded-lg transition-all duration-300 ease-in-out
+                      group relative overflow-hidden min-h-[2.5rem] gap-2.5 px-3 py-[1vh]
+                      ${isGroupActive ? activeGradient : inactiveHover}
+                    `}
+                  >
+                    {groupIcon}
+                    <span className="font-medium text-sm flex-1 text-start transition-all duration-300">
+                      {t(item.label)}
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                    />
+                    {isGroupActive && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                    )}
+                  </button>
+                  {isExpanded && (
+                    <div className="mt-1 ms-4 ps-2 space-y-0.5 border-s-2 border-gray-700">
+                      {visibleChildren.map((child) => {
+                        const isChildActive = location.pathname === child.path
+                        return (
+                          <Link
+                            key={child.path}
+                            to={child.path}
+                            className={`
+                              flex items-center rounded-lg px-3 py-2 text-sm transition-all duration-200
+                              ${isChildActive ? 'bg-gray-700 text-white font-medium' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white'}
+                            `}
+                          >
+                            {t(child.label)}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+
             const isActive = location?.pathname === item.path
             return (
               <Link
                 key={item.path}
-                to={item.path}
+                to={item.path!}
                 className={`
                   flex items-center rounded-lg
                   transition-all duration-300 ease-in-out
