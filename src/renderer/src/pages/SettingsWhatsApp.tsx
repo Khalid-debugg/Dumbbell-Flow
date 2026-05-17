@@ -4,30 +4,29 @@ import { useSettings } from '@renderer/hooks/useSettings'
 import { Settings as SettingsType } from '@renderer/models/settings'
 import { PERMISSIONS } from '@renderer/models/account'
 import { useAuth } from '@renderer/hooks/useAuth'
+import { usePlanFeatures } from '@renderer/hooks/usePlanFeatures'
+import { PlanGate } from '@renderer/components/ui/PlanGate'
 import { Button } from '@renderer/components/ui/button'
 import { Save, Loader2, ShieldAlert, AlertTriangle, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
-import DeveloperTools from '@renderer/components/settings/DeveloperTools'
-import { GymInformationSection } from '@renderer/components/settings/GymInformationSection'
-import { GymSettingsSection } from '@renderer/components/settings/GymSettingsSection'
-import { LicenseManagementSection } from '@renderer/components/settings/LicenseManagementSection'
+import { WhatsAppNotificationSection } from '@renderer/components/settings/WhatsAppNotificationSection'
 
-function Settings() {
+function SettingsWhatsApp() {
   const { t } = useTranslation('settings')
   const { settings: contextSettings, updateSettings, loading: contextLoading, error, refreshSettings } = useSettings()
   const { hasPermission } = useAuth()
+  const planFeatures = usePlanFeatures()
   const [formData, setFormData] = useState<SettingsType | null>(null)
   const [saving, setSaving] = useState(false)
 
   const permissions = useMemo(
     () => {
       if (contextLoading) {
-        return { canView: false, canEdit: false, canManageLicense: false }
+        return { canView: false, canManageWhatsApp: false }
       }
       return {
         canView: hasPermission(PERMISSIONS.settings.view),
-        canEdit: hasPermission(PERMISSIONS.settings.edit),
-        canManageLicense: hasPermission(PERMISSIONS.settings.manage_license)
+        canManageWhatsApp: hasPermission(PERMISSIONS.settings.manage_whatsapp)
       }
     },
     [hasPermission, contextLoading]
@@ -45,7 +44,6 @@ function Settings() {
 
   const handleSave = useCallback(async () => {
     if (!formData) return
-
     setSaving(true)
     try {
       await updateSettings(formData)
@@ -74,17 +72,7 @@ function Settings() {
         <p className="text-gray-400 mb-6 max-w-md text-center">
           We couldn't load your settings. This might be a temporary issue. Please try again.
         </p>
-        {import.meta.env.DEV && (
-          <div className="bg-gray-800 rounded-lg p-3 mb-4 max-w-md">
-            <p className="text-xs text-yellow-400 mb-1">Development Mode - Error:</p>
-            <p className="text-xs font-mono text-red-400">{error.message}</p>
-          </div>
-        )}
-        <Button
-          variant="primary"
-          onClick={() => refreshSettings()}
-          className="gap-2"
-        >
+        <Button variant="primary" onClick={() => refreshSettings()} className="gap-2">
           <RefreshCw className="w-4 h-4" />
           Retry
         </Button>
@@ -98,11 +86,7 @@ function Settings() {
         <AlertTriangle className="w-20 h-20 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold text-white mb-2">No Settings Available</h2>
         <p className="text-gray-400 mb-4">Settings data is not available</p>
-        <Button
-          variant="primary"
-          onClick={() => refreshSettings()}
-          className="gap-2"
-        >
+        <Button variant="primary" onClick={() => refreshSettings()} className="gap-2">
           <RefreshCw className="w-4 h-4" />
           Reload
         </Button>
@@ -124,15 +108,12 @@ function Settings() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">{t('title')}</h1>
-          <p className="text-gray-400">
-            {t('subtitle')}
-            {!permissions.canEdit && (
-              <span className="text-yellow-400 ml-2">(Read-only - No edit permission)</span>
-            )}
-          </p>
+          <h1 className="text-3xl font-bold text-white mb-2">{t('whatsapp.title')}</h1>
+          {!permissions.canManageWhatsApp && (
+            <p className="text-yellow-400 text-sm">(Read-only - No manage permission)</p>
+          )}
         </div>
-        {permissions.canEdit && (
+        {permissions.canManageWhatsApp && (
           <Button variant="primary" onClick={handleSave} disabled={saving} className="gap-2">
             {saving ? (
               <>
@@ -149,35 +130,29 @@ function Settings() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <GymInformationSection
-          gymName={formData.gymName}
-          gymAddress={formData.gymAddress || ''}
-          gymPhone={formData.gymPhone || ''}
-          gymCountryCode={formData.gymCountryCode || '+20'}
-          gymLogoPath={formData.gymLogoPath || ''}
-          canEdit={permissions.canEdit}
+      {planFeatures.whatsapp ? (
+        <WhatsAppNotificationSection
+          whatsappEnabled={formData.whatsappEnabled}
+          whatsappAutoSend={formData.whatsappAutoSend}
+          whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
+          whatsappLastCheckDate={formData.whatsappLastCheckDate}
+          canManageWhatsApp={permissions.canManageWhatsApp}
           onUpdate={handleUpdate}
         />
-
-        <GymSettingsSection
-          language={formData.language}
-          currency={formData.currency}
-          allowedGenders={formData.allowedGenders}
-          defaultPaymentMethod={formData.defaultPaymentMethod}
-          barcodeSize={formData.barcodeSize || 'keychain'}
-          allowInstantCheckIn={formData.allowInstantCheckIn}
-          allowCustomMemberId={formData.allowCustomMemberId}
-          canEdit={permissions.canEdit}
-          onUpdate={handleUpdate}
-        />
-
-        <LicenseManagementSection canManageLicense={permissions.canManageLicense} />
-
-        {import.meta.env.DEV && <DeveloperTools />}
-      </div>
+      ) : (
+        <PlanGate requiredPlan="premium">
+          <WhatsAppNotificationSection
+            whatsappEnabled={formData.whatsappEnabled}
+            whatsappAutoSend={formData.whatsappAutoSend}
+            whatsappDaysBeforeExpiry={formData.whatsappDaysBeforeExpiry}
+            whatsappLastCheckDate={formData.whatsappLastCheckDate}
+            canManageWhatsApp={false}
+            onUpdate={() => {}}
+          />
+        </PlanGate>
+      )}
     </div>
   )
 }
 
-export default memo(Settings)
+export default memo(SettingsWhatsApp)

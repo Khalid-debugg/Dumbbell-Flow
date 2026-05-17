@@ -52,6 +52,8 @@ const Accounts = lazy(() => import('./pages/Accounts'))
 const ClassesRules = lazy(() => import('./pages/ClassesRules'))
 const ClassesSchedule = lazy(() => import('./pages/ClassesSchedule'))
 const ClassesSubscribers = lazy(() => import('./pages/ClassesSubscribers'))
+const SettingsBackup = lazy(() => import('./pages/SettingsBackup'))
+const SettingsWhatsApp = lazy(() => import('./pages/SettingsWhatsApp'))
 function AppContent() {
   const { user, loading } = useAuth()
 
@@ -165,6 +167,26 @@ function AppContent() {
             <ErrorBoundary>
               <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
                 <Settings />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/settings/backup"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+                <SettingsBackup />
+              </Suspense>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/settings/whatsapp"
+          element={
+            <ErrorBoundary>
+              <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+                <SettingsWhatsApp />
               </Suspense>
             </ErrorBoundary>
           }
