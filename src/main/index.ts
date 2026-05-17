@@ -19,6 +19,7 @@ import { registerWhatsAppHandlers } from './handlers/whatsapp'
 import { registerExportsHandlers } from './handlers/exports'
 import { registerStoreProductHandlers } from './handlers/storeProducts'
 import { registerStoreSalesHandlers } from './handlers/storeSales'
+import { registerClassHandlers } from './handlers/classes'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -76,6 +77,7 @@ app.whenReady().then(async () => {
   registerExportsHandlers()
   registerStoreProductHandlers()
   registerStoreSalesHandlers()
+  registerClassHandlers()
   await performAutoBackup()
 
   createWindow()
