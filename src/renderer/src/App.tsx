@@ -54,6 +54,7 @@ const ClassesSchedule = lazy(() => import('./pages/ClassesSchedule'))
 const ClassesSubscribers = lazy(() => import('./pages/ClassesSubscribers'))
 const SettingsBackup = lazy(() => import('./pages/SettingsBackup'))
 const SettingsWhatsApp = lazy(() => import('./pages/SettingsWhatsApp'))
+const Billing = lazy(() => import('./pages/Billing'))
 function AppContent() {
   const { user, loading } = useAuth()
 
@@ -142,6 +143,14 @@ function AppContent() {
           element={
             <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
               <ClassesSubscribers />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/billing"
+          element={
+            <Suspense fallback={<LoaderCircle className="mx-auto h-20 w-20 animate-spin" />}>
+              <Billing />
             </Suspense>
           }
         />

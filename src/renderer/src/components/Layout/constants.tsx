@@ -8,6 +8,7 @@ import {
   LayoutDashboardIcon,
   MessageCircle,
   NotebookPen,
+  Receipt,
   Repeat,
   ScanLine,
   Settings,
@@ -80,6 +81,12 @@ export const menuItems: MenuItem[] = [
     icon: <ShoppingCart />,
     label: 'nav.store',
     permission: PERMISSIONS.store.view
+  },
+  {
+    path: '/billing',
+    icon: <Receipt />,
+    label: 'nav.billing',
+    permission: PERMISSIONS.billing.view
   },
   {
     path: '/reports',
