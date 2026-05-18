@@ -20,6 +20,8 @@ import { registerExportsHandlers } from './handlers/exports'
 import { registerStoreProductHandlers } from './handlers/storeProducts'
 import { registerStoreSalesHandlers } from './handlers/storeSales'
 import { registerClassHandlers } from './handlers/classes'
+import { registerTransactionHandlers } from './handlers/transactions'
+import { registerPrintHandlers } from './handlers/print'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -78,6 +80,8 @@ app.whenReady().then(async () => {
   registerStoreProductHandlers()
   registerStoreSalesHandlers()
   registerClassHandlers()
+  registerTransactionHandlers()
+  registerPrintHandlers()
   await performAutoBackup()
 
   createWindow()
