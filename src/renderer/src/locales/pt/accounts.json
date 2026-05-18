@@ -125,7 +125,9 @@
     "reports": "Relatórios",
     "settings": "Configurações",
     "accounts": "Contas",
-    "store": "Loja"
+    "store": "Loja",
+    "classes": "Aulas",
+    "billing": "Faturamento"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Pode visualizar dados financeiros",
@@ -172,6 +174,16 @@
     "store.create_sale": "Pode criar vendas (PDV)",
     "store.view_sales": "Pode visualizar histórico de vendas",
     "store.delete_sale": "Pode excluir registros de vendas",
-    "store.manage_products": "Pode adicionar, editar e remover produtos"
+    "store.manage_products": "Pode adicionar, editar e remover produtos",
+    "classes.view": "Pode visualizar aulas",
+    "classes.create": "Pode criar regras e instâncias de aulas",
+    "classes.edit": "Pode editar regras e instâncias de aulas",
+    "classes.delete": "Pode excluir regras e instâncias de aulas",
+    "classes.complete": "Pode marcar aulas como concluídas",
+    "classes.manage_subscribers": "Pode gerenciar inscritos das aulas",
+    "billing.view": "Pode visualizar transações de faturamento",
+    "billing.create": "Pode criar transações",
+    "billing.edit": "Pode editar transações",
+    "billing.delete": "Pode excluir transações"
   }
 }

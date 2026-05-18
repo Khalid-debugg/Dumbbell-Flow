@@ -70,6 +70,12 @@ export const PERMISSIONS = {
     delete: 'classes.delete',
     complete: 'classes.complete',
     manage_subscribers: 'classes.manage_subscribers'
+  },
+  billing: {
+    view: 'billing.view',
+    create: 'billing.create',
+    edit: 'billing.edit',
+    delete: 'billing.delete'
   }
 } as const
 
@@ -147,7 +153,13 @@ export const PERMISSION_LABELS: Record<string, string> = {
   'classes.edit': 'Can edit class rules and instances',
   'classes.delete': 'Can delete class rules and instances',
   'classes.complete': 'Can mark classes as completed',
-  'classes.manage_subscribers': 'Can manage class subscribers'
+  'classes.manage_subscribers': 'Can manage class subscribers',
+
+  // Billing
+  'billing.view': 'Can view billing transactions',
+  'billing.create': 'Can create transactions',
+  'billing.edit': 'Can edit transactions',
+  'billing.delete': 'Can delete transactions'
 }
 
 // Permission dependencies - maps each permission to the permissions it requires
@@ -215,7 +227,12 @@ export const PERMISSION_DEPENDENCIES: Record<string, string[]> = {
   'classes.edit': ['classes.view'],
   'classes.delete': ['classes.view'],
   'classes.complete': ['classes.view'],
-  'classes.manage_subscribers': ['classes.view']
+  'classes.manage_subscribers': ['classes.view'],
+
+  // Billing
+  'billing.create': ['billing.view'],
+  'billing.edit': ['billing.view'],
+  'billing.delete': ['billing.view']
 }
 
 // Page names for grouping
@@ -229,7 +246,8 @@ export const PAGE_NAMES: Record<string, string> = {
   settings: 'Settings',
   accounts: 'Accounts',
   store: 'Store',
-  classes: 'Classes'
+  classes: 'Classes',
+  billing: 'Billing'
 }
 
 // User permissions type
@@ -339,7 +357,10 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     ...Object.fromEntries(Object.values(PERMISSIONS.store).map((p) => [p, true])),
 
     // Classes - Full access
-    ...Object.fromEntries(Object.values(PERMISSIONS.classes).map((p) => [p, true]))
+    ...Object.fromEntries(Object.values(PERMISSIONS.classes).map((p) => [p, true])),
+
+    // Billing - Full access
+    ...Object.fromEntries(Object.values(PERMISSIONS.billing).map((p) => [p, true]))
   },
 
   coach: {
@@ -393,7 +414,10 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'classes.edit': true,
     'classes.delete': false,
     'classes.complete': true,
-    'classes.manage_subscribers': true
+    'classes.manage_subscribers': true,
+
+    // Billing - No access
+    ...Object.fromEntries(Object.values(PERMISSIONS.billing).map((p) => [p, false]))
   },
 
   receptionist: {
@@ -450,7 +474,10 @@ const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
     'classes.edit': false,
     'classes.delete': false,
     'classes.complete': false,
-    'classes.manage_subscribers': false
+    'classes.manage_subscribers': false,
+
+    // Billing - No access
+    ...Object.fromEntries(Object.values(PERMISSIONS.billing).map((p) => [p, false]))
   },
 
   custom: getEmptyPermissions()

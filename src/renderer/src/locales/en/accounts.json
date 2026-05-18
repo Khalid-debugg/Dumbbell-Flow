@@ -125,7 +125,9 @@
     "reports": "Reports",
     "settings": "Settings",
     "accounts": "Accounts",
-    "store": "Store"
+    "store": "Store",
+    "classes": "Classes",
+    "billing": "Billing"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Can view financial data",
@@ -172,6 +174,16 @@
     "store.create_sale": "Can create sales (POS)",
     "store.view_sales": "Can view sales history",
     "store.delete_sale": "Can delete sales records",
-    "store.manage_products": "Can add, edit, and remove products"
+    "store.manage_products": "Can add, edit, and remove products",
+    "classes.view": "Can view classes",
+    "classes.create": "Can create class rules and instances",
+    "classes.edit": "Can edit class rules and instances",
+    "classes.delete": "Can delete class rules and instances",
+    "classes.complete": "Can mark classes as completed",
+    "classes.manage_subscribers": "Can manage class subscribers",
+    "billing.view": "Can view billing transactions",
+    "billing.create": "Can create transactions",
+    "billing.edit": "Can edit transactions",
+    "billing.delete": "Can delete transactions"
   }
 }

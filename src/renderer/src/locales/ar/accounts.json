@@ -125,7 +125,9 @@
     "reports": "التقارير",
     "settings": "الإعدادات",
     "accounts": "الحسابات",
-    "store": "المتجر"
+    "store": "المتجر",
+    "classes": "الفصول",
+    "billing": "الفوترة"
   },
   "permissionLabels": {
     "dashboard.view_financial": "يمكنه عرض البيانات المالية",
@@ -172,6 +174,16 @@
     "store.create_sale": "يمكنه إنشاء مبيعات (نقطة البيع)",
     "store.view_sales": "يمكنه عرض سجل المبيعات",
     "store.delete_sale": "يمكنه حذف سجلات المبيعات",
-    "store.manage_products": "يمكنه إضافة وتعديل وحذف المنتجات"
+    "store.manage_products": "يمكنه إضافة وتعديل وحذف المنتجات",
+    "classes.view": "يمكنه عرض الفصول",
+    "classes.create": "يمكنه إنشاء قواعد الفصول",
+    "classes.edit": "يمكنه تعديل قواعد الفصول",
+    "classes.delete": "يمكنه حذف قواعد الفصول",
+    "classes.complete": "يمكنه تحديد الفصول كمكتملة",
+    "classes.manage_subscribers": "يمكنه إدارة المشتركين في الفصول",
+    "billing.view": "يمكنه عرض معاملات الفوترة",
+    "billing.create": "يمكنه إنشاء معاملات",
+    "billing.edit": "يمكنه تعديل المعاملات",
+    "billing.delete": "يمكنه حذف المعاملات"
   }
 }

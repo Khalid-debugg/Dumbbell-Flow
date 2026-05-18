@@ -125,7 +125,9 @@
     "reports": "Berichte",
     "settings": "Einstellungen",
     "accounts": "Konten",
-    "store": "Shop"
+    "store": "Shop",
+    "classes": "Kurse",
+    "billing": "Abrechnung"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Kann Finanzdaten einsehen",
@@ -172,6 +174,16 @@
     "store.create_sale": "Kann Verkäufe erstellen (Kasse)",
     "store.view_sales": "Kann Verkaufshistorie einsehen",
     "store.delete_sale": "Kann Verkaufsdatensätze löschen",
-    "store.manage_products": "Kann Produkte hinzufügen, bearbeiten und entfernen"
+    "store.manage_products": "Kann Produkte hinzufügen, bearbeiten und entfernen",
+    "classes.view": "Kann Kurse einsehen",
+    "classes.create": "Kann Kursregeln und -instanzen erstellen",
+    "classes.edit": "Kann Kursregeln und -instanzen bearbeiten",
+    "classes.delete": "Kann Kursregeln und -instanzen löschen",
+    "classes.complete": "Kann Kurse als abgeschlossen markieren",
+    "classes.manage_subscribers": "Kann Kursteilnehmer verwalten",
+    "billing.view": "Kann Abrechnungstransaktionen einsehen",
+    "billing.create": "Kann Transaktionen erstellen",
+    "billing.edit": "Kann Transaktionen bearbeiten",
+    "billing.delete": "Kann Transaktionen löschen"
   }
 }

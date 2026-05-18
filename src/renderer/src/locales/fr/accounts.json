@@ -125,7 +125,9 @@
     "reports": "Rapports",
     "settings": "Paramètres",
     "accounts": "Comptes",
-    "store": "Boutique"
+    "store": "Boutique",
+    "classes": "Cours",
+    "billing": "Facturation"
   },
   "permissionLabels": {
     "dashboard.view_financial": "Peut voir les données financières",
@@ -172,6 +174,16 @@
     "store.create_sale": "Peut créer des ventes (POS)",
     "store.view_sales": "Peut voir l'historique des ventes",
     "store.delete_sale": "Peut supprimer des enregistrements de ventes",
-    "store.manage_products": "Peut ajouter, modifier et supprimer des produits"
+    "store.manage_products": "Peut ajouter, modifier et supprimer des produits",
+    "classes.view": "Peut voir les cours",
+    "classes.create": "Peut créer des règles et instances de cours",
+    "classes.edit": "Peut modifier des règles et instances de cours",
+    "classes.delete": "Peut supprimer des règles et instances de cours",
+    "classes.complete": "Peut marquer des cours comme terminés",
+    "classes.manage_subscribers": "Peut gérer les abonnés aux cours",
+    "billing.view": "Peut voir les transactions de facturation",
+    "billing.create": "Peut créer des transactions",
+    "billing.edit": "Peut modifier des transactions",
+    "billing.delete": "Peut supprimer des transactions"
   }
 }
