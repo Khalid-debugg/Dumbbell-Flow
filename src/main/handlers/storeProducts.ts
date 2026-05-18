@@ -46,7 +46,7 @@ function buildProductFilters(filters: Partial<StoreProductFilters>): {
 }
 
 const PRODUCT_COLUMNS =
-  'id, name, description, category, price, cost_price, stock_quantity, created_at, updated_at'
+  'id, name, description, category, price, cost_price, stock_quantity, expiry_date, created_at, updated_at'
 
 function queryProducts(
   page: number,
@@ -96,8 +96,8 @@ export function registerStoreProductHandlers() {
     const id = generateEncryptedId()
 
     db.prepare(
-      `INSERT INTO store_products (id, name, description, category, price, cost_price, stock_quantity)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO store_products (id, name, description, category, price, cost_price, stock_quantity, expiry_date)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
       id,
       data.name,
@@ -105,7 +105,8 @@ export function registerStoreProductHandlers() {
       data.category,
       data.price,
       data.costPrice,
-      data.stockQuantity
+      data.stockQuantity,
+      data.expiryDate ?? null
     )
 
     return { id, ...data }
@@ -118,7 +119,7 @@ export function registerStoreProductHandlers() {
 
       db.prepare(
         `UPDATE store_products
-         SET name = ?, description = ?, category = ?, price = ?, cost_price = ?, stock_quantity = ?
+         SET name = ?, description = ?, category = ?, price = ?, cost_price = ?, stock_quantity = ?, expiry_date = ?
          WHERE id = ?`
       ).run(
         data.name,
@@ -127,6 +128,7 @@ export function registerStoreProductHandlers() {
         data.price,
         data.costPrice,
         data.stockQuantity,
+        data.expiryDate ?? null,
         id
       )
 

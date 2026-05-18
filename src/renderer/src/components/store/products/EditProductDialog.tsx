@@ -23,7 +23,8 @@ export default function EditProductDialog({ product, onClose, onSuccess }: EditP
         category: product.category,
         price: product.price,
         costPrice: product.costPrice,
-        stockQuantity: product.stockQuantity
+        stockQuantity: product.stockQuantity,
+        expiryDate: product.expiryDate
       })
     }
   }, [product])

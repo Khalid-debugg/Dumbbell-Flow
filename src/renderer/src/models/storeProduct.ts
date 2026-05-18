@@ -16,6 +16,7 @@ export type StoreProduct = {
   price: number
   costPrice: number
   stockQuantity: number
+  expiryDate: string | null
   createdAt?: string
   updatedAt?: string
 }
@@ -28,6 +29,7 @@ export type StoreProductDbRow = {
   price: number
   cost_price: number
   stock_quantity: number
+  expiry_date: string | null
   created_at: string
   updated_at: string
 }

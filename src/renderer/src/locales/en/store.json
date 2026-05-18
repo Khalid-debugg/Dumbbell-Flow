@@ -64,6 +64,7 @@
       "price": "Selling Price",
       "costPrice": "Cost Price",
       "stock": "Stock Quantity",
+      "expiryDate": "Expiry Date",
       "cancel": "Cancel",
       "save": "Save Product",
       "create": "Create Product"

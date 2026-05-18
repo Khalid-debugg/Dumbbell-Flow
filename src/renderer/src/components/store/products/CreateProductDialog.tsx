@@ -23,7 +23,8 @@ const DEFAULT_FORM: StoreProductFormData = {
   category: 'other',
   price: 0,
   costPrice: 0,
-  stockQuantity: 0
+  stockQuantity: 0,
+  expiryDate: null
 }
 
 export default function CreateProductDialog({ onSuccess }: CreateProductDialogProps) {

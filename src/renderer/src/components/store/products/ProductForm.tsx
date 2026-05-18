@@ -103,6 +103,17 @@ export default function ProductForm({
           />
         </div>
 
+        {/* Expiry Date */}
+        <div className="space-y-1.5">
+          <label className="text-sm text-gray-300">{t('products.form.expiryDate')}</label>
+          <Input
+            type="date"
+            value={data.expiryDate ?? ''}
+            onChange={(e) => onChange({ expiryDate: e.target.value || null })}
+            className="border-gray-700 bg-gray-900 text-white"
+          />
+        </div>
+
         {/* Description */}
         <div className="col-span-2 space-y-1.5">
           <label className="text-sm text-gray-300">{t('products.form.description')}</label>

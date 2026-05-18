@@ -64,6 +64,7 @@
       "price": "Precio de venta",
       "costPrice": "Precio de coste",
       "stock": "Cantidad en stock",
+      "expiryDate": "Fecha de caducidad",
       "cancel": "Cancelar",
       "save": "Guardar producto",
       "create": "Crear producto"

@@ -64,6 +64,7 @@
       "price": "Verkaufspreis",
       "costPrice": "Einkaufspreis",
       "stock": "Lagerbestand",
+      "expiryDate": "Ablaufdatum",
       "cancel": "Abbrechen",
       "save": "Produkt speichern",
       "create": "Produkt erstellen"

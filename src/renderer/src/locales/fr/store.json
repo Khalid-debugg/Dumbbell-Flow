@@ -64,6 +64,7 @@
       "price": "Prix de vente",
       "costPrice": "Prix de revient",
       "stock": "Quantité en stock",
+      "expiryDate": "Date d'expiration",
       "cancel": "Annuler",
       "save": "Enregistrer",
       "create": "Créer le produit"
