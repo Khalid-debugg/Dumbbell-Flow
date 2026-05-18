@@ -32,20 +32,28 @@ export function registerDashboardHandlers() {
         SELECT DATE(created_at) as date, SUM(amount_paid) as total
         FROM class_subscribers
         GROUP BY DATE(created_at)
+      ),
+      income_daily AS (
+        SELECT date, SUM(amount) as total
+        FROM transactions
+        WHERE type = 'income'
+        GROUP BY date
       )
       SELECT
         dates.date,
         COALESCE(md.total, 0) AS memberships,
         COALESCE(sd.total, 0) AS store,
-        COALESCE(cd.total, 0) AS classes
+        COALESCE(cd.total, 0) AS classes,
+        COALESCE(id.total, 0) AS income
       FROM dates
       LEFT JOIN membership_daily md ON md.date = dates.date
       LEFT JOIN store_daily sd ON sd.date = dates.date
       LEFT JOIN classes_daily cd ON cd.date = dates.date
+      LEFT JOIN income_daily id ON id.date = dates.date
       ORDER BY dates.date ASC
     `
       )
-      .all() as { date: string; memberships: number; store: number; classes: number }[]
+      .all() as { date: string; memberships: number; store: number; classes: number; income: number }[]
 
     const thisMonthMemberships = (
       db
@@ -107,8 +115,49 @@ export function registerDashboardHandlers() {
         .get() as { total: number }
     ).total
 
-    const totalThisMonth = thisMonthMemberships + thisMonthStore + thisMonthClasses
-    const totalLastMonth = lastMonthMemberships + lastMonthStore + lastMonthClasses
+    const thisMonthIncome = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount), 0) as total
+           FROM transactions
+           WHERE type = 'income' AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const thisMonthExpenses = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount), 0) as total
+           FROM transactions
+           WHERE type = 'expense' AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const lastMonthExpenses = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount), 0) as total
+           FROM transactions
+           WHERE type = 'expense' AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now', '-1 month')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const lastMonthIncome = (
+      db
+        .prepare(
+          `SELECT COALESCE(SUM(amount), 0) as total
+           FROM transactions
+           WHERE type = 'income' AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now', '-1 month')`
+        )
+        .get() as { total: number }
+    ).total
+
+    const totalThisMonth =
+      thisMonthMemberships + thisMonthStore + thisMonthClasses + thisMonthIncome
+    const totalLastMonth = lastMonthMemberships + lastMonthStore + lastMonthClasses + lastMonthIncome
     const percentageChange =
       totalLastMonth > 0 ? ((totalThisMonth - totalLastMonth) / totalLastMonth) * 100 : 0
 
@@ -118,11 +167,11 @@ export function registerDashboardHandlers() {
     const highestDay =
       dailyRevenue.length > 0
         ? dailyRevenue.reduce((max, day) => {
-            const dayTotal = day.memberships + day.store + day.classes
-            const maxTotal = max.memberships + max.store + max.classes
+            const dayTotal = day.memberships + day.store + day.classes + day.income
+            const maxTotal = max.memberships + max.store + max.classes + max.income
             return dayTotal > maxTotal ? day : max
           })
-        : { date: '', memberships: 0, store: 0, classes: 0 }
+        : { date: '', memberships: 0, store: 0, classes: 0, income: 0 }
 
     return {
       dailyRevenue,
@@ -132,6 +181,9 @@ export function registerDashboardHandlers() {
         thisMonthMemberships,
         thisMonthStore,
         thisMonthClasses,
+        thisMonthIncome,
+        thisMonthExpenses,
+        lastMonthExpenses,
         percentageChange: Math.round(percentageChange * 10) / 10,
         averageDaily: Math.round(averageDaily * 10) / 10,
         highestDay

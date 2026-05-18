@@ -22,6 +22,9 @@
     "memberships": "Mitgliedschaften",
     "store": "Shop",
     "classes": "Kurse",
+    "income": "Sonstige Einnahmen",
+    "expenses": "Ausgaben",
+    "netProfit": "Nettogewinn",
     "membershipRevenue": "Mitgliedschaftsumsatz",
     "storeRevenue": "Shop-Umsatz",
     "classesRevenue": "Kursumsatz"

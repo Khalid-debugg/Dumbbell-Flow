@@ -17,17 +17,21 @@ import {
   Calendar,
   ShoppingCart,
   Users,
-  Dumbbell
+  Dumbbell,
+  Wallet,
+  ArrowDownCircle,
+  Minus
 } from 'lucide-react'
 import { useSettings } from '@renderer/hooks/useSettings'
 
-type RevenueSeriesFilter = 'all' | 'memberships' | 'store' | 'classes'
+type RevenueSeriesFilter = 'all' | 'memberships' | 'store' | 'classes' | 'income'
 
 interface DailyRevenueEntry {
   date: string
   memberships: number
   store: number
   classes: number
+  income: number
 }
 
 interface RevenueData {
@@ -38,9 +42,12 @@ interface RevenueData {
     thisMonthMemberships: number
     thisMonthStore: number
     thisMonthClasses: number
+    thisMonthIncome: number
+    thisMonthExpenses: number
+    lastMonthExpenses: number
     percentageChange: number
     averageDaily: number
-    highestDay: { date: string; memberships: number; store: number; classes: number }
+    highestDay: { date: string; memberships: number; store: number; classes: number; income: number }
   }
 }
 
@@ -62,6 +69,7 @@ interface CustomTooltipProps {
   membershipLabel: string
   storeLabel: string
   classesLabel: string
+  incomeLabel: string
 }
 
 function CustomTooltip({
@@ -71,13 +79,15 @@ function CustomTooltip({
   formatCurrency,
   membershipLabel,
   storeLabel,
-  classesLabel
+  classesLabel,
+  incomeLabel
 }: CustomTooltipProps) {
   if (!active || !payload?.length) return null
 
   const memberships = payload.find((p) => p.name === 'memberships')?.value ?? 0
   const store = payload.find((p) => p.name === 'store')?.value ?? 0
   const classes = payload.find((p) => p.name === 'classes')?.value ?? 0
+  const income = payload.find((p) => p.name === 'income')?.value ?? 0
   const total = payload.reduce((sum, p) => sum + (p.value ?? 0), 0)
 
   return (
@@ -109,6 +119,15 @@ function CustomTooltip({
               {classesLabel}
             </span>
             <span className="font-semibold text-white">{formatCurrency(classes)}</span>
+          </div>
+        )}
+        {payload.some((p) => p.name === 'income') && (
+          <div className="flex items-center justify-between gap-6">
+            <span className="flex items-center gap-1.5 text-emerald-400">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              {incomeLabel}
+            </span>
+            <span className="font-semibold text-white">{formatCurrency(income)}</span>
           </div>
         )}
         {payload.length > 1 && (
@@ -143,7 +162,8 @@ function RevenueChart({ data }: RevenueChartProps) {
         date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         memberships: item.memberships ?? 0,
         store: item.store ?? 0,
-        classes: item.classes ?? 0
+        classes: item.classes ?? 0,
+        income: item.income ?? 0
       })),
     [data.dailyRevenue]
   )
@@ -151,15 +171,18 @@ function RevenueChart({ data }: RevenueChartProps) {
   const membershipLabel = t('revenueChart.memberships')
   const storeLabel = t('revenueChart.store')
   const classesLabel = t('revenueChart.classes')
+  const incomeLabel = t('revenueChart.income')
 
   const showMemberships = seriesFilter === 'all' || seriesFilter === 'memberships'
   const showStore = seriesFilter === 'all' || seriesFilter === 'store'
   const showClasses = seriesFilter === 'all' || seriesFilter === 'classes'
+  const showIncome = seriesFilter === 'all' || seriesFilter === 'income'
 
   const highestDayTotal =
     (data.summary.highestDay.memberships ?? 0) +
     (data.summary.highestDay.store ?? 0) +
-    (data.summary.highestDay.classes ?? 0)
+    (data.summary.highestDay.classes ?? 0) +
+    (data.summary.highestDay.income ?? 0)
 
   const filterButtons: {
     key: RevenueSeriesFilter
@@ -185,6 +208,11 @@ function RevenueChart({ data }: RevenueChartProps) {
       key: 'classes',
       label: classesLabel,
       activeClass: 'bg-indigo-500/20 border-indigo-500/50 text-indigo-300'
+    },
+    {
+      key: 'income',
+      label: incomeLabel,
+      activeClass: 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
     }
   ]
 
@@ -228,6 +256,10 @@ function RevenueChart({ data }: RevenueChartProps) {
                 <stop offset="5%" stopColor="#818cf8" stopOpacity={0.5} />
                 <stop offset="95%" stopColor="#818cf8" stopOpacity={0.05} />
               </linearGradient>
+              <linearGradient id="gradIncome" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#34d399" stopOpacity={0.5} />
+                <stop offset="95%" stopColor="#34d399" stopOpacity={0.05} />
+              </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '11px' }} />
@@ -244,6 +276,7 @@ function RevenueChart({ data }: RevenueChartProps) {
                   membershipLabel={membershipLabel}
                   storeLabel={storeLabel}
                   classesLabel={classesLabel}
+                  incomeLabel={incomeLabel}
                 />
               }
             />
@@ -251,7 +284,8 @@ function RevenueChart({ data }: RevenueChartProps) {
               formatter={(value) => {
                 if (value === 'memberships') return membershipLabel
                 if (value === 'store') return storeLabel
-                return classesLabel
+                if (value === 'classes') return classesLabel
+                return incomeLabel
               }}
               wrapperStyle={{ fontSize: '12px', color: '#9ca3af', paddingTop: '12px' }}
             />
@@ -285,11 +319,21 @@ function RevenueChart({ data }: RevenueChartProps) {
                 fill="url(#gradClasses)"
               />
             )}
+            {showIncome && (
+              <Area
+                type="monotone"
+                dataKey="income"
+                stackId="revenue"
+                stroke="#34d399"
+                strokeWidth={2}
+                fill="url(#gradIncome)"
+              />
+            )}
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-6">
         <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-gray-400">{t('revenueChart.thisMonth')}</span>
@@ -339,6 +383,17 @@ function RevenueChart({ data }: RevenueChartProps) {
                 {formatCurrency(data.summary.thisMonthClasses ?? 0)}
               </span>
             </div>
+            {(data.summary.thisMonthIncome ?? 0) > 0 && (
+              <div className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1 text-emerald-400">
+                  <Wallet className="h-3 w-3" />
+                  {incomeLabel}
+                </span>
+                <span className="text-gray-300">
+                  {formatCurrency(data.summary.thisMonthIncome ?? 0)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -373,6 +428,31 @@ function RevenueChart({ data }: RevenueChartProps) {
               {new Date(data.summary.highestDay.date).toLocaleDateString()}
             </p>
           )}
+        </div>
+
+        <div className="rounded-lg border border-red-900/30 bg-red-900/10 p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm text-gray-400">{t('revenueChart.expenses')}</span>
+            <ArrowDownCircle className="h-4 w-4 text-red-400" />
+          </div>
+          <p className="text-2xl font-bold text-red-400">
+            {formatCurrency(data.summary.thisMonthExpenses ?? 0)}
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm text-gray-400">{t('revenueChart.netProfit')}</span>
+            <Minus className="h-4 w-4 text-gray-400" />
+          </div>
+          {(() => {
+            const net = (data.summary.totalThisMonth ?? 0) - (data.summary.thisMonthExpenses ?? 0)
+            return (
+              <p className={`text-2xl font-bold ${net >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                {net >= 0 ? '+' : ''}{formatCurrency(net)}
+              </p>
+            )
+          })()}
         </div>
       </div>
     </div>

@@ -22,6 +22,9 @@
     "memberships": "Memberships",
     "store": "Store",
     "classes": "Classes",
+    "income": "Other Income",
+    "expenses": "Expenses",
+    "netProfit": "Net Profit",
     "membershipRevenue": "Membership Revenue",
     "storeRevenue": "Store Revenue",
     "classesRevenue": "Classes Revenue"

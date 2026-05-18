@@ -109,6 +109,17 @@ export function registerReportsHandlers() {
       )
       .get(endDate) as { count: number }
 
+    // Billing income transactions in period
+    const billingIncomeResult = db
+      .prepare(
+        `
+      SELECT COALESCE(SUM(amount), 0) as total
+      FROM transactions
+      WHERE type = 'income' AND date BETWEEN ? AND ?
+    `
+      )
+      .get(startDate, endDate) as { total: number }
+
     // ============ PREVIOUS PERIOD ============
 
     // Previous Revenue
@@ -154,6 +165,17 @@ export function registerReportsHandlers() {
       )
       .get(prevStartDate, prevEndDate) as { count: number }
 
+    // Previous billing income
+    const prevBillingIncomeResult = db
+      .prepare(
+        `
+      SELECT COALESCE(SUM(amount), 0) as total
+      FROM transactions
+      WHERE type = 'income' AND date BETWEEN ? AND ?
+    `
+      )
+      .get(prevStartDate, prevEndDate) as { total: number }
+
     // Previous Check-ins
     const prevCheckInsResult = db
       .prepare(
@@ -165,7 +187,7 @@ export function registerReportsHandlers() {
       )
       .get(prevStartDate, prevEndDate) as { count: number }
 
-    // Revenue by Day — stacked: memberships + store
+    // Revenue by Day — stacked: memberships + store + billing (pre-aggregated to avoid cross-join)
     const revenueByDay = db
       .prepare(
         `
@@ -175,16 +197,32 @@ export function registerReportsHandlers() {
         SELECT DATE(date, '+1 day')
         FROM dates
         WHERE date < ?
+      ),
+      m_agg AS (
+        SELECT DATE(payment_date) as d, SUM(amount_paid) as total
+        FROM memberships
+        GROUP BY DATE(payment_date)
+      ),
+      s_agg AS (
+        SELECT DATE(sold_at) as d, SUM(total_amount) as total
+        FROM store_sales
+        GROUP BY DATE(sold_at)
+      ),
+      b_agg AS (
+        SELECT date as d,
+          SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as total
+        FROM transactions
+        GROUP BY date
       )
       SELECT
         dates.date,
-        COALESCE(SUM(m.amount_paid), 0)   AS memberships,
-        COALESCE(SUM(ss.total_amount), 0)  AS store,
-        COALESCE(SUM(m.amount_paid), 0) + COALESCE(SUM(ss.total_amount), 0) AS revenue
+        COALESCE(m_agg.total, 0) AS memberships,
+        COALESCE(s_agg.total, 0) AS store,
+        COALESCE(m_agg.total, 0) + COALESCE(s_agg.total, 0) + COALESCE(b_agg.total, 0) AS revenue
       FROM dates
-      LEFT JOIN memberships m  ON DATE(m.payment_date) = dates.date
-      LEFT JOIN store_sales ss ON DATE(ss.sold_at)     = dates.date
-      GROUP BY dates.date
+      LEFT JOIN m_agg ON m_agg.d = dates.date
+      LEFT JOIN s_agg ON s_agg.d = dates.date
+      LEFT JOIN b_agg ON b_agg.d = dates.date
       ORDER BY dates.date ASC
     `
       )
@@ -212,11 +250,13 @@ export function registerReportsHandlers() {
 
     const membershipRevenue = revenueResult.total || 0
     const storeRevenue = storeRevenueResult.total
-    const totalRevenue = membershipRevenue + storeRevenue
+    const billingIncome = billingIncomeResult.total
+    const totalRevenue = membershipRevenue + storeRevenue + billingIncome
 
     const prevMembershipRevenue = prevRevenueResult.total || 0
     const prevStoreRevenue = prevStoreRevenueResult.total
-    const prevTotalRevenue = prevMembershipRevenue + prevStoreRevenue
+    const prevBillingIncome = prevBillingIncomeResult.total
+    const prevTotalRevenue = prevMembershipRevenue + prevStoreRevenue + prevBillingIncome
 
     const revenueChange =
       prevTotalRevenue > 0 ? ((totalRevenue - prevTotalRevenue) / prevTotalRevenue) * 100 : 0

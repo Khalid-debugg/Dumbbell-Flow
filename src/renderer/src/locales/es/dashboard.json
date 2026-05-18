@@ -22,6 +22,9 @@
     "memberships": "Membresías",
     "store": "Tienda",
     "classes": "Clases",
+    "income": "Otros Ingresos",
+    "expenses": "Gastos",
+    "netProfit": "Ganancia Neta",
     "membershipRevenue": "Ingresos por Membresías",
     "storeRevenue": "Ingresos de Tienda",
     "classesRevenue": "Ingresos por Clases"

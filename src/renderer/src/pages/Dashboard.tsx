@@ -22,16 +22,19 @@ import { PlanGate } from '@renderer/components/ui/PlanGate'
 import type { ClassInstance } from '@renderer/models/classRule'
 
 interface RevenueData {
-  dailyRevenue: { date: string; memberships: number; store: number; classes: number }[]
+  dailyRevenue: { date: string; memberships: number; store: number; classes: number; income: number }[]
   summary: {
     totalThisMonth: number
     totalLastMonth: number
     thisMonthMemberships: number
     thisMonthStore: number
     thisMonthClasses: number
+    thisMonthIncome: number
+    thisMonthExpenses: number
+    lastMonthExpenses: number
     percentageChange: number
     averageDaily: number
-    highestDay: { date: string; memberships: number; store: number; classes: number }
+    highestDay: { date: string; memberships: number; store: number; classes: number; income: number }
   }
 }
 
@@ -50,9 +53,12 @@ function Dashboard() {
       thisMonthMemberships: 0,
       thisMonthStore: 0,
       thisMonthClasses: 0,
+      thisMonthIncome: 0,
+      thisMonthExpenses: 0,
+      lastMonthExpenses: 0,
       percentageChange: 0,
       averageDaily: 0,
-      highestDay: { date: '', memberships: 0, store: 0, classes: 0 }
+      highestDay: { date: '', memberships: 0, store: 0, classes: 0, income: 0 }
     }
   })
 

@@ -22,6 +22,9 @@
     "memberships": "Matrículas",
     "store": "Loja",
     "classes": "Aulas",
+    "income": "Outras Receitas",
+    "expenses": "Despesas",
+    "netProfit": "Lucro Líquido",
     "membershipRevenue": "Receita de Matrículas",
     "storeRevenue": "Receita da Loja",
     "classesRevenue": "Receita de Aulas"

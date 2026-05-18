@@ -22,6 +22,9 @@
     "memberships": "الاشتراكات",
     "store": "المتجر",
     "classes": "الحصص",
+    "income": "إيرادات أخرى",
+    "expenses": "المصروفات",
+    "netProfit": "صافي الربح",
     "membershipRevenue": "إيرادات الاشتراكات",
     "storeRevenue": "إيرادات المتجر",
     "classesRevenue": "إيرادات الحصص"

@@ -22,6 +22,9 @@
     "memberships": "Adhésions",
     "store": "Boutique",
     "classes": "Cours",
+    "income": "Autres Revenus",
+    "expenses": "Dépenses",
+    "netProfit": "Bénéfice Net",
     "membershipRevenue": "Revenus des Adhésions",
     "storeRevenue": "Revenus de la Boutique",
     "classesRevenue": "Revenus des Cours"
