@@ -18,7 +18,8 @@ export const namespaces = [
   'settings',
   'license',
   'store',
-  'classes'
+  'classes',
+  'billing'
 ] as const
 
 // Lazy load translation resources

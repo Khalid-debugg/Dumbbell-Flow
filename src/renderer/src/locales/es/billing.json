@@ -1,0 +1,128 @@
+{
+  "nav": "Facturación",
+  "title": "Facturación",
+  "addNew": "Agregar transacción",
+  "summary": {
+    "income": "Ingresos este mes",
+    "expenses": "Gastos este mes",
+    "net": "Neto este mes"
+  },
+  "filters": {
+    "search": "Buscar",
+    "searchPlaceholder": "Descripción o referencia...",
+    "type": "Tipo",
+    "category": "Categoría",
+    "dateFrom": "Desde",
+    "dateTo": "Hasta",
+    "reset": "Restablecer",
+    "allTypes": "Todos los tipos",
+    "allCategories": "Todas las categorías"
+  },
+  "type": {
+    "income": "Ingreso",
+    "expense": "Gasto"
+  },
+  "expenseCategories": {
+    "inventory_purchase": "Compra de inventario",
+    "rent": "Alquiler",
+    "utilities": "Servicios",
+    "salaries": "Salarios",
+    "equipment": "Equipamiento",
+    "maintenance": "Mantenimiento",
+    "marketing": "Marketing",
+    "other": "Otro"
+  },
+  "incomeCategories": {
+    "other": "Otro ingreso"
+  },
+  "table": {
+    "date": "Fecha",
+    "type": "Tipo",
+    "category": "Categoría",
+    "description": "Descripción",
+    "paymentMethod": "Pago",
+    "reference": "Referencia",
+    "amount": "Monto",
+    "actions": "Acciones",
+    "noData": "No se encontraron transacciones",
+    "noDataHint": "Agrega tu primera transacción para comenzar"
+  },
+  "form": {
+    "type": "Tipo",
+    "category": "Categoría",
+    "categoryPlaceholder": "Seleccionar categoría",
+    "otherCategory": "Especificar categoría",
+    "otherCategoryPlaceholder": "Ej. Mantenimiento piscina, Bono personal...",
+    "amount": "Monto",
+    "date": "Fecha",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Descripción opcional",
+    "paymentMethod": "Método de pago",
+    "paymentMethodPlaceholder": "Seleccionar método (opcional)",
+    "reference": "Referencia / Nº de factura",
+    "referencePlaceholder": "Generado automáticamente",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "create": "Agregar transacción"
+  },
+  "paymentMethod": {
+    "cash": "Efectivo",
+    "card": "Tarjeta",
+    "transfer": "Transferencia",
+    "e-wallet": "Monedero electrónico"
+  },
+  "delete": {
+    "title": "Eliminar transacción",
+    "message": "¿Está seguro de que desea eliminar esta transacción? Esta acción no se puede deshacer.",
+    "confirm": "Eliminar",
+    "cancel": "Cancelar"
+  },
+  "bulkDelete": {
+    "selected": "{{count}} seleccionados",
+    "delete": "Eliminar seleccionados",
+    "title": "Eliminar {{count}} transacciones",
+    "message": "¿Está seguro de que desea eliminar {{count}} transacciones? Esta acción no se puede deshacer.",
+    "confirm": "Eliminar todo",
+    "cancel": "Cancelar"
+  },
+  "success": {
+    "created": "Transacción agregada exitosamente",
+    "updated": "Transacción actualizada exitosamente",
+    "deleted": "Transacción eliminada",
+    "bulkDeleted": "{{count}} transacciones eliminadas"
+  },
+  "errors": {
+    "loadFailed": "Error al cargar las transacciones",
+    "createFailed": "Error al agregar la transacción",
+    "updateFailed": "Error al actualizar la transacción",
+    "deleteFailed": "Error al eliminar la transacción"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "multiInvoice": {
+    "preview": "Vista previa",
+    "print": "Imprimir factura",
+    "totalIncome": "Total ingresos",
+    "totalExpenses": "Total gastos",
+    "net": "Neto"
+  },
+  "detail": {
+    "title": "Detalles de la transacción",
+    "receipt": "Recibo",
+    "date": "Fecha",
+    "type": "Tipo",
+    "category": "Categoría",
+    "description": "Descripción",
+    "paymentMethod": "Método de pago",
+    "amount": "Importe total",
+    "close": "Cerrar",
+    "print": "Imprimir",
+    "savePDF": "Guardar como PDF",
+    "pdfSaved": "PDF guardado correctamente",
+    "gymFallback": "Gimnasio"
+  }
+}

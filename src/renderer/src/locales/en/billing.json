@@ -1,0 +1,128 @@
+{
+  "nav": "Billing",
+  "title": "Billing",
+  "addNew": "Add Transaction",
+  "summary": {
+    "income": "Income This Month",
+    "expenses": "Expenses This Month",
+    "net": "Net This Month"
+  },
+  "filters": {
+    "search": "Search",
+    "searchPlaceholder": "Description or reference...",
+    "type": "Type",
+    "category": "Category",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "reset": "Reset",
+    "allTypes": "All types",
+    "allCategories": "All categories"
+  },
+  "type": {
+    "income": "Income",
+    "expense": "Expense"
+  },
+  "expenseCategories": {
+    "inventory_purchase": "Inventory Purchase",
+    "rent": "Rent",
+    "utilities": "Utilities",
+    "salaries": "Salaries",
+    "equipment": "Equipment",
+    "maintenance": "Maintenance",
+    "marketing": "Marketing",
+    "other": "Other"
+  },
+  "incomeCategories": {
+    "other": "Other Income"
+  },
+  "table": {
+    "date": "Date",
+    "type": "Type",
+    "category": "Category",
+    "description": "Description",
+    "paymentMethod": "Payment",
+    "reference": "Reference",
+    "amount": "Amount",
+    "actions": "Actions",
+    "noData": "No transactions found",
+    "noDataHint": "Add your first transaction to get started"
+  },
+  "form": {
+    "type": "Type",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category",
+    "otherCategory": "Specify category",
+    "otherCategoryPlaceholder": "e.g. Pool maintenance, Staff bonus...",
+    "amount": "Amount",
+    "date": "Date",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description",
+    "paymentMethod": "Payment Method",
+    "paymentMethodPlaceholder": "Select method (optional)",
+    "reference": "Reference / Invoice No.",
+    "referencePlaceholder": "Auto-generated",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Add Transaction"
+  },
+  "paymentMethod": {
+    "cash": "Cash",
+    "card": "Card",
+    "transfer": "Transfer",
+    "e-wallet": "E-Wallet"
+  },
+  "delete": {
+    "title": "Delete Transaction",
+    "message": "Are you sure you want to delete this transaction? This cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "bulkDelete": {
+    "selected": "{{count}} selected",
+    "delete": "Delete Selected",
+    "title": "Delete {{count}} Transactions",
+    "message": "Are you sure you want to delete {{count}} transactions? This cannot be undone.",
+    "confirm": "Delete All",
+    "cancel": "Cancel"
+  },
+  "success": {
+    "created": "Transaction added successfully",
+    "updated": "Transaction updated successfully",
+    "deleted": "Transaction deleted",
+    "bulkDeleted": "{{count}} transactions deleted"
+  },
+  "errors": {
+    "loadFailed": "Failed to load transactions",
+    "createFailed": "Failed to add transaction",
+    "updateFailed": "Failed to update transaction",
+    "deleteFailed": "Failed to delete transaction"
+  },
+  "pagination": {
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "multiInvoice": {
+    "preview": "Preview Invoice",
+    "print": "Print Invoice",
+    "totalIncome": "Total Income",
+    "totalExpenses": "Total Expenses",
+    "net": "Net"
+  },
+  "detail": {
+    "title": "Transaction Details",
+    "receipt": "Receipt",
+    "date": "Date",
+    "type": "Type",
+    "category": "Category",
+    "description": "Description",
+    "paymentMethod": "Payment Method",
+    "amount": "Total Amount",
+    "close": "Close",
+    "print": "Print",
+    "savePDF": "Save as PDF",
+    "pdfSaved": "PDF saved successfully",
+    "gymFallback": "Gym"
+  }
+}

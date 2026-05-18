@@ -1,0 +1,128 @@
+{
+  "nav": "Faturamento",
+  "title": "Faturamento",
+  "addNew": "Adicionar transação",
+  "summary": {
+    "income": "Receitas deste mês",
+    "expenses": "Despesas deste mês",
+    "net": "Líquido deste mês"
+  },
+  "filters": {
+    "search": "Pesquisar",
+    "searchPlaceholder": "Descrição ou referência...",
+    "type": "Tipo",
+    "category": "Categoria",
+    "dateFrom": "De",
+    "dateTo": "Até",
+    "reset": "Redefinir",
+    "allTypes": "Todos os tipos",
+    "allCategories": "Todas as categorias"
+  },
+  "type": {
+    "income": "Receita",
+    "expense": "Despesa"
+  },
+  "expenseCategories": {
+    "inventory_purchase": "Compra de estoque",
+    "rent": "Aluguel",
+    "utilities": "Utilidades",
+    "salaries": "Salários",
+    "equipment": "Equipamentos",
+    "maintenance": "Manutenção",
+    "marketing": "Marketing",
+    "other": "Outro"
+  },
+  "incomeCategories": {
+    "other": "Outra receita"
+  },
+  "table": {
+    "date": "Data",
+    "type": "Tipo",
+    "category": "Categoria",
+    "description": "Descrição",
+    "paymentMethod": "Pagamento",
+    "reference": "Referência",
+    "amount": "Valor",
+    "actions": "Ações",
+    "noData": "Nenhuma transação encontrada",
+    "noDataHint": "Adicione sua primeira transação para começar"
+  },
+  "form": {
+    "type": "Tipo",
+    "category": "Categoria",
+    "categoryPlaceholder": "Selecionar categoria",
+    "otherCategory": "Especificar categoria",
+    "otherCategoryPlaceholder": "Ex. Manutenção piscina, Bônus pessoal...",
+    "amount": "Valor",
+    "date": "Data",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Descrição opcional",
+    "paymentMethod": "Método de pagamento",
+    "paymentMethodPlaceholder": "Selecionar método (opcional)",
+    "reference": "Referência / Nº de fatura",
+    "referencePlaceholder": "Gerado automaticamente",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "create": "Adicionar transação"
+  },
+  "paymentMethod": {
+    "cash": "Dinheiro",
+    "card": "Cartão",
+    "transfer": "Transferência",
+    "e-wallet": "Carteira digital"
+  },
+  "delete": {
+    "title": "Excluir transação",
+    "message": "Tem certeza de que deseja excluir esta transação? Esta ação não pode ser desfeita.",
+    "confirm": "Excluir",
+    "cancel": "Cancelar"
+  },
+  "bulkDelete": {
+    "selected": "{{count}} selecionado(s)",
+    "delete": "Excluir selecionados",
+    "title": "Excluir {{count}} transações",
+    "message": "Tem certeza de que deseja excluir {{count}} transações? Esta ação não pode ser desfeita.",
+    "confirm": "Excluir tudo",
+    "cancel": "Cancelar"
+  },
+  "success": {
+    "created": "Transação adicionada com sucesso",
+    "updated": "Transação atualizada com sucesso",
+    "deleted": "Transação excluída",
+    "bulkDeleted": "{{count}} transações excluídas"
+  },
+  "errors": {
+    "loadFailed": "Falha ao carregar transações",
+    "createFailed": "Falha ao adicionar transação",
+    "updateFailed": "Falha ao atualizar transação",
+    "deleteFailed": "Falha ao excluir transação"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Próximo"
+  },
+  "multiInvoice": {
+    "preview": "Pré-visualizar fatura",
+    "print": "Imprimir fatura",
+    "totalIncome": "Total receitas",
+    "totalExpenses": "Total despesas",
+    "net": "Líquido"
+  },
+  "detail": {
+    "title": "Detalhes da transação",
+    "receipt": "Recibo",
+    "date": "Data",
+    "type": "Tipo",
+    "category": "Categoria",
+    "description": "Descrição",
+    "paymentMethod": "Método de pagamento",
+    "amount": "Valor total",
+    "close": "Fechar",
+    "print": "Imprimir",
+    "savePDF": "Salvar como PDF",
+    "pdfSaved": "PDF salvo com sucesso",
+    "gymFallback": "Academia"
+  }
+}

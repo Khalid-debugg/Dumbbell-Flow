@@ -1,0 +1,128 @@
+{
+  "nav": "Abrechnung",
+  "title": "Abrechnung",
+  "addNew": "Transaktion hinzufügen",
+  "summary": {
+    "income": "Einnahmen diesen Monat",
+    "expenses": "Ausgaben diesen Monat",
+    "net": "Netto diesen Monat"
+  },
+  "filters": {
+    "search": "Suche",
+    "searchPlaceholder": "Beschreibung oder Referenz...",
+    "type": "Typ",
+    "category": "Kategorie",
+    "dateFrom": "Von",
+    "dateTo": "Bis",
+    "reset": "Zurücksetzen",
+    "allTypes": "Alle Typen",
+    "allCategories": "Alle Kategorien"
+  },
+  "type": {
+    "income": "Einnahme",
+    "expense": "Ausgabe"
+  },
+  "expenseCategories": {
+    "inventory_purchase": "Wareneinkauf",
+    "rent": "Miete",
+    "utilities": "Nebenkosten",
+    "salaries": "Gehälter",
+    "equipment": "Ausrüstung",
+    "maintenance": "Wartung",
+    "marketing": "Marketing",
+    "other": "Sonstiges"
+  },
+  "incomeCategories": {
+    "other": "Sonstige Einnahme"
+  },
+  "table": {
+    "date": "Datum",
+    "type": "Typ",
+    "category": "Kategorie",
+    "description": "Beschreibung",
+    "paymentMethod": "Zahlung",
+    "reference": "Referenz",
+    "amount": "Betrag",
+    "actions": "Aktionen",
+    "noData": "Keine Transaktionen gefunden",
+    "noDataHint": "Füge deine erste Transaktion hinzu"
+  },
+  "form": {
+    "type": "Typ",
+    "category": "Kategorie",
+    "categoryPlaceholder": "Kategorie auswählen",
+    "otherCategory": "Kategorie angeben",
+    "otherCategoryPlaceholder": "z.B. Poolwartung, Mitarbeiterbonus...",
+    "amount": "Betrag",
+    "date": "Datum",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Optionale Beschreibung",
+    "paymentMethod": "Zahlungsmethode",
+    "paymentMethodPlaceholder": "Methode auswählen (optional)",
+    "reference": "Referenz / Rechnungsnr.",
+    "referencePlaceholder": "Wird automatisch generiert",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "create": "Transaktion hinzufügen"
+  },
+  "paymentMethod": {
+    "cash": "Bar",
+    "card": "Karte",
+    "transfer": "Überweisung",
+    "e-wallet": "E-Wallet"
+  },
+  "delete": {
+    "title": "Transaktion löschen",
+    "message": "Sind Sie sicher, dass Sie diese Transaktion löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "bulkDelete": {
+    "selected": "{{count}} ausgewählt",
+    "delete": "Ausgewählte löschen",
+    "title": "{{count}} Transaktionen löschen",
+    "message": "Sind Sie sicher, dass Sie {{count}} Transaktionen löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+    "confirm": "Alle löschen",
+    "cancel": "Abbrechen"
+  },
+  "success": {
+    "created": "Transaktion erfolgreich hinzugefügt",
+    "updated": "Transaktion erfolgreich aktualisiert",
+    "deleted": "Transaktion gelöscht",
+    "bulkDeleted": "{{count}} Transaktionen gelöscht"
+  },
+  "errors": {
+    "loadFailed": "Transaktionen konnten nicht geladen werden",
+    "createFailed": "Transaktion konnte nicht hinzugefügt werden",
+    "updateFailed": "Transaktion konnte nicht aktualisiert werden",
+    "deleteFailed": "Transaktion konnte nicht gelöscht werden"
+  },
+  "pagination": {
+    "page": "Seite",
+    "of": "von",
+    "previous": "Zurück",
+    "next": "Weiter"
+  },
+  "multiInvoice": {
+    "preview": "Rechnung vorschau",
+    "print": "Rechnung drucken",
+    "totalIncome": "Gesamteinnahmen",
+    "totalExpenses": "Gesamtausgaben",
+    "net": "Netto"
+  },
+  "detail": {
+    "title": "Transaktionsdetails",
+    "receipt": "Quittung",
+    "date": "Datum",
+    "type": "Typ",
+    "category": "Kategorie",
+    "description": "Beschreibung",
+    "paymentMethod": "Zahlungsmethode",
+    "amount": "Gesamtbetrag",
+    "close": "Schließen",
+    "print": "Drucken",
+    "savePDF": "Als PDF speichern",
+    "pdfSaved": "PDF erfolgreich gespeichert",
+    "gymFallback": "Fitnessstudio"
+  }
+}

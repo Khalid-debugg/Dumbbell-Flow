@@ -1,0 +1,128 @@
+{
+  "nav": "المحاسبة",
+  "title": "المحاسبة",
+  "addNew": "إضافة معاملة",
+  "summary": {
+    "income": "الإيرادات هذا الشهر",
+    "expenses": "المصروفات هذا الشهر",
+    "net": "الصافي هذا الشهر"
+  },
+  "filters": {
+    "search": "بحث",
+    "searchPlaceholder": "الوصف أو المرجع...",
+    "type": "النوع",
+    "category": "الفئة",
+    "dateFrom": "من",
+    "dateTo": "إلى",
+    "reset": "إعادة ضبط",
+    "allTypes": "جميع الأنواع",
+    "allCategories": "جميع الفئات"
+  },
+  "type": {
+    "income": "إيراد",
+    "expense": "مصروف"
+  },
+  "expenseCategories": {
+    "inventory_purchase": "شراء بضائع",
+    "rent": "إيجار",
+    "utilities": "مرافق",
+    "salaries": "رواتب",
+    "equipment": "معدات",
+    "maintenance": "صيانة",
+    "marketing": "تسويق",
+    "other": "أخرى"
+  },
+  "incomeCategories": {
+    "other": "إيراد آخر"
+  },
+  "table": {
+    "date": "التاريخ",
+    "type": "النوع",
+    "category": "الفئة",
+    "description": "الوصف",
+    "paymentMethod": "طريقة الدفع",
+    "reference": "المرجع",
+    "amount": "المبلغ",
+    "actions": "إجراءات",
+    "noData": "لا توجد معاملات",
+    "noDataHint": "أضف أول معاملة للبدء"
+  },
+  "form": {
+    "type": "النوع",
+    "category": "الفئة",
+    "categoryPlaceholder": "اختر فئة",
+    "otherCategory": "تحديد الفئة",
+    "otherCategoryPlaceholder": "مثال: صيانة المسبح، مكافأة موظف...",
+    "amount": "المبلغ",
+    "date": "التاريخ",
+    "description": "الوصف",
+    "descriptionPlaceholder": "وصف اختياري",
+    "paymentMethod": "طريقة الدفع",
+    "paymentMethodPlaceholder": "اختر طريقة (اختياري)",
+    "reference": "المرجع / رقم الفاتورة",
+    "referencePlaceholder": "يتم التوليد تلقائياً",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "create": "إضافة معاملة"
+  },
+  "paymentMethod": {
+    "cash": "نقدي",
+    "card": "بطاقة",
+    "transfer": "تحويل",
+    "e-wallet": "محفظة إلكترونية"
+  },
+  "delete": {
+    "title": "حذف المعاملة",
+    "message": "هل أنت متأكد من حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.",
+    "confirm": "حذف",
+    "cancel": "إلغاء"
+  },
+  "bulkDelete": {
+    "selected": "{{count}} محدد",
+    "delete": "حذف المحدد",
+    "title": "حذف {{count}} معاملات",
+    "message": "هل أنت متأكد من حذف {{count}} معاملة؟ لا يمكن التراجع عن هذا الإجراء.",
+    "confirm": "حذف الكل",
+    "cancel": "إلغاء"
+  },
+  "success": {
+    "created": "تمت إضافة المعاملة بنجاح",
+    "updated": "تم تحديث المعاملة بنجاح",
+    "deleted": "تم حذف المعاملة",
+    "bulkDeleted": "تم حذف {{count}} معاملة"
+  },
+  "errors": {
+    "loadFailed": "فشل تحميل المعاملات",
+    "createFailed": "فشل إضافة المعاملة",
+    "updateFailed": "فشل تحديث المعاملة",
+    "deleteFailed": "فشل حذف المعاملة"
+  },
+  "pagination": {
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي"
+  },
+  "multiInvoice": {
+    "preview": "معاينة الفاتورة",
+    "print": "طباعة الفاتورة",
+    "totalIncome": "إجمالي الإيرادات",
+    "totalExpenses": "إجمالي المصروفات",
+    "net": "الصافي"
+  },
+  "detail": {
+    "title": "تفاصيل المعاملة",
+    "receipt": "إيصال",
+    "date": "التاريخ",
+    "type": "النوع",
+    "category": "الفئة",
+    "description": "الوصف",
+    "paymentMethod": "طريقة الدفع",
+    "amount": "المبلغ الإجمالي",
+    "close": "إغلاق",
+    "print": "طباعة",
+    "savePDF": "حفظ كـ PDF",
+    "pdfSaved": "تم حفظ PDF بنجاح",
+    "gymFallback": "النادي"
+  }
+}
